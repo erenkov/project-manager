@@ -1,11 +1,12 @@
 package com.developing.simbir_product.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Управление задачами")
+@RestController
 public class TaskBoardController {
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping(value = "/board")

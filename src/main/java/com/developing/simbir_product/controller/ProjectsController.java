@@ -3,10 +3,15 @@ package com.developing.simbir_product.controller;
 import com.developing.simbir_product.controller.Dto.LoginDto;
 import com.developing.simbir_product.controller.Dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Управление проектами")
+@RestController
 public class ProjectsController {
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping(value = "/registration")
