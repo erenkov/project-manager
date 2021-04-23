@@ -6,10 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Управление задачами")
+@RequestMapping(value = "/board")
 @RestController
 public class TaskBoardController {
     @Operation(summary = "Получить страницу с доской проекта")
-    @GetMapping(value = "/board")
+    @GetMapping(value = "")
     public ResponseEntity<String> getBoardPage() {
         // Запрос страницы с доской проекта
         return null;
