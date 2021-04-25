@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "TASK")
-public class Task {
+public class TaskEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,12 +53,12 @@ public class Task {
     @Column(name = "priority")
     private int priority;
 
-    public Task() {
+    public TaskEntity() {
     }
 
-    public Task(UUID id, String name, UUID stateId, UUID taskTypeId, UUID projectId, String description,
-                LocalDateTime createDate, LocalDateTime dueDate, LocalDateTime finishDate, int estCosts,
-                int actualCosts, String comments, int priority) {
+    public TaskEntity(UUID id, String name, UUID stateId, UUID taskTypeId, UUID projectId, String description,
+                      LocalDateTime createDate, LocalDateTime dueDate, LocalDateTime finishDate, int estCosts,
+                      int actualCosts, String comments, int priority) {
         this.id = id;
         this.name = name;
         this.stateId = stateId;

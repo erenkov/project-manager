@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "TASK")
-public class TaskRelease {
+public class TaskReleaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,10 +25,10 @@ public class TaskRelease {
     @Column(name = "isComplete")
     private int isComplete;
 
-    public TaskRelease() {
+    public TaskReleaseEntity() {
     }
 
-    public TaskRelease(UUID id, UUID taskId, UUID releaseId, int isComplete) {
+    public TaskReleaseEntity(UUID id, UUID taskId, UUID releaseId, int isComplete) {
         this.id = id;
         this.taskId = taskId;
         this.releaseId = releaseId;

@@ -1,4 +1,12 @@
 package com.developing.simbir_product.repository;
 
-public interface TaskRepository {
+import com.developing.simbir_product.entity.TaskEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
+
 }

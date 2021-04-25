@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "RELEASE")
-public class Release {
+public class ReleaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,10 +24,10 @@ public class Release {
     @Column(name = "finish_date")
     private LocalDateTime finishDate;
 
-    public Release() {
+    public ReleaseEntity() {
     }
 
-    public Release(UUID id, LocalDateTime startDate, LocalDateTime finishDate) {
+    public ReleaseEntity(UUID id, LocalDateTime startDate, LocalDateTime finishDate) {
         this.id = id;
         this.startDate = startDate;
         this.finishDate = finishDate;
