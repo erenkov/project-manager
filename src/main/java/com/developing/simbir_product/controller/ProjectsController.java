@@ -1,7 +1,5 @@
 package com.developing.simbir_product.controller;
 
-import com.developing.simbir_product.controller.Dto.LoginDto;
-import com.developing.simbir_product.controller.Dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

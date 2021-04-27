@@ -1,7 +1,7 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.LoginDto;
-import com.developing.simbir_product.controller.Dto.UserDto;
+import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class AuthorizationController {
 
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping(value = "/registration")
-    public ResponseEntity<LoginDto> registerUser(UserDto userDto) {
+    public ResponseEntity<LoginDto> registerUser(UserRequestDto userDto) {
         // Регистрируем нового пользователя
         return ResponseEntity.ok().body(new LoginDto());
     }
