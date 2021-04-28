@@ -6,7 +6,7 @@ import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ProjectStatus;
 import com.developing.simbir_product.repository.ProjectRepository;
 import com.developing.simbir_product.service.ProjectService;
-import javassist.NotFoundException;
+import com.developing.simbir_product.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
