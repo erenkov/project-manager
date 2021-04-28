@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 000000-create-table-task
+      id: 1619638368613-1
       author: Rebrin Konstantin
       changes:
         - createTable:
@@ -11,7 +11,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: task_pk
                   name: id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -31,7 +31,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: project_id
-                  type: INTEGER
+                  type: UUID
               - column:
                   name: description
                   type: TEXT
@@ -63,9 +63,8 @@ databaseChangeLog:
                   type: INTEGER
             remarks: Информация о задачах
             tableName: task
-
   - changeSet:
-      id: 000000-create-table-task_release
+      id: 1619638368613-2
       author: Rebrin Konstantin
       changes:
         - createTable:
@@ -76,23 +75,22 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: task_release_pk
                   name: task_id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: task_release_pk
                   name: release_id
-                  type: INTEGER
+                  type: UUID
               - column:
                   defaultValueBoolean: false
                   name: is_completed
                   type: BOOLEAN
             remarks: Информация о задачах  и релизах, в которых эти задачи выполнялись
             tableName: task_release
-
   - changeSet:
-      id: 000000-create-table-project
+      id: 1619638368613-3
       author: Rebrin Konstantin
       changes:
         - createTable:
@@ -103,7 +101,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: project_pk
                   name: id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -114,7 +112,7 @@ databaseChangeLog:
                   type: TEXT
               - column:
                   name: team_id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -132,9 +130,8 @@ databaseChangeLog:
                   type: TIMESTAMP WITH TIME ZONE
             remarks: Информация о проектах
             tableName: project
-
   - changeSet:
-      id: 000000-create-table-user
+      id: 1619638368613-4
       author: Rebrin Konstantin
       changes:
         - createTable:
@@ -145,7 +142,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: user_pk
                   name: id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -162,6 +159,8 @@ databaseChangeLog:
                   name: first_name
                   type: VARCHAR(50)
               - column:
+                  constraints:
+                    nullable: false
                   name: last_name
                   type: VARCHAR(50)
               - column:
@@ -169,12 +168,11 @@ databaseChangeLog:
                   type: VARCHAR(30)
               - column:
                   name: team_id
-                  type: INTEGER
+                  type: UUID
             remarks: Информация о пользователях
             tableName: user
-
   - changeSet:
-      id: 000000-create-table-team
+      id: 1619638368613-5
       author: Rebrin Konstantin
       changes:
         - createTable:
@@ -185,7 +183,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: team_pk
                   name: id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -196,9 +194,8 @@ databaseChangeLog:
                   type: TEXT
             remarks: Информация о командах
             tableName: team
-
   - changeSet:
-      id: 000000-create-table-user_task_history
+      id: 1619638368613-6
       author: Rebrin Konstantin
       changes:
         - createTable:
@@ -209,27 +206,26 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: user_task_history_pk
                   name: task_id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: user_task_history_pk
                   name: user_id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: user_task_history_pk
-                  defaultValue: 01-01-2099 10:00:00
+                  defaultValueDate: 2099-01-01T10:00:00
                   name: valid_to_date
                   type: TIMESTAMP WITHOUT TIME ZONE
             remarks: Информация о пользователях и задачах, над которыми они работали
             tableName: user_task_history
-
   - changeSet:
-      id: 000000-create-table-release
+      id: 1619638368613-7
       author: Rebrin Konstantin
       changes:
         - createTable:
@@ -240,7 +236,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: release_pk
                   name: id
-                  type: INTEGER
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -259,9 +255,8 @@ databaseChangeLog:
                   type: TIMESTAMP WITH TIME ZONE
             remarks: Информация о релизах
             tableName: release
-
   - changeSet:
-      id: 000000-add-constraints-foreign-key-task_id_fk
+      id: 1619638368613-8
       author: Rebrin Konstantin
       changes:
         - addForeignKeyConstraint:
@@ -275,27 +270,24 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: task
             validate: true
-
   - changeSet:
-      id: 000000-add-constraints-unique-user
+      id: 1619638368613-9
       author: Rebrin Konstantin
       changes:
         - addUniqueConstraint:
             columnNames: login
             constraintName: user_login_key
             tableName: user
-
   - changeSet:
-      id: 000000-add-constraints-unique-team
+      id: 1619638368613-10
       author: Rebrin Konstantin
       changes:
         - addUniqueConstraint:
             columnNames: name
             constraintName: team_name_key
             tableName: team
-
   - changeSet:
-      id: 000000-add-constraints-foreign-key-user_team_fk
+      id: 1619638368613-11
       author: Rebrin Konstantin
       changes:
         - addForeignKeyConstraint:
@@ -309,9 +301,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: team
             validate: true
-
   - changeSet:
-      id: 000000-add-constraints-foreign-key-user_id_fk
+      id: 1619638368613-12
       author: Rebrin Konstantin
       changes:
         - addForeignKeyConstraint:
@@ -325,9 +316,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
             validate: true
-
   - changeSet:
-      id: 000000-add-constraints-foreign-key-project_id_fk
+      id: 1619638368613-13
       author: Rebrin Konstantin
       changes:
         - addForeignKeyConstraint:
@@ -341,9 +331,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: project
             validate: true
-
   - changeSet:
-      id: 000000-add-constraints-foreign-key-release_id_fk
+      id: 1619638368613-14
       author: Rebrin Konstantin
       changes:
         - addForeignKeyConstraint:
@@ -357,9 +346,8 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: release
             validate: true
-
   - changeSet:
-      id: 000000-add-constraints-foreign-key-team_id_fk
+      id: 1619638368613-15
       author: Rebrin Konstantin
       changes:
         - addForeignKeyConstraint:
