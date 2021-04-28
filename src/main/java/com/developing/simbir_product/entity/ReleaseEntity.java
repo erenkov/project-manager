@@ -1,5 +1,8 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,20 +17,26 @@ import java.util.UUID;
 public class ReleaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, nullable = false)
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
-    @Column(name = "start_date")
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
-    @Column(name = "finish_date")
+    @Column(name = "finish_date", nullable = false)
     private LocalDateTime finishDate;
 
     public ReleaseEntity() {
     }
 
-    public ReleaseEntity(UUID id, LocalDateTime startDate, LocalDateTime finishDate) {
-        this.id = id;
+    public ReleaseEntity(String name, LocalDateTime startDate, LocalDateTime finishDate) {
+        this.name = name;
         this.startDate = startDate;
         this.finishDate = finishDate;
     }
@@ -38,6 +47,14 @@ public class ReleaseEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDateTime getStartDate() {
