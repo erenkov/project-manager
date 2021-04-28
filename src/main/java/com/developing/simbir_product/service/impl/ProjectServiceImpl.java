@@ -39,6 +39,9 @@ public class ProjectServiceImpl implements ProjectService {
         return responseDto;
     }
 
+
+    //todo !!!!!!!!!! Я так понял что и обновление и сохранение следующим методом происходит !!!!!!!!!!!!!!!!!!
+
     //todo !!!!!!!!!!!!1 Похоже что при последнем коммите пропал конструктор из ProjectEntity !!!!!!!!!!!
     // + Я не знаю что должен возвращать этот метод
     @Transactional
@@ -55,7 +58,6 @@ public class ProjectServiceImpl implements ProjectService {
         return entity;
     }
 
-    //todo !!!!!!!!!! Я так понял что и обновление и сохранение этим методом !!!!!!!!!!!!!!!!!!
     @Transactional
     @Override
     public void deleteById(UUID id) {
