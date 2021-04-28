@@ -24,13 +24,9 @@ public class UserRequestDto {
     @Size(min = 8, max = 50)
     private String password;
 
-    @Schema(description = "Имя")
-    @Size(max = 50)
-    private String firstName;
-
-    @Schema(description = "Фамилия")
-    @Size(max = 50)
-    private String lastName;
+    @Schema(description = "Имя и фамилия")
+    @Size(max = 100)
+    private String fullName;
 
     @Schema(description = "Роль")
     @Size(max = 50)
@@ -39,6 +35,10 @@ public class UserRequestDto {
     @Schema(description = "Команда")
     @Size(max = 50)
     private String team;
+
+    @Schema(description = "Табельный номер")
+    @NotNull
+    private int userNumber;
 
 
     public String getEmail() {
@@ -57,20 +57,12 @@ public class UserRequestDto {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getRole() {
@@ -87,5 +79,13 @@ public class UserRequestDto {
 
     public void setTeam(String team) {
         this.team = team;
+    }
+
+    public int getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(int userNumber) {
+        this.userNumber = userNumber;
     }
 }
