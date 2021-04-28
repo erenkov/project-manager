@@ -219,7 +219,7 @@ databaseChangeLog:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: user_task_history_pk
-                  defaultValueDate: 2099-01-01T10:00:00
+                  defaultValueDate: 01-01-2099 10:00:00
                   name: valid_to_date
                   type: TIMESTAMP WITHOUT TIME ZONE
             remarks: Информация о пользователях и задачах, над которыми они работали
