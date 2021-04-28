@@ -2,11 +2,16 @@ package com.developing.simbir_product.controller.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 
 @Schema(description = "Задача")
-public class TaskResponseDto {
+public class TaskRequestDto {
 
     @Schema(description = "Название задачи")
+    @NotBlank
+    @Size(max = 50)
     private String name;
 
     @Schema(description = "Статус задачи")
@@ -40,9 +45,11 @@ public class TaskResponseDto {
     private int priority;
 
     @Schema(description = "Исполнитель")
+    @Size(max = 50)
     private String assigneeName;
 
     @Schema(description = "Команда")
+    @Size(max = 50)
     private String team;
 
 

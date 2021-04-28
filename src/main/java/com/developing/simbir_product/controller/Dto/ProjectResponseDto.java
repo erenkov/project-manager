@@ -1,17 +1,10 @@
 package com.developing.simbir_product.controller.Dto;
 
-import com.developing.simbir_product.entity.ProjectStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 
 @Schema(description = "Проект")
 public class ProjectResponseDto {
-
-    @Schema(description = "ID проекта")
-    private UUID id;
 
     @Schema(description = "Навзвание проекта")
     private String name;
@@ -20,28 +13,17 @@ public class ProjectResponseDto {
     private String description;
 
     @Schema(description = "Команда")
-    private TeamResponseDto teamDto;
+    private String teamName;
 
     @Schema(description = "Статус")
-    private ProjectStatus status;
+    private String status;
 
     @Schema(description = "Дата начала проекта")
-    private LocalDateTime startDate;
-
-    @Schema(description = "Дата конца проекта")
-    private LocalDateTime finishDate;
+    private String startDate;
 
     @Schema(description = "Ориентировочная дата конца проекта")
-    private LocalDateTime estFinishDate;
+    private String estFinishDate;
 
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -59,43 +41,35 @@ public class ProjectResponseDto {
         this.description = description;
     }
 
-    public TeamResponseDto getTeamDto() {
-        return teamDto;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setTeamDto(TeamResponseDto teamDto) {
-        this.teamDto = teamDto;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
-    public ProjectStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(ProjectStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public LocalDateTime getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(LocalDateTime finishDate) {
-        this.finishDate = finishDate;
-    }
-
-    public LocalDateTime getEstFinishDate() {
+    public String getEstFinishDate() {
         return estFinishDate;
     }
 
-    public void setEstFinishDate(LocalDateTime estFinishDate) {
+    public void setEstFinishDate(String estFinishDate) {
         this.estFinishDate = estFinishDate;
     }
 }
