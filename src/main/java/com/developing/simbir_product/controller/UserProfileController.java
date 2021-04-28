@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Управление профилем")
 @RequestMapping(value = "/profile")
 @RestController
-public class ProfileController {
+public class UserProfileController {
     @Operation(summary = "Получить страницу c профилем пользователя")
     @GetMapping(value = "")
     public ResponseEntity<String> getProfile() {
