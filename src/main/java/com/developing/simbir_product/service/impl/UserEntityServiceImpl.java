@@ -24,7 +24,7 @@ public class UserEntityServiceImpl implements UserEntityService {
         userResponseDto.setFirstName(userEntity.getFirstName());
         userResponseDto.setLastName(userEntity.getLastName());
         userResponseDto.setRole(userEntity.getRole().getShortName());
-
+        userResponseDto.setTeam(userEntity.getTeamId().getName());
         return userResponseDto;
     }
 
