@@ -1,26 +1,31 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "TASK")
+@Table(name = "TASK_RELEASE")
 public class TaskReleaseEntity {
 
     @EmbeddedId
     private TaskReleaseId taskReleaseId;
 
-    @Column(name = "is_complete")
-    private int isComplete;
+    @Column(name = "is_completed")
+    private boolean isCompleted;
+
+    @ManyToOne
+    @MapsId("taskId")
+    private TaskEntity taskId;
+
+    @ManyToOne
+    @MapsId("releaseId")
+    private ReleaseEntity releaseId;
 
     public TaskReleaseEntity() {
     }
 
-    public TaskReleaseEntity(TaskReleaseId taskReleaseId, int isComplete) {
+    public TaskReleaseEntity(TaskReleaseId taskReleaseId, boolean isCompleted) {
         this.taskReleaseId = taskReleaseId;
-        this.isComplete = isComplete;
+        this.isCompleted = isCompleted;
     }
 
     public TaskReleaseId getTaskReleaseId() {
@@ -31,11 +36,11 @@ public class TaskReleaseEntity {
         this.taskReleaseId = taskReleaseId;
     }
 
-    public int getIsComplete() {
-        return isComplete;
+    public boolean isCompleted() {
+        return isCompleted;
     }
 
-    public void setIsComplete(int isComplete) {
-        this.isComplete = isComplete;
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }
