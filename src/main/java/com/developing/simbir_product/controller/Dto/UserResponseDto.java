@@ -12,17 +12,17 @@ public class UserResponseDto {
     @Schema(description = "Пароль")
     private String password;
 
-    @Schema(description = "Имя")
-    private String firstName;
-
-    @Schema(description = "Фамилия")
-    private String lastName;
+    @Schema(description = "Имя и фамилия")
+    private String fullName;
 
     @Schema(description = "Роль")
     private String role;
 
     @Schema(description = "Команда")
     private String team;
+
+    @Schema(description = "Табельный номер")
+    private int userNumber;
 
 
     public String getEmail() {
@@ -41,20 +41,12 @@ public class UserResponseDto {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getRole() {
@@ -71,5 +63,13 @@ public class UserResponseDto {
 
     public void setTeam(String team) {
         this.team = team;
+    }
+
+    public int getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(int userNumber) {
+        this.userNumber = userNumber;
     }
 }
