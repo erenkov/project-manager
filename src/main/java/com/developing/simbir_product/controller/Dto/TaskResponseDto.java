@@ -45,6 +45,9 @@ public class TaskResponseDto {
     @Schema(description = "Команда")
     private String team;
 
+    @Schema(description = "Релиз")
+    private String release;
+
 
     public String getName() {
         return name;
@@ -148,5 +151,13 @@ public class TaskResponseDto {
 
     public void setTeam(String team) {
         this.team = team;
+    }
+
+    public String getRelease() {
+        return release;
+    }
+
+    public void setRelease(String release) {
+        this.release = release;
     }
 }
