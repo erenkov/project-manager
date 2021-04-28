@@ -28,6 +28,9 @@ public class UserEntityServiceImpl implements UserEntityService {
         return userResponseDto;
     }
 
+
+    @Transactional
+    @Override
     public boolean addUser(UserEntity user) {
         UserEntity userFromDb = userRepository.findByLogin(user.getLogin());
 
