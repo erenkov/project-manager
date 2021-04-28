@@ -1,7 +1,12 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -10,10 +15,16 @@ import java.util.UUID;
 @Embeddable
 public class UserTaskId implements Serializable {
 
-    @Column(name = "task_id")
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+    @Column(name = "task_id", updatable = false, nullable = false)
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID taskId;
 
-    @Column(name = "user_id")
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+    @Column(name = "user_id", updatable = false, nullable = false)
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID userId;
 
     @Column(name = "to_date")

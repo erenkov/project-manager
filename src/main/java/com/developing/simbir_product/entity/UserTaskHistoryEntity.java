@@ -10,14 +10,18 @@ public class UserTaskHistoryEntity {
     private UserTaskId userTaskId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @MapsId("userId")
     private UserEntity userId;
 
     @ManyToOne
-    @JoinColumn(name = "task_id")
+    @MapsId("taskId")
     private TaskEntity taskId;
 
     public UserTaskHistoryEntity() {
+    }
+
+    public UserTaskHistoryEntity(UserTaskId userTaskId) {
+        this.userTaskId = userTaskId;
     }
 
     public UserTaskId getUserTaskId() {
@@ -26,5 +30,21 @@ public class UserTaskHistoryEntity {
 
     public void setUserTaskId(UserTaskId userTaskId) {
         this.userTaskId = userTaskId;
+    }
+
+    public UserEntity getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserEntity userId) {
+        this.userId = userId;
+    }
+
+    public TaskEntity getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(TaskEntity taskId) {
+        this.taskId = taskId;
     }
 }

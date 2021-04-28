@@ -1,11 +1,9 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,25 +12,29 @@ import java.util.UUID;
 public class TaskEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, nullable = false)
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "state_id")
-    private UUID stateId;
+    @Column(name = "task_status", nullable = false)
+    private TaskStatus taskStatus;
 
-    @Column(name = "task_type_id")
-    private UUID taskTypeId;
+    @Column(name = "task_type", nullable = false)
+    private TaskType taskType;
 
-    @Column(name = "project_id")
-    private UUID projectId;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private ProjectEntity projectId;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
 
     @Column(name = "due_date")
@@ -50,20 +52,19 @@ public class TaskEntity {
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "priority")
+    @Column(name = "priority", nullable = false)
     private int priority;
 
     public TaskEntity() {
     }
 
-    public TaskEntity(UUID id, String name, UUID stateId, UUID taskTypeId, UUID projectId, String description,
-                      LocalDateTime createDate, LocalDateTime dueDate, LocalDateTime finishDate, int estCosts,
-                      int actualCosts, String comments, int priority) {
-        this.id = id;
+    public TaskEntity(String name, TaskStatus taskStatus, TaskType taskType,
+                      String description, LocalDateTime createDate,
+                      LocalDateTime dueDate, LocalDateTime finishDate,
+                      int estCosts, int actualCosts, String comments, int priority) {
         this.name = name;
-        this.stateId = stateId;
-        this.taskTypeId = taskTypeId;
-        this.projectId = projectId;
+        this.taskStatus = taskStatus;
+        this.taskType = taskType;
         this.description = description;
         this.createDate = createDate;
         this.dueDate = dueDate;
@@ -90,27 +91,27 @@ public class TaskEntity {
         this.name = name;
     }
 
-    public UUID getStateId() {
-        return stateId;
+    public TaskStatus getTaskStatus() {
+        return taskStatus;
     }
 
-    public void setStateId(UUID stateId) {
-        this.stateId = stateId;
+    public void setTaskStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
-    public UUID getTaskTypeId() {
-        return taskTypeId;
+    public TaskType getTaskType() {
+        return taskType;
     }
 
-    public void setTaskTypeId(UUID taskTypeId) {
-        this.taskTypeId = taskTypeId;
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
     }
 
-    public UUID getProjectId() {
+    public ProjectEntity getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(UUID projectId) {
+    public void setProjectId(ProjectEntity projectId) {
         this.projectId = projectId;
     }
 

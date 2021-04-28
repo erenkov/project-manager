@@ -1,5 +1,8 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,20 +12,26 @@ import java.util.UUID;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, nullable = false)
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
-    @Column(name = "login")
+    @Column(name = "login", nullable = false)
     private String login;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "user_number", nullable = false)
+    private int userNumber;
 
     @Column(name = "role_type")
     private Role role;
@@ -35,13 +44,13 @@ public class UserEntity {
     }
 
     public UserEntity(String login, String password, String firstName,
-                      String lastName, Role role, TeamEntity teamId) {
+                      String lastName, int userNumber, Role role) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userNumber = userNumber;
         this.role = role;
-        this.teamId = teamId;
     }
 
     public UUID getId() {
@@ -82,6 +91,14 @@ public class UserEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public int getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(int userNumber) {
+        this.userNumber = userNumber;
     }
 
     public Role getRole() {
