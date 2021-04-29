@@ -6,6 +6,7 @@ import com.developing.simbir_product.service.impl.ProjectServiceImpl;
 import com.developing.simbir_product.service.impl.TeamServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/projects")
 @RestController
 public class ProjectsController {
+
+    @Autowired
+    private TeamService teamService;
 
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping(value = "")
@@ -31,7 +35,6 @@ public class ProjectsController {
         // Запрос страницы для создания нового проекта
 //        ProjectService projectService = new ProjectServiceImpl();
 //        projectService.addProject();
-        TeamService teamService  = new TeamServiceImpl();
         teamService.addTeam();
         return null;
     }
