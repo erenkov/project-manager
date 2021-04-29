@@ -2,7 +2,9 @@ package com.developing.simbir_product.converter;
 
 import com.developing.simbir_product.entity.ProjectStatus;
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter(autoApply = true)
 public class ProjectStatusConverter implements AttributeConverter<ProjectStatus, String> {
 
     @Override
@@ -26,8 +28,7 @@ public class ProjectStatusConverter implements AttributeConverter<ProjectStatus,
                 return ProjectStatus.CLOSED;
 
             default:
-                throw new IllegalArgumentException("ShortName [" + shortName
-                        + "] not supported.");
+                throw new IllegalArgumentException(String.format("ShortName [ %s ] not supported.", shortName));
         }
     }
 }

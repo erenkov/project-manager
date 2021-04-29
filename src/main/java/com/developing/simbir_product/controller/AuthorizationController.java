@@ -1,7 +1,8 @@
 package com.developing.simbir_product.controller;
 
-import com.developing.simbir_product.controller.Dto.LoginDto;
-import com.developing.simbir_product.controller.Dto.UserDto;
+
+import com.developing.simbir_product.controller.Dto.UserRequestDto;
+import com.developing.simbir_product.controller.Dto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @Tag(name = "Авторизация")
 @RequestMapping("/")
@@ -25,9 +27,9 @@ public class AuthorizationController {
 
     @Operation(summary = "Проверка логина")
     @PostMapping(value = "/login")
-    public ResponseEntity<LoginDto> loginUser(LoginDto loginDto) {
+    public ResponseEntity<UserResponseDto> loginUser(UserRequestDto userRequestDto) {
         // Запрашиваем проверку логина
-        return ResponseEntity.ok().body(new LoginDto());
+        return ResponseEntity.ok().body(new UserResponseDto());
     }
 
     @Operation(summary = "Получить страницу регистрации")
@@ -39,8 +41,9 @@ public class AuthorizationController {
 
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping(value = "/registration")
-    public ResponseEntity<LoginDto> registerUser(UserDto userDto) {
+
+    public ResponseEntity<UserResponseDto> registerUser(UserRequestDto userRequestDto) {
         // Регистрируем нового пользователя
-        return ResponseEntity.ok().body(new LoginDto());
+        return ResponseEntity.ok().body(new UserResponseDto());
     }
 }

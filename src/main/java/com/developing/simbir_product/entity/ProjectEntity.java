@@ -1,7 +1,12 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -9,10 +14,13 @@ import java.util.UUID;
 public class ProjectEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, nullable = false)
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
@@ -34,8 +42,12 @@ public class ProjectEntity {
     @Column(name = "finish_date")
     private LocalDateTime finishDate;
 
+    @OneToMany (mappedBy = "projectId")
+    private List<TaskEntity> tasks;
+
     public ProjectEntity() {
     }
+
 
     public ProjectEntity(String name, String description, ProjectStatus projectStatus,
                          LocalDateTime startDate, LocalDateTime estFinishDate,
@@ -46,6 +58,14 @@ public class ProjectEntity {
         this.startDate = startDate;
         this.estFinishDate = estFinishDate;
         this.finishDate = finishDate;
+    }
+
+    public void assignTaskToProject (TaskEntity task) {
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+        }
+        tasks.add(task);
+        task.setProjectId(this);
     }
 
     public UUID getId() {
@@ -110,5 +130,13 @@ public class ProjectEntity {
 
     public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public List<TaskEntity> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskEntity> tasks) {
+        this.tasks = tasks;
     }
 }

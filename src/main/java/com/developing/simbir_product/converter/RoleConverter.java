@@ -5,7 +5,7 @@ import com.developing.simbir_product.entity.Role;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-@Converter
+@Converter(autoApply = true)
 public class RoleConverter implements AttributeConverter<Role, String> {
 
     @Override
