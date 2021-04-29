@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserProfileController {
     @Operation(summary = "Получить страницу c профилем пользователя")
-    @GetMapping(value = "")
+    @GetMapping
     public ResponseEntity<String> getProfile() {
         return null;
     }
