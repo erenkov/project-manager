@@ -10,7 +10,7 @@ public interface TeamService {
     //todo все сервисы возвращают Entity а не DTO
     TeamEntity getById(UUID id);
 
-    TeamEntity addTeam(ProjectRequestDto projectRequestDto);
+    void addTeam();
 
     TeamEntity editTeam(ProjectRequestDto projectRequestDto);
 

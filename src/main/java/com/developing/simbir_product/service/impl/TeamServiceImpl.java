@@ -24,7 +24,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Transactional
     @Override
-    public TeamEntity addTeam(ProjectRequestDto projectRequestDto) {
+    public void addTeam() {
 
         TeamEntity teamEntity = new TeamEntity(
                 "Team-1",
@@ -33,7 +33,7 @@ public class TeamServiceImpl implements TeamService {
 
         teamRepository.save(teamEntity);
 
-        return teamEntity;
+//        return teamEntity;
     }
 
     @Transactional

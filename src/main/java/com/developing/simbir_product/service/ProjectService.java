@@ -9,7 +9,7 @@ public interface ProjectService {
 
     ProjectResponseDto getById(UUID id);
 
-    ProjectResponseDto addProject(ProjectRequestDto projectRequestDto);
+    void addProject();
 
     ProjectResponseDto editProject(ProjectRequestDto projectRequestDto);
 

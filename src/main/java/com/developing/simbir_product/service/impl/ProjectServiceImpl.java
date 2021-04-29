@@ -42,7 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
+    public void addProject() {
 
 //        ProjectEntity projectEntity = new ProjectEntity();
 //
@@ -66,8 +66,6 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setTeamId(new TeamEntity("Team-1", "Desc team-1"));
 
         projectRepository.save(projectEntity);
-
-        return new ProjectResponseDto();
     }
 
     @Transactional

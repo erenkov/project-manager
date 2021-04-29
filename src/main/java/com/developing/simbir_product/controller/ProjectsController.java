@@ -1,5 +1,9 @@
 package com.developing.simbir_product.controller;
 
+import com.developing.simbir_product.service.ProjectService;
+import com.developing.simbir_product.service.TeamService;
+import com.developing.simbir_product.service.impl.ProjectServiceImpl;
+import com.developing.simbir_product.service.impl.TeamServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,10 @@ public class ProjectsController {
     @GetMapping(value = "/create")
     public ResponseEntity<String> getNewProjectPage() {
         // Запрос страницы для создания нового проекта
+//        ProjectService projectService = new ProjectServiceImpl();
+//        projectService.addProject();
+        TeamService teamService  = new TeamServiceImpl();
+        teamService.addTeam();
         return null;
     }
 
