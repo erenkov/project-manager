@@ -8,6 +8,7 @@ public class SimbirProductApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SimbirProductApplication.class, args);
+        
     }
 
 }

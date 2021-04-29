@@ -277,7 +277,7 @@ databaseChangeLog:
         - addUniqueConstraint:
             columnNames: login
             constraintName: user_login_key
-            tableName: user
+            tableName: usr
   - changeSet:
       id: 1619638368613-10
       author: Rebrin Konstantin
@@ -292,7 +292,7 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: team_id
-            baseTableName: user
+            baseTableName: usr
             constraintName: user_team_fk
             deferrable: false
             initiallyDeferred: false
@@ -314,7 +314,7 @@ databaseChangeLog:
             onDelete: NO ACTION
             onUpdate: NO ACTION
             referencedColumnNames: id
-            referencedTableName: user
+            referencedTableName: usr
             validate: true
   - changeSet:
       id: 1619638368613-13

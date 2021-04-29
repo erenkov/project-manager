@@ -54,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
 //        projectEntity.setEstFinishDate(LocalDateTime.MAX);
 //        projectEntity.setFinishDate(LocalDateTime.MAX);
 
-                ProjectEntity projectEntity = new ProjectEntity(
+        ProjectEntity projectEntity = new ProjectEntity(
                 "Проект-1",
                 "Описание",
                 ProjectStatus.BACKLOG,
@@ -62,7 +62,8 @@ public class ProjectServiceImpl implements ProjectService {
                 LocalDateTime.MAX,
                 LocalDateTime.MAX);
 
-                projectEntity.setTeamId(new TeamEntity());
+
+        projectEntity.setTeamId(new TeamEntity("Team-1", "Desc team-1"));
 
         projectRepository.save(projectEntity);
 
@@ -92,6 +93,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public void deleteById(UUID id) {
-         projectRepository.deleteById(id);
+        projectRepository.deleteById(id);
     }
 }
