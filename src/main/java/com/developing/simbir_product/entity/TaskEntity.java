@@ -11,11 +11,13 @@ import java.util.UUID;
 @Table(name = "TASK")
 public class TaskEntity {
 
+//    @Id
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @Column(name = "id", updatable = false, nullable = false)
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "name", nullable = false)

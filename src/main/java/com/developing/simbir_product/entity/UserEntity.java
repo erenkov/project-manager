@@ -8,20 +8,22 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "USR")
 public class UserEntity {
 
+//    @Id
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @Column(name = "id", updatable = false, nullable = false)
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "login", nullable = false)
     private String login;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "pass", nullable = false)
     private String password;
 
     @Column(name = "first_name", nullable = false)
