@@ -49,6 +49,17 @@ public class ProjectEntity {
     }
 
 
+    public ProjectEntity(String name, String description, ProjectStatus projectStatus,
+                         LocalDateTime startDate, LocalDateTime estFinishDate,
+                         LocalDateTime finishDate) {
+        this.name = name;
+        this.description = description;
+        this.projectStatus = projectStatus;
+        this.startDate = startDate;
+        this.estFinishDate = estFinishDate;
+        this.finishDate = finishDate;
+    }
+
     public void assignTaskToProject (TaskEntity task) {
         if (tasks == null) {
             tasks = new ArrayList<>();
