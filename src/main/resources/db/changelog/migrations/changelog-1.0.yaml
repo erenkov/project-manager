@@ -151,7 +151,7 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: password
+                  name: pass
                   type: VARCHAR(50)
               - column:
                   constraints:
@@ -170,7 +170,7 @@ databaseChangeLog:
                   name: team_id
                   type: UUID
             remarks: Информация о пользователях
-            tableName: user
+            tableName: usr
   - changeSet:
       id: 1619638368613-5
       author: Rebrin Konstantin
