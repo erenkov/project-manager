@@ -13,18 +13,18 @@ public class TaskReleaseId implements Serializable {
 
 //    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
 //    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "task_id", updatable = false, nullable = false)
+    @Column(name = "task_id", updatable = false, nullable = false)
 //    @Type(type="org.hibernate.type.PostgresUUIDType")
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID taskId;
 
 //    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
 //    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "release_id", updatable = false, nullable = false)
+    @Column(name = "release_id", updatable = false, nullable = false)
 //    @Type(type="org.hibernate.type.PostgresUUIDType")
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID releaseId;
 
     public TaskReleaseId() {
