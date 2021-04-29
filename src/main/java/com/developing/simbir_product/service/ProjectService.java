@@ -11,6 +11,8 @@ public interface ProjectService {
 
     ProjectResponseDto addProject(ProjectRequestDto projectRequestDto);
 
+    ProjectResponseDto editProject(ProjectRequestDto projectRequestDto);
+
     void deleteById(UUID id);
 
 }

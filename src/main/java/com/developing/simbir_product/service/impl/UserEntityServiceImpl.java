@@ -21,7 +21,7 @@ public class UserEntityServiceImpl implements UserEntityService {
                 () -> new NotFoundException("Project with email = ' ' not found")
         );
         UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setFullName(userEntity.getFirstName());
+        userResponseDto.setFullName(userEntity.getFirstName() + " " + userEntity.getLastName());
         userResponseDto.setRole(userEntity.getRole().getShortName());
         userResponseDto.setTeam(userEntity.getTeamId().getName());
         return userResponseDto;
