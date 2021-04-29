@@ -1,5 +1,6 @@
 package com.developing.simbir_product.controller;
 
+
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +41,7 @@ public class AuthorizationController {
 
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping(value = "/registration")
+
     public ResponseEntity<UserResponseDto> registerUser(UserRequestDto userRequestDto) {
         // Регистрируем нового пользователя
         return ResponseEntity.ok().body(new UserResponseDto());
