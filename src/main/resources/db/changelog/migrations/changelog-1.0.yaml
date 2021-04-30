@@ -169,6 +169,9 @@ databaseChangeLog:
               - column:
                   name: team_id
                   type: UUID
+              - column:
+                  name: user_number
+                  type: int
             remarks: Информация о пользователях
             tableName: usr
   - changeSet:
@@ -277,7 +280,15 @@ databaseChangeLog:
         - addUniqueConstraint:
             columnNames: login
             constraintName: user_login_key
-            tableName: user
+            tableName: usr
+  - changeSet:
+      id: 1619638368613-16
+      author: Rebrin Konstantin
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_number
+            constraintName: user_number_key
+            tableName: usr
   - changeSet:
       id: 1619638368613-10
       author: Rebrin Konstantin
@@ -292,7 +303,7 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: team_id
-            baseTableName: user
+            baseTableName: usr
             constraintName: user_team_fk
             deferrable: false
             initiallyDeferred: false
@@ -314,7 +325,7 @@ databaseChangeLog:
             onDelete: NO ACTION
             onUpdate: NO ACTION
             referencedColumnNames: id
-            referencedTableName: user
+            referencedTableName: usr
             validate: true
   - changeSet:
       id: 1619638368613-13
@@ -361,4 +372,16 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: team
             validate: true
-
+  - changeSet:
+      id: addAutoIncrement
+      author: Maxim Nikitin
+      changes:
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: user_number
+            defaultOnNull: false
+            generationType: ALWAYS
+            incrementBy: 1
+            schemaName: public
+            startWith: 1
+            tableName: usr
