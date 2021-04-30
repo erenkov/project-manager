@@ -28,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void addTask() {
         TaskEntity taskEntity = new TaskEntity();
-        taskEntity.setProjectId(projectService.getById(UUID.fromString("cc3771cf-e15d-403e-947e-af2b07a0083b")));
+        taskEntity.setProjectId(projectService.findByName("Проект-1"));
         taskEntity.setDescription("Description");
         taskEntity.setName("Task Name " + new Random().nextInt());
         taskEntity.setTaskType(TaskType.FEATURE);

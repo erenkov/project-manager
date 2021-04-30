@@ -28,7 +28,8 @@ public class TeamServiceImpl implements TeamService {
     public void addTeam() {
 
         TeamEntity teamEntity = new TeamEntity(
-                "Team-2" + new Random().nextInt(),
+//                "Team-2" + new Random().nextInt(),
+                "Team-2",
                 "Desc team-1"
         );
 //        teamEntity.setId(UUID.randomUUID());

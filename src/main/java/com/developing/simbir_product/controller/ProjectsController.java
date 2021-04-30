@@ -51,7 +51,7 @@ public class ProjectsController {
         projectService.addProject();
         taskService.addTask();
         releaseService.addRelease();
-        taskReleaseService.addTaskRelease();
+//        taskReleaseService.addTaskRelease();
 
         return null;
     }

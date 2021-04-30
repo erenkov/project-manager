@@ -4,6 +4,7 @@ import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ProjectStatus;
+import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.ProjectRepository;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TeamService;
@@ -67,7 +68,8 @@ public class ProjectServiceImpl implements ProjectService {
 //        projectEntity.setFinishDate(LocalDateTime.MAX);
 
         ProjectEntity projectEntity = new ProjectEntity(
-                "Проект-1" + new Random().nextInt(),
+//                "Проект-1" + new Random().nextInt(),
+                "Проект-1",
                 "Описание",
                 ProjectStatus.BACKLOG,
                 OffsetDateTime.now(),
@@ -104,5 +106,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteById(UUID id) {
         projectRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public ProjectEntity findByName(String name) {
+        ProjectEntity projectEntity = projectRepository.findByName(name).orElseThrow(
+                () -> new NotFoundException("Project with ID = ' ' not found"));
+        return projectEntity;
     }
 }
