@@ -22,6 +22,7 @@ public class ProjectsController {
     @Autowired
     private TeamService teamService;
 
+
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping(value = "")
     public ResponseEntity<String> getProjectsPage() {
