@@ -4,7 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
@@ -37,13 +37,13 @@ public class TaskEntity {
     private String description;
 
     @Column(name = "create_date", nullable = false)
-    private LocalDateTime createDate;
+    private OffsetDateTime createDate;
 
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private OffsetDateTime dueDate;
 
     @Column(name = "finish_date")
-    private LocalDateTime finishDate;
+    private OffsetDateTime finishDate;
 
     @Column(name = "est_costs")
     private int estCosts;
@@ -61,8 +61,8 @@ public class TaskEntity {
     }
 
     public TaskEntity(String name, TaskStatus taskStatus, TaskType taskType,
-                      String description, LocalDateTime createDate,
-                      LocalDateTime dueDate, LocalDateTime finishDate,
+                      String description, OffsetDateTime createDate,
+                      OffsetDateTime dueDate, OffsetDateTime finishDate,
                       int estCosts, int actualCosts, String comments, int priority) {
         this.name = name;
         this.taskStatus = taskStatus;
@@ -125,27 +125,27 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public LocalDateTime getCreateDate() {
+    public OffsetDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(OffsetDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getDueDate() {
+    public OffsetDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(OffsetDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    public LocalDateTime getFinishDate() {
+    public OffsetDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
+    public void setFinishDate(OffsetDateTime finishDate) {
         this.finishDate = finishDate;
     }
 

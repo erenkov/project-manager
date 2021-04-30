@@ -1,7 +1,7 @@
 package com.developing.simbir_product.controller;
 
-import com.developing.simbir_product.service.ProjectService;
-import com.developing.simbir_product.service.TeamService;
+import com.developing.simbir_product.entity.ReleaseEntity;
+import com.developing.simbir_product.service.*;
 import com.developing.simbir_product.service.impl.ProjectServiceImpl;
 import com.developing.simbir_product.service.impl.TeamServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +22,17 @@ public class ProjectsController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private ReleaseService releaseService;
+
+    @Autowired
+    private TaskReleaseService taskReleaseService;
 
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping(value = "")
@@ -37,6 +48,11 @@ public class ProjectsController {
 //        ProjectService projectService = new ProjectServiceImpl();
 //        projectService.addProject();
         teamService.addTeam();
+        projectService.addProject();
+        taskService.addTask();
+        releaseService.addRelease();
+        taskReleaseService.addTaskRelease();
+
         return null;
     }
 

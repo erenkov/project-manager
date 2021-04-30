@@ -15,4 +15,6 @@ public interface TeamService {
     TeamEntity editTeam(ProjectRequestDto projectRequestDto);
 
     void deleteById(UUID id);
+
+    TeamEntity getByName(String s);
 }

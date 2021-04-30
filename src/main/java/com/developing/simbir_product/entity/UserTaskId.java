@@ -2,7 +2,7 @@ package com.developing.simbir_product.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,12 +26,12 @@ public class UserTaskId implements Serializable {
     private UUID userId;
 
     @Column(name = "valid_to_date")
-    private LocalDateTime validToDate;
+    private OffsetDateTime validToDate;
 
     public UserTaskId() {
     }
 
-    public UserTaskId(UUID taskId, UUID userId, LocalDateTime validToDate) {
+    public UserTaskId(UUID taskId, UUID userId, OffsetDateTime validToDate) {
         this.taskId = taskId;
         this.userId = userId;
         this.validToDate = validToDate;
@@ -53,11 +53,11 @@ public class UserTaskId implements Serializable {
         this.userId = userId;
     }
 
-    public LocalDateTime getValidToDate() {
+    public OffsetDateTime getValidToDate() {
         return validToDate;
     }
 
-    public void setValidToDate(LocalDateTime validToDate) {
+    public void setValidToDate(OffsetDateTime validToDate) {
         this.validToDate = validToDate;
     }
 
