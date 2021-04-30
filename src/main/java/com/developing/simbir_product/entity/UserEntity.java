@@ -1,21 +1,13 @@
 package com.developing.simbir_product.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
+
 
 @Entity
 @Table(name = "USR")
 public class UserEntity {
 
-//    @Id
-//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "id", updatable = false, nullable = false)
-//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -32,7 +24,8 @@ public class UserEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "user_number", nullable = false)
+    @Column(name = "user_number", unique = true, nullable = false, insertable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int userNumber;
 
     @Column(name = "role_type")
@@ -42,17 +35,19 @@ public class UserEntity {
     @JoinColumn(name = "team_id")
     private TeamEntity teamId;
 
+
     public UserEntity() {
     }
 
-    public UserEntity(String login, String password, String firstName,
-                      String lastName, int userNumber, Role role) {
+    public UserEntity(String login, String password, String firstName, String lastName, int userNumber,
+                      Role role, TeamEntity teamId) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userNumber = userNumber;
         this.role = role;
+        this.teamId = teamId;
     }
 
     public UUID getId() {

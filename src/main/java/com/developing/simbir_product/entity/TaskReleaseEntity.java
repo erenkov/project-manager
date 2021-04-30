@@ -1,39 +1,31 @@
 package com.developing.simbir_product.entity;
 
 import javax.persistence.*;
+import java.util.UUID;
+
 
 @Entity
+@IdClass(TaskReleaseId.class)
 @Table(name = "TASK_RELEASE")
 public class TaskReleaseEntity {
-
-    @EmbeddedId
-    private TaskReleaseId taskReleaseId;
 
     @Column(name = "is_completed")
     private boolean isCompleted;
 
-    @ManyToOne
-    @MapsId("taskId")
-    private TaskEntity taskId;
+    @Id
+    private UUID taskId;
 
-    @ManyToOne
-    @MapsId("releaseId")
-    private ReleaseEntity releaseId;
+    @Id
+    private UUID releaseId;
+
 
     public TaskReleaseEntity() {
     }
 
-    public TaskReleaseEntity(TaskReleaseId taskReleaseId, boolean isCompleted) {
-        this.taskReleaseId = taskReleaseId;
+    public TaskReleaseEntity(boolean isCompleted, UUID taskId, UUID releaseId) {
         this.isCompleted = isCompleted;
-    }
-
-    public TaskReleaseId getTaskReleaseId() {
-        return taskReleaseId;
-    }
-
-    public void setTaskReleaseId(TaskReleaseId taskReleaseId) {
-        this.taskReleaseId = taskReleaseId;
+        this.taskId = taskId;
+        this.releaseId = releaseId;
     }
 
     public boolean isCompleted() {
@@ -42,5 +34,21 @@ public class TaskReleaseEntity {
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+    }
+
+    public UUID getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(UUID taskId) {
+        this.taskId = taskId;
+    }
+
+    public UUID getReleaseId() {
+        return releaseId;
+    }
+
+    public void setReleaseId(UUID releaseId) {
+        this.releaseId = releaseId;
     }
 }

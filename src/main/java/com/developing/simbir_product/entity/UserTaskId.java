@@ -1,32 +1,23 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-@Embeddable
+
 public class UserTaskId implements Serializable {
 
-//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "task_id", updatable = false, nullable = false)
-//    @Type(type="org.hibernate.type.PostgresUUIDType")
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "task_id", updatable = false, nullable = false)
     private UUID taskId;
 
-//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "user_id", updatable = false, nullable = false)
-//    @Type(type="org.hibernate.type.PostgresUUIDType")
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
     @Column(name = "valid_to_date")
     private OffsetDateTime validToDate;
+
 
     public UserTaskId() {
     }

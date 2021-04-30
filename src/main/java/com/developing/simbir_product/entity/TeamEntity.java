@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 @Entity
 @Table(name = "TEAM")
 public class TeamEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "name")
@@ -19,10 +21,10 @@ public class TeamEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany (mappedBy = "teamId")
+    @OneToMany(mappedBy = "teamId")
     private List<ProjectEntity> projects;
 
-    @OneToMany (mappedBy = "teamId")
+    @OneToMany(mappedBy = "teamId")
     private List<UserEntity> users;
 
     public TeamEntity() {
@@ -33,7 +35,15 @@ public class TeamEntity {
         this.description = description;
     }
 
-    public void assignProjectToTeam (ProjectEntity project) {
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
+    }
+
+    public void assignProjectToTeam(ProjectEntity project) {
         if (projects == null) {
             projects = new ArrayList<>();
         }
@@ -41,7 +51,7 @@ public class TeamEntity {
         project.setTeamId(this);
     }
 
-    public void assignUserToTeam (UserEntity user) {
+    public void assignUserToTeam(UserEntity user) {
         if (users == null) {
             users = new ArrayList<>();
         }

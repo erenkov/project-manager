@@ -1,23 +1,16 @@
 package com.developing.simbir_product.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 @Entity
 @Table(name = "PROJECT")
 public class ProjectEntity {
 
-//    @Id
-//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "id", updatable = false, nullable = false)
-//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -44,12 +37,12 @@ public class ProjectEntity {
     @Column(name = "finish_date")
     private OffsetDateTime finishDate;
 
-    @OneToMany (mappedBy = "projectId")
+    @OneToMany(mappedBy = "projectId")
     private List<TaskEntity> tasks;
+
 
     public ProjectEntity() {
     }
-
 
     public ProjectEntity(String name, String description, ProjectStatus projectStatus,
                          OffsetDateTime startDate, OffsetDateTime estFinishDate,
@@ -62,7 +55,8 @@ public class ProjectEntity {
         this.finishDate = finishDate;
     }
 
-    public void assignTaskToProject (TaskEntity task) {
+
+    public void assignTaskToProject(TaskEntity task) {
         if (tasks == null) {
             tasks = new ArrayList<>();
         }
