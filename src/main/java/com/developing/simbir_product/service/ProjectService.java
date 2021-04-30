@@ -2,12 +2,13 @@ package com.developing.simbir_product.service;
 
 import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
+import com.developing.simbir_product.entity.ProjectEntity;
 
 import java.util.UUID;
 
 public interface ProjectService {
 
-    ProjectResponseDto getById(UUID id);
+    ProjectEntity getById(UUID id);
 
     void addProject();
 

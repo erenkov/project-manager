@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -27,7 +28,7 @@ public class TeamServiceImpl implements TeamService {
     public void addTeam() {
 
         TeamEntity teamEntity = new TeamEntity(
-                "Team-2",
+                "Team-2" + new Random().nextInt(),
                 "Desc team-1"
         );
 //        teamEntity.setId(UUID.randomUUID());
@@ -53,5 +54,10 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void deleteById(UUID id) {
         teamRepository.deleteById(id);
+    }
+
+    @Override
+    public TeamEntity getByName(String s) {
+        return teamRepository.findByName(s).orElseThrow();
     }
 }

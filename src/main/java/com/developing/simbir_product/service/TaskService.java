@@ -1,8 +1,13 @@
 package com.developing.simbir_product.service;
 
+import com.developing.simbir_product.entity.TaskEntity;
+
+import java.util.UUID;
+
+
 public interface TaskService {
 
-//    private TaskResponseDto getById(UUID is) {
-//        return null;
-//    }
+    void addTask();
+
+    TaskEntity getById(UUID id);
 }
