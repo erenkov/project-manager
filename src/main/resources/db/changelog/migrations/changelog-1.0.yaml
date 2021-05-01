@@ -264,7 +264,7 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: task_id
-            baseTableName: task_release
+            baseTableName: task_release_history
             constraintName: task_id_fk
             deferrable: false
             initiallyDeferred: false
@@ -348,7 +348,7 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: release_id
-            baseTableName: task_release
+            baseTableName: task_release_history
             constraintName: release_id_fk
             deferrable: false
             initiallyDeferred: false
