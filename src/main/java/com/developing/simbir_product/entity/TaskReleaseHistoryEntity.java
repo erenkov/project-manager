@@ -3,8 +3,8 @@ package com.developing.simbir_product.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "TASK_RELEASE")
-public class TaskReleaseEntity {
+@Table(name = "TASK_RELEASE_HISTORY")
+public class TaskReleaseHistoryEntity {
 
     @EmbeddedId
     private TaskReleaseId taskReleaseId;
@@ -20,10 +20,10 @@ public class TaskReleaseEntity {
     @MapsId("releaseId")
     private ReleaseEntity releaseId;
 
-    public TaskReleaseEntity() {
+    public TaskReleaseHistoryEntity() {
     }
 
-    public TaskReleaseEntity(TaskReleaseId taskReleaseId, boolean isCompleted) {
+    public TaskReleaseHistoryEntity(TaskReleaseId taskReleaseId, boolean isCompleted) {
         this.taskReleaseId = taskReleaseId;
         this.isCompleted = isCompleted;
     }
