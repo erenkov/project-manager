@@ -67,7 +67,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public void deleteById(UUID id) {
-         projectRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        projectRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 

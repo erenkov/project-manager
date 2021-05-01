@@ -33,7 +33,7 @@ public class TaskReleaseServiceImpl implements TaskReleaseService {
     }
 
     @Override
-    public void deleteByTaskIdAndReleaseId(UUID taskId, UUID releaseId)  {
+    public void deleteByTaskIdAndReleaseId(UUID taskId, UUID releaseId) {
         taskReleaseRepository.deleteByTaskIdAndReleaseId(taskId, releaseId); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 

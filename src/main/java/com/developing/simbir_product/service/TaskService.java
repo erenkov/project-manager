@@ -16,5 +16,5 @@ public interface TaskService {
     void deleteById(UUID id);
 
     TaskResponseDto findByName(String name);
-    
+
 }

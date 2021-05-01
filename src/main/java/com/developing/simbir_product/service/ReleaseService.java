@@ -16,5 +16,5 @@ public interface ReleaseService {
     void deleteById(UUID id);
 
     ReleaseResponseDto findByName(String name);
-    
+
 }

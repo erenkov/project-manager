@@ -15,5 +15,5 @@ public interface TeamService {
     void deleteById(UUID id);
 
     TeamEntity findByName(String name);
-    
+
 }
