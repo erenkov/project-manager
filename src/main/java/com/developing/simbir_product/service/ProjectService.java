@@ -15,4 +15,6 @@ public interface ProjectService {
 
     void deleteById(UUID id);
 
+    ProjectResponseDto findByName(String name);
+
 }

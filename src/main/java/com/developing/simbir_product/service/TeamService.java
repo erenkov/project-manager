@@ -1,18 +1,19 @@
 package com.developing.simbir_product.service;
 
-import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.entity.TeamEntity;
 
 import java.util.UUID;
 
 public interface TeamService {
 
-    //todo все сервисы возвращают Entity а не DTO
     TeamEntity getById(UUID id);
 
-    TeamEntity addTeam(ProjectRequestDto projectRequestDto);
+    TeamEntity addTeam(TeamEntity teamRequestDto);
 
-    TeamEntity editTeam(ProjectRequestDto projectRequestDto);
+    TeamEntity editTeam(TeamEntity teamRequestDto);
 
     void deleteById(UUID id);
+
+    TeamEntity findByName(String name);
+    
 }

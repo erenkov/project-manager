@@ -1,7 +1,7 @@
 package com.developing.simbir_product.service.impl;
 
-import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.entity.TeamEntity;
+import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.TeamRepository;
 import com.developing.simbir_product.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,38 +19,33 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     @Override
     public TeamEntity getById(UUID id) {
-        return teamRepository.findById(id).orElse(new TeamEntity());
-    }
-
-    @Transactional
-    @Override
-    public TeamEntity addTeam(ProjectRequestDto projectRequestDto) {
-
-        TeamEntity teamEntity = new TeamEntity(
-                "Team-1",
-                "Desc team-1"
+        return teamRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Team with ID = ' ' not found")
         );
-
-        teamRepository.save(teamEntity);
-
-        return teamEntity;
     }
 
     @Transactional
     @Override
-    public TeamEntity editTeam(ProjectRequestDto projectRequestDto) {
+    public TeamEntity addTeam(TeamEntity teamEntity) {
+        return teamRepository.save(teamEntity);
+    }
 
-        TeamEntity teamEntity = teamRepository.findByName("Team-1").orElse(new TeamEntity());
-        teamEntity.setDescription("new desc"); // Изменяем описание
-
-        teamRepository.save(teamEntity);
-
-        return teamEntity;
+    @Transactional
+    @Override
+    public TeamEntity editTeam(TeamEntity teamEntity) {
+        return teamRepository.save(teamEntity);
     }
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
         teamRepository.deleteById(id);
+    }
+
+    @Override
+    public TeamEntity findByName(String name) {
+        return teamRepository.findByName(name).orElseThrow(
+                () -> new NotFoundException("Team with name = ' ' not found")
+        );
     }
 }
