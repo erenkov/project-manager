@@ -372,6 +372,7 @@ databaseChangeLog:
             referencedTableName: team
             validate: true
   - changeSet:
+
       id: 1619863834457-17
       author: Rebrin Konstantin
       changes:
@@ -401,6 +402,7 @@ databaseChangeLog:
             startWith: 1
             tableName: usr
   - changeSet:
+
       id: addForeignKey-19
       author: Rebrin Konstantin
       changes:
