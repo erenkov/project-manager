@@ -15,18 +15,22 @@ import java.util.UUID;
 @Service
 public class ReleaseServiceImpl implements ReleaseService {
 
+
     @Autowired
     private ReleaseRepository releaseRepository;
+
 
     @Transactional
     @Override
     public ReleaseResponseDto getById(UUID id) {
+
         ReleaseEntity releaseEntity = releaseRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Release with ID = ' ' not found")
         );
 
         ReleaseResponseDto releaseResponseDto = new ReleaseResponseDto();
-        //todo ReleaseResponseDto = mapFrom releaseEntity
+
+        //todo ReleaseResponseDto = mapFrom releaseEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return releaseResponseDto;
     }
@@ -37,43 +41,45 @@ public class ReleaseServiceImpl implements ReleaseService {
     public ReleaseResponseDto addRelease(ReleaseRequestDto releaseRequestDto) {
 
         ReleaseEntity releaseEntity = new ReleaseEntity();
-        //todo releaseEntity = mapFrom releaseRequestDto
+        //todo releaseEntity = mapFrom releaseRequestDto ???????????????????????????????
 
         releaseRepository.save(releaseEntity);
 
-        return new ReleaseResponseDto(); //todo
+        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Transactional
     @Override
     public ReleaseResponseDto editRelease(ReleaseRequestDto releaseRequestDto) {
+
         ReleaseEntity releaseEntity = new ReleaseEntity();
-        //todo releaseEntity = mapFrom releaseRequestDto
+
+        //todo releaseEntity = mapFrom releaseRequestDto ?????????????????????????????????????
 
         releaseRepository.save(releaseEntity);
 
-        return new ReleaseResponseDto(); //todo
+        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        releaseRepository.deleteById(id); //todo
+        releaseRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Override
     public ReleaseResponseDto findByName(String name) {
+
         ReleaseEntity releaseEntity = releaseRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException("Release with name = ' ' not found")
         );
 
         ReleaseResponseDto releaseResponseDto = new ReleaseResponseDto();
-        //todo ReleaseResponseDto = mapFrom releaseEntity
+        //todo ReleaseResponseDto = mapFrom releaseEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return releaseResponseDto;
     }
-
 }

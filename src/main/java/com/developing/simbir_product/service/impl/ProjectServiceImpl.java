@@ -15,18 +15,22 @@ import java.util.UUID;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+
     @Autowired
     private ProjectRepository projectRepository;
+
 
     @Transactional
     @Override
     public ProjectResponseDto getById(UUID id) {
+
         ProjectEntity projectEntity = projectRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Project with ID = ' ' not found")
         );
 
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-        //todo ProjectResponseDto = mapFrom projectEntity
+
+        //todo ProjectResponseDto = mapFrom projectEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return projectResponseDto;
     }
@@ -37,30 +41,33 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
 
         ProjectEntity projectEntity = new ProjectEntity();
-        //todo projectEntity = mapFrom projectRequestDto
+
+        //todo projectEntity = mapFrom projectRequestDto ???????????????????????????????????????
 
         projectRepository.save(projectEntity);
 
-        return new ProjectResponseDto(); //todo
+        return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Transactional
     @Override
     public ProjectResponseDto editProject(ProjectRequestDto projectRequestDto) {
+
         ProjectEntity projectEntity = new ProjectEntity();
-        //todo projectEntity = mapFrom projectRequestDto
+
+        //todo projectEntity = mapFrom projectRequestDto ???????????????????????????????????
 
         projectRepository.save(projectEntity);
 
-        return new ProjectResponseDto(); //todo
+        return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
-         projectRepository.deleteById(id); //todo
+         projectRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
@@ -71,7 +78,8 @@ public class ProjectServiceImpl implements ProjectService {
         );
 
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-        //todo ProjectResponseDto = mapFrom projectEntity
+
+        //todo ProjectResponseDto = mapFrom projectEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return projectResponseDto;
     }

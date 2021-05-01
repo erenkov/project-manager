@@ -14,25 +14,25 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     private UserTaskHistoryRepository userTaskHistoryRepository;
 
     @Override
-    public UserTaskHistoryEntity getByTaskIdAndReleaseId(UUID userId, UUID taskId) {
+    public UserTaskHistoryEntity getByTaskIdAndReleaseId(UUID userId, UUID taskId) { //todo 3 поле добавить из ключа
         return userTaskHistoryRepository.findByUserIdAndTaskId(userId, taskId).orElseThrow(
                 () -> new NotFoundException("UserTaskHistory with ID = ' ' not found")
-        );
+        );  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
     public UserTaskHistoryEntity addUserTaskHistory(UserTaskHistoryEntity userTaskHistoryEntity) {
-        return userTaskHistoryRepository.save(userTaskHistoryEntity);
+        return userTaskHistoryRepository.save(userTaskHistoryEntity);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
     public UserTaskHistoryEntity editUserTaskHistory(UserTaskHistoryEntity userTaskHistoryEntity) {
-        return userTaskHistoryRepository.save(userTaskHistoryEntity);
+        return userTaskHistoryRepository.save(userTaskHistoryEntity);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
-    public void deleteByUserIdAndTaskId(UUID userId, UUID taskId) {
-        userTaskHistoryRepository.deleteByUserIdAndTaskId(userId, taskId); //todo
+    public void deleteByUserIdAndTaskId(UUID userId, UUID taskId) { //todo 3 поле добавить из ключа
+        userTaskHistoryRepository.deleteByUserIdAndTaskId(userId, taskId);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 }

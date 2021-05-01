@@ -19,22 +19,22 @@ public class TaskReleaseServiceImpl implements TaskReleaseService {
     public TaskReleaseEntity getByTaskIdAndReleaseId(UUID taskId, UUID releaseId) {
         return taskReleaseRepository.findByTaskIdAndReleaseId(taskId, releaseId).orElseThrow(
                 () -> new NotFoundException("TaskRelease with ID = ' ' not found")
-        );
+        ); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
     public TaskReleaseEntity addTaskRelease(TaskReleaseEntity taskReleaseEntity) {
-        return taskReleaseRepository.save(taskReleaseEntity);
+        return taskReleaseRepository.save(taskReleaseEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
     public TaskReleaseEntity editTaskRelease(TaskReleaseEntity taskReleaseEntity) {
-        return taskReleaseRepository.save(taskReleaseEntity);
+        return taskReleaseRepository.save(taskReleaseEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
     public void deleteByTaskIdAndReleaseId(UUID taskId, UUID releaseId)  {
-        taskReleaseRepository.deleteByTaskIdAndReleaseId(taskId, releaseId); //todo
+        taskReleaseRepository.deleteByTaskIdAndReleaseId(taskId, releaseId); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 }

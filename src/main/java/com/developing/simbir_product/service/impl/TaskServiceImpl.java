@@ -19,15 +19,18 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+
     @Transactional
     @Override
     public TaskResponseDto getById(UUID id) {
+
         TaskEntity taskEntity = taskRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Task with ID = ' ' not found")
         );
 
         TaskResponseDto taskResponseDto = new TaskResponseDto();
-        //todo TaskResponseDto = mapFrom taskEntity
+
+        //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return taskResponseDto;
     }
@@ -38,41 +41,46 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
 
         TaskEntity taskEntity = new TaskEntity();
-        //todo taskEntity = mapFrom taskRequestDto
+
+        //todo taskEntity = mapFrom taskRequestDto ??????????????????????????
 
         taskRepository.save(taskEntity);
 
-        return new TaskResponseDto(); //todo
+        return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Transactional
     @Override
     public TaskResponseDto editTask(TaskRequestDto taskRequestDto) {
+
         TaskEntity taskEntity = new TaskEntity();
-        //todo taskEntity = mapFrom taskRequestDto
+
+        //todo taskEntity = mapFrom taskRequestDto ???????????????????????????????
 
         taskRepository.save(taskEntity);
 
-        return new TaskResponseDto(); //todo
+        return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        taskRepository.deleteById(id); //todo
+        taskRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
     @Override
     public TaskResponseDto findByName(String name) {
+
         TaskEntity taskEntity = taskRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException("Task with name = ' ' not found")
         );
 
         TaskResponseDto taskResponseDto = new TaskResponseDto();
-        //todo TaskResponseDto = mapFrom taskEntity
+
+        //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!
 
         return taskResponseDto;
     }
