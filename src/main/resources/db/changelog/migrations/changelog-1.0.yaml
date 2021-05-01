@@ -88,7 +88,7 @@ databaseChangeLog:
                   name: is_completed
                   type: BOOLEAN
             remarks: Информация о задачах  и релизах, в которых эти задачи выполнялись
-            tableName: task_release
+            tableName: task_release_history
   - changeSet:
       id: 1619638368613-3
       author: Rebrin Konstantin
