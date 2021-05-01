@@ -8,10 +8,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface TaskReleaseRepository extends JpaRepository<TaskReleaseHistoryEntity, UUID>{
-
-    Optional<TaskReleaseEntity> findByTaskIdAndReleaseId(UUID taskId, UUID releaseId);
-
-    void deleteByTaskIdAndReleaseId(UUID taskId, UUID releaseId);
-
+public interface TaskReleaseHistoryRepository extends JpaRepository<TaskReleaseHistoryEntity, UUID>{
 }

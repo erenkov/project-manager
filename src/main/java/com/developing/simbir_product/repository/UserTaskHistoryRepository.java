@@ -4,10 +4,8 @@ import com.developing.simbir_product.entity.UserTaskHistoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface UserTaskHistoryRepository extends  JpaRepository<UserTaskHistoryEntity, UserTaskId>{
-
-    Optional<UserTaskHistoryEntity> findByUserIdAndTaskId(UUID userId, UUID taskId);//todo добавить 3 поле
-
-    void deleteByUserIdAndTaskId(UUID userId, UUID taskId); //todo добавить 3 поле
+public interface UserTaskHistoryRepository extends  JpaRepository<UserTaskHistoryEntity, UUID>{
 }
