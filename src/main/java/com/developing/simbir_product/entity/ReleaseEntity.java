@@ -9,33 +9,35 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "RELEASE")
 public class ReleaseEntity {
 
+//    @Id
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @Column(name = "id", updatable = false, nullable = false)
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDateTime startDate;
+    private OffsetDateTime startDate;
 
     @Column(name = "finish_date", nullable = false)
-    private LocalDateTime finishDate;
+    private OffsetDateTime finishDate;
 
     public ReleaseEntity() {
     }
 
-    public ReleaseEntity(String name, LocalDateTime startDate, LocalDateTime finishDate) {
+    public ReleaseEntity(String name, OffsetDateTime startDate, OffsetDateTime finishDate) {
         this.name = name;
         this.startDate = startDate;
         this.finishDate = finishDate;
@@ -57,19 +59,19 @@ public class ReleaseEntity {
         this.name = name;
     }
 
-    public LocalDateTime getStartDate() {
+    public OffsetDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(OffsetDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getFinishDate() {
+    public OffsetDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
+    public void setFinishDate(OffsetDateTime finishDate) {
         this.finishDate = finishDate;
     }
 }

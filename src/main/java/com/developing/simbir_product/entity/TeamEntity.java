@@ -1,5 +1,8 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +13,11 @@ import java.util.UUID;
 public class TeamEntity {
 
     @Id
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+//    @Type(type="pg-uuid")
     private UUID id;
 
     @Column(name = "name")

@@ -23,12 +23,12 @@ public class UserEntityServiceImpl implements UserEntityService, UserDetailsServ
 
     @Transactional
     @Override
-    public UserResponseDto findByEmail(String email) {
-        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException("Project with email = ' ' not found")
+    public UserResponseDto findByEmail(String login) {
+        UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
+                () -> new NotFoundException("User with email = ' ' not found")
         );
         UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setFullName(userEntity.getFirstName());
+        userResponseDto.setFullName(userEntity.getFirstName() + " " + userEntity.getLastName());
         userResponseDto.setRole(userEntity.getRole().getShortName());
         userResponseDto.setTeam(userEntity.getTeamId().getName());
         return userResponseDto;
@@ -38,7 +38,8 @@ public class UserEntityServiceImpl implements UserEntityService, UserDetailsServ
     @Transactional
     @Override
     public boolean addUser(UserEntity user) {
-        UserEntity userFromDb = userRepository.findByLogin(user.getLogin());
+        UserEntity userFromDb = userRepository.findByLogin(user.getLogin()).orElseThrow(
+                () -> new NotFoundException("User with email = ' ' not found"));
 
         if (userFromDb != null) {
             return false;

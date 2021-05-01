@@ -37,7 +37,6 @@ public class UserRequestDto {
     private String team;
 
     @Schema(description = "Табельный номер")
-    @NotNull
     private int userNumber;
 
 

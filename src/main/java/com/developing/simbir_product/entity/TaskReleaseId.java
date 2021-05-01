@@ -3,10 +3,7 @@ package com.developing.simbir_product.entity;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -14,16 +11,20 @@ import java.util.UUID;
 @Embeddable
 public class TaskReleaseId implements Serializable {
 
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
     @Column(name = "task_id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID taskId;
 
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
     @Column(name = "release_id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID releaseId;
 
     public TaskReleaseId() {

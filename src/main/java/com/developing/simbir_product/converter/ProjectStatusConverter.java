@@ -28,8 +28,7 @@ public class ProjectStatusConverter implements AttributeConverter<ProjectStatus,
                 return ProjectStatus.CLOSED;
 
             default:
-                throw new IllegalArgumentException("ShortName [" + shortName
-                        + "] not supported.");
+                throw new IllegalArgumentException(String.format("ShortName [ %s ] not supported.", shortName));
         }
     }
 }
