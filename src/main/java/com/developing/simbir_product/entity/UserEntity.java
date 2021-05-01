@@ -37,12 +37,11 @@ public class UserEntity {
     }
 
     public UserEntity(String login, String password, String firstName,
-                      String lastName, TeamEntity teamId, Role role) {
+                      String lastName, Role role) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.teamId = teamId;
         this.role = role;
     }
 
