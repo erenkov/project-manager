@@ -1,20 +1,21 @@
 package com.developing.simbir_product.entity;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "USER_TASK_HISTORY")
 public class UserTaskHistoryEntity {
 
-    @EmbeddedId
-    private UserTaskId userTaskId;
+    @Id
+    private UUID id;
 
     @ManyToOne
-    @MapsId("userId")
+    @JoinColumn("user_id")
     private UserEntity userId;
 
     @ManyToOne
-    @MapsId("taskId")
+    @JoinColumn("task_id")
     private TaskEntity taskId;
 
     public UserTaskHistoryEntity() {

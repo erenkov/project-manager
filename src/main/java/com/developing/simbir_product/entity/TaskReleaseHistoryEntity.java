@@ -1,39 +1,59 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "TASK_RELEASE_HISTORY")
 public class TaskReleaseHistoryEntity {
 
-    @EmbeddedId
-    private TaskReleaseId taskReleaseId;
+    @Id
+    private UUID id;
+
+    @ManyToOne
+    @JoinColumn("task_id", updatable = false, nullable = false)
+    private TaskEntity taskId;
+
+    @ManyToOne
+    @JoinColumn("release_id", updatable = false, nullable = false)
+    private ReleaseEntity releaseId;
 
     @Column(name = "is_completed")
     private boolean isCompleted;
 
-    @ManyToOne
-    @MapsId("taskId")
-    private TaskEntity taskId;
-
-    @ManyToOne
-    @MapsId("releaseId")
-    private ReleaseEntity releaseId;
-
     public TaskReleaseHistoryEntity() {
     }
 
-    public TaskReleaseHistoryEntity(TaskReleaseId taskReleaseId, boolean isCompleted) {
-        this.taskReleaseId = taskReleaseId;
+    public TaskReleaseHistoryEntity(UUID id, boolean isCompleted) {
+        this.id = id;
         this.isCompleted = isCompleted;
     }
 
-    public TaskReleaseId getTaskReleaseId() {
-        return taskReleaseId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setTaskReleaseId(TaskReleaseId taskReleaseId) {
-        this.taskReleaseId = taskReleaseId;
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public TaskEntity getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(TaskEntity taskId) {
+        this.taskId = taskId;
+    }
+
+    public ReleaseEntity getReleaseId() {
+        return releaseId;
+    }
+
+    public void setReleaseId(ReleaseEntity releaseId) {
+        this.releaseId = releaseId;
     }
 
     public boolean isCompleted() {
