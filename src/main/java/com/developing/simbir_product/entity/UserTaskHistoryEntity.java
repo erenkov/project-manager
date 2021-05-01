@@ -1,6 +1,7 @@
 package com.developing.simbir_product.entity;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
@@ -18,19 +19,22 @@ public class UserTaskHistoryEntity {
     @JoinColumn("task_id")
     private TaskEntity taskId;
 
+    @Column(name = "valid_to_date")
+    private OffsetDateTime validToDate;
+
     public UserTaskHistoryEntity() {
     }
 
-    public UserTaskHistoryEntity(UserTaskId userTaskId) {
-        this.userTaskId = userTaskId;
+    public UserTaskHistoryEntity(OffsetDateTime validToDate) {
+        this.validToDate = validToDate;
     }
 
-    public UserTaskId getUserTaskId() {
-        return userTaskId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setUserTaskId(UserTaskId userTaskId) {
-        this.userTaskId = userTaskId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public UserEntity getUserId() {
@@ -47,5 +51,13 @@ public class UserTaskHistoryEntity {
 
     public void setTaskId(TaskEntity taskId) {
         this.taskId = taskId;
+    }
+
+    public OffsetDateTime getValidToDate() {
+        return validToDate;
+    }
+
+    public void setValidToDate(OffsetDateTime validToDate) {
+        this.validToDate = validToDate;
     }
 }
