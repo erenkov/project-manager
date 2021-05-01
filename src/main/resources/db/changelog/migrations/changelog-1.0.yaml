@@ -88,7 +88,7 @@ databaseChangeLog:
                   name: is_completed
                   type: BOOLEAN
             remarks: Информация о задачах  и релизах, в которых эти задачи выполнялись
-            tableName: task_release
+            tableName: task_release_history
   - changeSet:
       id: 1619638368613-3
       author: Rebrin Konstantin
@@ -169,6 +169,9 @@ databaseChangeLog:
               - column:
                   name: team_id
                   type: UUID
+              - column:
+                  name: user_number
+                  type: int
             remarks: Информация о пользователях
             tableName: usr
   - changeSet:
@@ -261,7 +264,7 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: task_id
-            baseTableName: task_release
+            baseTableName: task_release_history
             constraintName: task_id_fk
             deferrable: false
             initiallyDeferred: false
@@ -277,6 +280,14 @@ databaseChangeLog:
         - addUniqueConstraint:
             columnNames: login
             constraintName: user_login_key
+            tableName: usr
+  - changeSet:
+      id: 1619638368613-16
+      author: Rebrin Konstantin
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_number
+            constraintName: user_number_key
             tableName: usr
   - changeSet:
       id: 1619638368613-10
@@ -337,7 +348,7 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: release_id
-            baseTableName: task_release
+            baseTableName: task_release_history
             constraintName: release_id_fk
             deferrable: false
             initiallyDeferred: false
@@ -361,4 +372,31 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: team
             validate: true
-
+  - changeSet:
+      id: addAutoIncrement-16
+      author: Maxim Nikitin
+      changes:
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: user_number
+            defaultOnNull: false
+            generationType: ALWAYS
+            incrementBy: 1
+            schemaName: public
+            startWith: 1
+            tableName: usr
+  - changeSet:
+      id: addAutoForeignKey-17
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: task_id
+            baseTableName: user_task_history
+            constraintName: task_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: task
+            validate: true
