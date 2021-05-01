@@ -12,11 +12,11 @@ public class UserTaskHistoryEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn("user_id")
+    @JoinColumn(name = "user_id")
     private UserEntity userId;
 
     @ManyToOne
-    @JoinColumn("task_id")
+    @JoinColumn(name = "task_id")
     private TaskEntity taskId;
 
     @Column(name = "valid_to_date")

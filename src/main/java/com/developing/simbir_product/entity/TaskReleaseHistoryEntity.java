@@ -14,11 +14,11 @@ public class TaskReleaseHistoryEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn("task_id", updatable = false, nullable = false)
+    @JoinColumn(name = "task_id", updatable = false, nullable = false)
     private TaskEntity taskId;
 
     @ManyToOne
-    @JoinColumn("release_id", updatable = false, nullable = false)
+    @JoinColumn(name = "release_id", updatable = false, nullable = false)
     private ReleaseEntity releaseId;
 
     @Column(name = "is_completed")
