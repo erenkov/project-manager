@@ -1,13 +1,10 @@
 package com.developing.simbir_product.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TASK_RELEASE_HISTORY")
+@Table(name = "task_release_history")
 public class TaskReleaseHistoryEntity {
 
     @Id
