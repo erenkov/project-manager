@@ -373,7 +373,7 @@ databaseChangeLog:
             referencedTableName: team
             validate: true
   - changeSet:
-      id: addAutoIncrement
+      id: addAutoIncrement-16
       author: Maxim Nikitin
       changes:
         - addAutoIncrement:
@@ -385,3 +385,18 @@ databaseChangeLog:
             schemaName: public
             startWith: 1
             tableName: usr
+  - changeSet:
+      id: addAutoForeignKey-17
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: task_id
+            baseTableName: user_task_history
+            constraintName: task_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: task
+            validate: true
