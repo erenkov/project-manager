@@ -3,7 +3,9 @@ package com.developing.simbir_product.converter;
 import com.developing.simbir_product.entity.TaskType;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter(autoApply = true)
 public class TaskTypeConverter implements AttributeConverter<TaskType, String> {
 
     @Override

@@ -4,7 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,11 +13,13 @@ import java.util.UUID;
 @Table(name = "PROJECT")
 public class ProjectEntity {
 
+//    @Id
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @Column(name = "id", updatable = false, nullable = false)
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "name", nullable = false)
@@ -34,13 +36,13 @@ public class ProjectEntity {
     private ProjectStatus projectStatus;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private OffsetDateTime startDate;
 
     @Column(name = "est_finish_date")
-    private LocalDateTime estFinishDate;
+    private OffsetDateTime estFinishDate;
 
     @Column(name = "finish_date")
-    private LocalDateTime finishDate;
+    private OffsetDateTime finishDate;
 
     @OneToMany (mappedBy = "projectId")
     private List<TaskEntity> tasks;
@@ -48,6 +50,17 @@ public class ProjectEntity {
     public ProjectEntity() {
     }
 
+
+    public ProjectEntity(String name, String description, ProjectStatus projectStatus,
+                         OffsetDateTime startDate, OffsetDateTime estFinishDate,
+                         OffsetDateTime finishDate) {
+        this.name = name;
+        this.description = description;
+        this.projectStatus = projectStatus;
+        this.startDate = startDate;
+        this.estFinishDate = estFinishDate;
+        this.finishDate = finishDate;
+    }
 
     public void assignTaskToProject (TaskEntity task) {
         if (tasks == null) {
@@ -97,27 +110,27 @@ public class ProjectEntity {
         this.projectStatus = projectStatus;
     }
 
-    public LocalDateTime getStartDate() {
+    public OffsetDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(OffsetDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEstFinishDate() {
+    public OffsetDateTime getEstFinishDate() {
         return estFinishDate;
     }
 
-    public void setEstFinishDate(LocalDateTime estFinishDate) {
+    public void setEstFinishDate(OffsetDateTime estFinishDate) {
         this.estFinishDate = estFinishDate;
     }
 
-    public LocalDateTime getFinishDate() {
+    public OffsetDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
+    public void setFinishDate(OffsetDateTime finishDate) {
         this.finishDate = finishDate;
     }
 

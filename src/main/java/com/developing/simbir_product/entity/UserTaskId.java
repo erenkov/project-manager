@@ -1,42 +1,40 @@
 package com.developing.simbir_product.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
 public class UserTaskId implements Serializable {
 
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-    @Column(name = "task_id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @Column(name = "task_id", updatable = false, nullable = false)
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID taskId;
 
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-    @Column(name = "user_id", updatable = false, nullable = false)
-    @Type(type="org.hibernate.type.PostgresUUIDType")
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
+//    @Column(name = "user_id", updatable = false, nullable = false)
+//    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userId;
 
-    @Column(name = "to_date")
-    private LocalDateTime toDate;
+    @Column(name = "valid_to_date")
+    private OffsetDateTime validToDate;
 
     public UserTaskId() {
     }
 
-    public UserTaskId(UUID taskId, UUID userId, LocalDateTime toDate) {
+    public UserTaskId(UUID taskId, UUID userId, OffsetDateTime validToDate) {
         this.taskId = taskId;
         this.userId = userId;
-        this.toDate = toDate;
+        this.validToDate = validToDate;
     }
 
     public UUID getTaskId() {
@@ -55,12 +53,12 @@ public class UserTaskId implements Serializable {
         this.userId = userId;
     }
 
-    public LocalDateTime getToDate() {
-        return toDate;
+    public OffsetDateTime getValidToDate() {
+        return validToDate;
     }
 
-    public void setToDate(LocalDateTime toDate) {
-        this.toDate = toDate;
+    public void setValidToDate(OffsetDateTime validToDate) {
+        this.validToDate = validToDate;
     }
 
     @Override
@@ -69,11 +67,11 @@ public class UserTaskId implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         UserTaskId that = (UserTaskId) o;
         return Objects.equals(taskId, that.taskId) && Objects.equals(userId, that.userId)
-                && Objects.equals(toDate, that.toDate);
+                && Objects.equals(validToDate, that.validToDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taskId, userId, toDate);
+        return Objects.hash(taskId, userId, validToDate);
     }
 }
