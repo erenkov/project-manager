@@ -6,12 +6,19 @@ import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.UserEntityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class UserEntityServiceImpl implements UserEntityService {
+import javax.xml.ws.soap.Addressing;
 
+@Service
+public class UserEntityServiceImpl implements UserEntityService, UserDetailsService {
+
+    @Autowired
     private UserRepository userRepository;
 
     @Transactional
@@ -40,6 +47,11 @@ public class UserEntityServiceImpl implements UserEntityService {
         user.setRole(Role.USER);
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return null;
     }
 }
 
