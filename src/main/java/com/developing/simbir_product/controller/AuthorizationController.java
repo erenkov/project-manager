@@ -17,7 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AuthorizationController {
 
-//todo @RequestMapping("/") => перенаправление в зависимости от роли
+    @Operation(summary = "Получить главную страницу") //todo убрать потом
+    @GetMapping(value = "/")
+    public String getMainPage() {
+        //Возвращаем страницу с вводом логина и пароля
+        return "login";
+    }
 
     @Operation(summary = "Получить страницу логирования")
     @GetMapping(value = "/login")
