@@ -401,8 +401,8 @@ databaseChangeLog:
             schemaName: public
             startWith: 1
             tableName: usr
-  - changeSet:
 
+  - changeSet:
       id: addForeignKey-19
       author: Rebrin Konstantin
       changes:
@@ -417,3 +417,13 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: task
             validate: true
+
+  - changeSet:
+      id: modifyDataType-20
+      author: Rebrin Konstantin
+      changes:
+        - modifyDataType:
+            columnName: pass
+            newDataType: VARCHAR(100)
+            schemaName: public
+            tableName: usr
