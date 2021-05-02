@@ -25,8 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectResponseDto getById(UUID id) {
 
         ProjectEntity projectEntity = projectRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Project with ID = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("Project with ID = '%s' not found", id)));
 
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
 
@@ -75,8 +74,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponseDto findByName(String name) {
         ProjectEntity projectEntity = projectRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException("Project with name = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
 
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
 

@@ -25,8 +25,7 @@ public class ReleaseServiceImpl implements ReleaseService {
     public ReleaseResponseDto getById(UUID id) {
 
         ReleaseEntity releaseEntity = releaseRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Release with ID = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("Release with ID = '%s' not found", id)));
 
         ReleaseResponseDto releaseResponseDto = new ReleaseResponseDto();
 
@@ -75,8 +74,7 @@ public class ReleaseServiceImpl implements ReleaseService {
     public ReleaseResponseDto findByName(String name) {
 
         ReleaseEntity releaseEntity = releaseRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException("Release with name = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("Release with name = '%s' not found", name)));
 
         ReleaseResponseDto releaseResponseDto = new ReleaseResponseDto();
         //todo ReleaseResponseDto = mapFrom releaseEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

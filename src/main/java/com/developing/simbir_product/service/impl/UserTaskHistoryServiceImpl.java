@@ -26,8 +26,8 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     @Override
     public UserTaskHistoryEntity getById(UUID id) {
         return userTaskHistoryRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("UserTaskHistory with ID = ' ' not found")
-        );  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+                () -> new NotFoundException(String.format("UserTaskHistory with ID = '%s' not found", id)));
+        //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Transactional

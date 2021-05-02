@@ -25,8 +25,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto getById(UUID id) {
 
         TaskEntity taskEntity = taskRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Task with ID = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("Task with ID = '%s' not found", id)));
 
         TaskResponseDto taskResponseDto = new TaskResponseDto();
 
@@ -76,8 +75,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto findByName(String name) {
 
         TaskEntity taskEntity = taskRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException("Task with name = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("Task with name = '%s' not found", name)));
 
         TaskResponseDto taskResponseDto = new TaskResponseDto();
 

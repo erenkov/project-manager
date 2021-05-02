@@ -24,8 +24,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto getById(UUID id) {
 
         UserEntity userEntity = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("User with ID = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
 
         UserResponseDto userResponseDto = new UserResponseDto();
 
@@ -76,8 +75,7 @@ public class UserServiceImpl implements UserService {
                               // Service знает что делать с этим
 
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException("User with login = ' ' not found")
-        );
+                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
 
         UserResponseDto userResponseDto = new UserResponseDto();
 

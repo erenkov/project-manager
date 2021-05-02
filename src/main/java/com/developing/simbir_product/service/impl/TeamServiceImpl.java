@@ -20,7 +20,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamEntity getById(UUID id) {
         return teamRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Team with ID = ' ' not found")
+                () -> new NotFoundException(String.format("Team with ID = '%s' not found", id))
         ); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
@@ -46,7 +46,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamEntity findByName(String name) {
         return teamRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException("Team with name = ' ' not found")
-        ); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+                () -> new NotFoundException(String.format("Team with name = '%s' not found", name)));
+         //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 }
