@@ -3,29 +3,29 @@ package com.developing.simbir_product.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 
 @Tag(name = "Управление проектами")
 @RequestMapping(value = "/projects")
-@RestController
+@Controller
 public class ProjectsController {
 
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping(value = "")
-    public ResponseEntity<String> getProjectsPage() {
+    public String getProjectsPage() {
         // Возвращаем страницу с проектами
-        return null;
+        return "projects";
     }
 
     @Operation(summary = "Получить страницу создания нового проекта")
     @GetMapping(value = "/create")
-    public ResponseEntity<String> getNewProjectPage() {
+    public String getNewProjectPage() {
         // Запрос страницы для создания нового проекта
-        return null;
+        return "create-project";
     }
 
     @Operation(summary = "Создать новый проект")
@@ -37,9 +37,9 @@ public class ProjectsController {
 
     @Operation(summary = "Получить страницу редактирования проекта")
     @GetMapping(value = "/edit")
-    public ResponseEntity<String> getEditProjectPage() {
+    public String getEditProjectPage() {
         // Запрос страницы для редактирования проекта
-        return null;
+        return "edit-project";
     }
 
     @Operation(summary = "Редактировать проект")
