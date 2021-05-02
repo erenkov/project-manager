@@ -1,0 +1,419 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1619863834457-1
+      author: Rebrin Konstantin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: task_pk
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: task_status
+                  type: VARCHAR(30)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: task_type
+                  type: VARCHAR(30)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: project_id
+                  type: UUID
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: now()
+                  name: create_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: due_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: finish_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: est_costs
+                  type: INTEGER
+              - column:
+                  name: actual_costs
+                  type: INTEGER
+              - column:
+                  name: comments
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: priority
+                  type: INTEGER
+            remarks: Информация о задачах
+            tableName: task
+  - changeSet:
+      id: 1619863834457-2
+      author: Rebrin Konstantin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: task_release_pk
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: task_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: release_id
+                  type: UUID
+              - column:
+                  defaultValueBoolean: false
+                  name: is_completed
+                  type: BOOLEAN
+            remarks: Информация о задачах  и релизах, в которых эти задачи выполнялись
+            tableName: task_release_history
+  - changeSet:
+      id: 1619863834457-3
+      author: Rebrin Konstantin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: project_pk
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(50)
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: team_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: project_status
+                  type: VARCHAR(30)
+              - column:
+                  defaultValueComputed: now()
+                  name: start_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: est_finish_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: finish_date
+                  type: TIMESTAMP WITH TIME ZONE
+            remarks: Информация о проектах
+            tableName: project
+  - changeSet:
+      id: 1619863834457-4
+      author: Rebrin Konstantin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: team_pk
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(50)
+              - column:
+                  name: description
+                  type: TEXT
+            remarks: Информация о командах
+            tableName: team
+  - changeSet:
+      id: 1619863834457-5
+      author: Rebrin Konstantin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_task_history_pk
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: task_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 01-01-2099 10:00:00
+                  name: valid_to_date
+                  type: TIMESTAMP WITHOUT TIME ZONE
+            remarks: Информация о пользователях и задачах, над которыми они работали
+            tableName: user_task_history
+  - changeSet:
+      id: 1619863834457-6
+      author: Rebrin Konstantin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: release_pk
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: now()
+                  name: start_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: finish_date
+                  type: TIMESTAMP WITH TIME ZONE
+            remarks: Информация о релизах
+            tableName: release
+  - changeSet:
+      id: 1619863834457-7
+      author: Rebrin Konstantin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_pk
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: login
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: pass
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_number
+                  type: int
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(50)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_name
+                  type: VARCHAR(50)
+              - column:
+                  name: role_type
+                  type: VARCHAR(30)
+              - column:
+                  name: team_id
+                  type: UUID
+            remarks: Информация о пользователях
+            tableName: usr
+  - changeSet:
+      id: 1619863834457-8
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: task_id
+            baseTableName: task_release_history
+            constraintName: task_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: task
+            validate: true
+  - changeSet:
+      id: 1619863834457-9
+      author: Rebrin Konstantin
+      changes:
+        - addUniqueConstraint:
+            columnNames: task_id, release_id
+            constraintName: task_release_history_task_id_release_id_key
+            tableName: task_release_history
+  - changeSet:
+      id: 1619863834457-10
+      author: Rebrin Konstantin
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: team_name_key
+            tableName: team
+  - changeSet:
+      id: 1619863834457-11
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: team_id
+            baseTableName: usr
+            constraintName: user_team_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: team
+            validate: true
+  - changeSet:
+      id: 1619863834457-12
+      author: Rebrin Konstantin
+      changes:
+        - addUniqueConstraint:
+            columnNames: task_id, user_id, valid_to_date
+            constraintName: user_task_history_task_id_user_id_valid_to_date_key
+            tableName: user_task_history
+  - changeSet:
+      id: 1619863834457-13
+      author: Rebrin Konstantin
+      changes:
+        - addUniqueConstraint:
+            columnNames: login
+            constraintName: usr_login_key
+            tableName: usr
+  - changeSet:
+      id: 1619863834457-14
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: task
+            constraintName: project_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: project
+            validate: true
+  - changeSet:
+      id: 1619863834457-15
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: release_id
+            baseTableName: task_release_history
+            constraintName: release_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: release
+            validate: true
+  - changeSet:
+      id: 1619863834457-16
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: team_id
+            baseTableName: project
+            constraintName: team_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: team
+            validate: true
+  - changeSet:
+
+      id: 1619863834457-17
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_task_history
+            constraintName: user_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: usr
+            validate: true
+
+  - changeSet:
+      id: addAutoIncrement-18
+      author: Maxim Nikitin
+      changes:
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: user_number
+            defaultOnNull: false
+            generationType: ALWAYS
+            incrementBy: 1
+            schemaName: public
+            startWith: 1
+            tableName: usr
+  - changeSet:
+
+      id: addForeignKey-19
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: task_id
+            baseTableName: user_task_history
+            constraintName: task_id_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: task
+            validate: true
