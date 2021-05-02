@@ -1,18 +1,20 @@
 package com.developing.simbir_product.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "PROJECT")
+@Table(name = "project")
 public class ProjectEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
@@ -26,26 +28,38 @@ public class ProjectEntity {
     private ProjectStatus projectStatus;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private OffsetDateTime startDate;
 
     @Column(name = "est_finish_date")
-    private LocalDateTime estFinishDate;
+    private OffsetDateTime estFinishDate;
 
     @Column(name = "finish_date")
-    private LocalDateTime finishDate;
+    private OffsetDateTime finishDate;
+
+    @OneToMany (mappedBy = "projectId")
+    private List<TaskEntity> tasks;
 
     public ProjectEntity() {
     }
 
+
     public ProjectEntity(String name, String description, ProjectStatus projectStatus,
-                         LocalDateTime startDate, LocalDateTime estFinishDate,
-                         LocalDateTime finishDate) {
+                         OffsetDateTime startDate, OffsetDateTime estFinishDate,
+                         OffsetDateTime finishDate) {
         this.name = name;
         this.description = description;
         this.projectStatus = projectStatus;
         this.startDate = startDate;
         this.estFinishDate = estFinishDate;
         this.finishDate = finishDate;
+    }
+
+    public void assignTaskToProject (TaskEntity task) {
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+        }
+        tasks.add(task);
+        task.setProjectId(this);
     }
 
     public UUID getId() {
@@ -88,27 +102,35 @@ public class ProjectEntity {
         this.projectStatus = projectStatus;
     }
 
-    public LocalDateTime getStartDate() {
+    public OffsetDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(OffsetDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEstFinishDate() {
+    public OffsetDateTime getEstFinishDate() {
         return estFinishDate;
     }
 
-    public void setEstFinishDate(LocalDateTime estFinishDate) {
+    public void setEstFinishDate(OffsetDateTime estFinishDate) {
         this.estFinishDate = estFinishDate;
     }
 
-    public LocalDateTime getFinishDate() {
+    public OffsetDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
+    public void setFinishDate(OffsetDateTime finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public List<TaskEntity> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskEntity> tasks) {
+        this.tasks = tasks;
     }
 }

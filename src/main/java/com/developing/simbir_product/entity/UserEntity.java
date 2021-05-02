@@ -1,28 +1,30 @@
 package com.developing.simbir_product.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "usr")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "login")
+    @Column(name = "login", nullable = false)
     private String login;
 
-    @Column(name = "password")
+    @Column(name = "pass", nullable = false)
     private String password;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "user_number", nullable = false)
+    private int userNumber;
 
     @Column(name = "role_type")
     private Role role;
@@ -35,13 +37,12 @@ public class UserEntity {
     }
 
     public UserEntity(String login, String password, String firstName,
-                      String lastName, Role role, TeamEntity teamId) {
+                      String lastName, Role role) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.teamId = teamId;
     }
 
     public UUID getId() {
@@ -82,6 +83,14 @@ public class UserEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public int getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(int userNumber) {
+        this.userNumber = userNumber;
     }
 
     public Role getRole() {

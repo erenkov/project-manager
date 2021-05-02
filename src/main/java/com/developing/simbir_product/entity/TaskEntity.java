@@ -1,45 +1,41 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TASK")
+@Table(name = "task")
 public class TaskEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "state_id")
-    private UUID stateId;
+    @Column(name = "task_status", nullable = false)
+    private TaskStatus taskStatus;
 
-    @Column(name = "task_type_id")
-    private UUID taskTypeId;
+    @Column(name = "task_type", nullable = false)
+    private TaskType taskType;
 
-    @Column(name = "project_id")
-    private UUID projectId;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private ProjectEntity projectId;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
+    @Column(name = "create_date", nullable = false)
+    private OffsetDateTime createDate;
 
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private OffsetDateTime dueDate;
 
     @Column(name = "finish_date")
-    private LocalDateTime finishDate;
+    private OffsetDateTime finishDate;
 
     @Column(name = "est_costs")
     private int estCosts;
@@ -50,20 +46,19 @@ public class TaskEntity {
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "priority")
+    @Column(name = "priority", nullable = false)
     private int priority;
 
     public TaskEntity() {
     }
 
-    public TaskEntity(UUID id, String name, UUID stateId, UUID taskTypeId, UUID projectId, String description,
-                      LocalDateTime createDate, LocalDateTime dueDate, LocalDateTime finishDate, int estCosts,
-                      int actualCosts, String comments, int priority) {
-        this.id = id;
+    public TaskEntity(String name, TaskStatus taskStatus, TaskType taskType,
+                      String description, OffsetDateTime createDate,
+                      OffsetDateTime dueDate, OffsetDateTime finishDate,
+                      int estCosts, int actualCosts, String comments, int priority) {
         this.name = name;
-        this.stateId = stateId;
-        this.taskTypeId = taskTypeId;
-        this.projectId = projectId;
+        this.taskStatus = taskStatus;
+        this.taskType = taskType;
         this.description = description;
         this.createDate = createDate;
         this.dueDate = dueDate;
@@ -90,27 +85,27 @@ public class TaskEntity {
         this.name = name;
     }
 
-    public UUID getStateId() {
-        return stateId;
+    public TaskStatus getTaskStatus() {
+        return taskStatus;
     }
 
-    public void setStateId(UUID stateId) {
-        this.stateId = stateId;
+    public void setTaskStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
-    public UUID getTaskTypeId() {
-        return taskTypeId;
+    public TaskType getTaskType() {
+        return taskType;
     }
 
-    public void setTaskTypeId(UUID taskTypeId) {
-        this.taskTypeId = taskTypeId;
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
     }
 
-    public UUID getProjectId() {
+    public ProjectEntity getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(UUID projectId) {
+    public void setProjectId(ProjectEntity projectId) {
         this.projectId = projectId;
     }
 
@@ -122,27 +117,27 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public LocalDateTime getCreateDate() {
+    public OffsetDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(OffsetDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getDueDate() {
+    public OffsetDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(OffsetDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    public LocalDateTime getFinishDate() {
+    public OffsetDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
+    public void setFinishDate(OffsetDateTime finishDate) {
         this.finishDate = finishDate;
     }
 

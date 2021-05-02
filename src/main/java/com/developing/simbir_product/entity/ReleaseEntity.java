@@ -1,33 +1,31 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "RELEASE")
+@Table(name = "release")
 public class ReleaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "finish_date")
-    private LocalDateTime finishDate;
+    @Column(name = "start_date", nullable = false)
+    private OffsetDateTime startDate;
+
+    @Column(name = "finish_date", nullable = false)
+    private OffsetDateTime finishDate;
 
     public ReleaseEntity() {
     }
 
-    public ReleaseEntity(UUID id, LocalDateTime startDate, LocalDateTime finishDate) {
-        this.id = id;
+    public ReleaseEntity(String name, OffsetDateTime startDate, OffsetDateTime finishDate) {
+        this.name = name;
         this.startDate = startDate;
         this.finishDate = finishDate;
     }
@@ -40,19 +38,27 @@ public class ReleaseEntity {
         this.id = id;
     }
 
-    public LocalDateTime getStartDate() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public OffsetDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(OffsetDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getFinishDate() {
+    public OffsetDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
+    public void setFinishDate(OffsetDateTime finishDate) {
         this.finishDate = finishDate;
     }
 }

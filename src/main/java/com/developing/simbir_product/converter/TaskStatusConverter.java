@@ -3,7 +3,9 @@ package com.developing.simbir_product.converter;
 import com.developing.simbir_product.entity.TaskStatus;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter(autoApply = true)
 public class TaskStatusConverter implements AttributeConverter<TaskStatus, String> {
 
     @Override
