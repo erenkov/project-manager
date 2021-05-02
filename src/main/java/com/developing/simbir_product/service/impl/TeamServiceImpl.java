@@ -6,8 +6,8 @@ import com.developing.simbir_product.repository.TeamRepository;
 import com.developing.simbir_product.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
@@ -42,6 +42,7 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Transactional
     @Override
     public TeamEntity findByName(String name) {
         return teamRepository.findByName(name).orElseThrow(

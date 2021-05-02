@@ -6,6 +6,7 @@ import com.developing.simbir_product.repository.TaskReleaseHistoryRepository;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     @Autowired
     private TaskReleaseHistoryRepository taskReleaseHistoryRepository;
 
+    @Transactional
     @Override
     public TaskReleaseHistoryEntity getById(UUID id) {
         return taskReleaseHistoryRepository.findById(id).orElseThrow(
@@ -22,19 +24,21 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
         ); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Transactional
     @Override
     public TaskReleaseHistoryEntity addTaskRelease(TaskReleaseHistoryEntity taskReleaseHistoryEntity) {
         return taskReleaseHistoryRepository.save(taskReleaseHistoryEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Transactional
     @Override
     public TaskReleaseHistoryEntity editTaskRelease(TaskReleaseHistoryEntity taskReleaseHistoryEntity) {
         return taskReleaseHistoryRepository.save(taskReleaseHistoryEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Transactional
     @Override
     public void deleteById(UUID id) {
         taskReleaseHistoryRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
-
 }

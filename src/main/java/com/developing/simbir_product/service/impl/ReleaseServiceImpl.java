@@ -70,6 +70,7 @@ public class ReleaseServiceImpl implements ReleaseService {
     }
 
 
+    @Transactional
     @Override
     public ReleaseResponseDto findByName(String name) {
 

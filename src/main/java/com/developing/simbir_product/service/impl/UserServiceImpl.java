@@ -8,6 +8,7 @@ import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-
+    @Transactional
     @Override
     public UserResponseDto getById(UUID id) {
 
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
+    @Transactional
     @Override
     public UserResponseDto addUser(UserRequestDto userRequestDto) {
 
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
         return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
-
+    @Transactional
     @Override
     public UserResponseDto editUser(UserRequestDto userRequestDto) {
 
@@ -60,13 +61,13 @@ public class UserServiceImpl implements UserService {
         return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
-
+    @Transactional
     @Override
     public void deleteById(UUID id) {
         userRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
-
+    @Transactional
     @Override
     public UserResponseDto findByEmail(String email) {
 
@@ -86,3 +87,4 @@ public class UserServiceImpl implements UserService {
     }
 }
 
+ ""

@@ -71,6 +71,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
+    @Transactional
     @Override
     public ProjectResponseDto findByName(String name) {
         ProjectEntity projectEntity = projectRepository.findByName(name).orElseThrow(

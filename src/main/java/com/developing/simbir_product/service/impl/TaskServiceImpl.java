@@ -71,6 +71,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
 
+    @Transactional
     @Override
     public TaskResponseDto findByName(String name) {
 
