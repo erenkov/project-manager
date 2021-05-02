@@ -1,8 +1,5 @@
 package com.developing.simbir_product.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -10,14 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "PROJECT")
+@Table(name = "project")
 public class ProjectEntity {
 
-//    @Id
-//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "id", updatable = false, nullable = false)
-//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

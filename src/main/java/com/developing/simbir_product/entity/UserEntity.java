@@ -1,21 +1,12 @@
 package com.developing.simbir_product.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "USR")
+@Table(name = "usr")
 public class UserEntity {
 
-//    @Id
-//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-//    @GeneratedValue(generator = "UUIDGenerator", strategy = GenerationType.AUTO)
-//    @Column(name = "id", updatable = false, nullable = false)
-//    @Type(type="org.hibernate.type.PostgresUUIDType")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -46,12 +37,11 @@ public class UserEntity {
     }
 
     public UserEntity(String login, String password, String firstName,
-                      String lastName, int userNumber, Role role) {
+                      String lastName, Role role) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userNumber = userNumber;
         this.role = role;
     }
 

@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "USER_TASK_HISTORY")
+@Table(name = "user_task_history")
 public class UserTaskHistoryEntity {
 
     @Id
