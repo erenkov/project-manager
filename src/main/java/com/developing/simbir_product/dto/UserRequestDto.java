@@ -1,24 +1,39 @@
-package com.developing.simbir_product.controller.Dto;
+package com.developing.simbir_product.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @Schema(description = "Пользователь")
-public class UserResponseDto {
+public class UserRequestDto {
 
     @Schema(description = "E-mail")
+    @Email(regexp = "[-a-z0-9!#$%&'*+/=?^_`{|}~]+" +
+            "(?:\\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*" +
+            "@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|" +
+            "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])")
+    @NotNull
+    @Size(min = 3, max = 320)
     private String email;
 
     @Schema(description = "Пароль")
+    @NotNull
+    @Size(min = 8, max = 50)
     private String password;
 
     @Schema(description = "Имя и фамилия")
+    @Size(max = 100)
     private String fullName;
 
     @Schema(description = "Роль")
+    @Size(max = 50)
     private String role;
 
     @Schema(description = "Команда")
+    @Size(max = 50)
     private String team;
 
     @Schema(description = "Табельный номер")

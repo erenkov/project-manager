@@ -1,7 +1,7 @@
 package com.developing.simbir_product.service.impl;
 
-import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
-import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
+import com.developing.simbir_product.dto.ProjectRequestDto;
+import com.developing.simbir_product.dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ProjectStatus;
 import com.developing.simbir_product.exception.NotFoundException;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
-import java.util.Random;
 import java.util.UUID;
 
 

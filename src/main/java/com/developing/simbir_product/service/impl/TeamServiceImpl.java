@@ -1,6 +1,7 @@
 package com.developing.simbir_product.service.impl;
 
-import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
+import com.developing.simbir_product.dto.ProjectRequestDto;
+import com.developing.simbir_product.dto.UserResponseDto;
 import com.developing.simbir_product.entity.TeamEntity;
 import com.developing.simbir_product.repository.TeamRepository;
 import com.developing.simbir_product.service.TeamService;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Random;
 import java.util.UUID;
 
 @Service

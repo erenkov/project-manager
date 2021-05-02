@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TaskBoardController {
     @Operation(summary = "Получить страницу с доской проекта")
-    @GetMapping(value = "")
+    @GetMapping
     public ResponseEntity<String> getBoardPage() {
         // Запрос страницы с доской проекта
         return null;

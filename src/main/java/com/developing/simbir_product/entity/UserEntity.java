@@ -1,6 +1,7 @@
 package com.developing.simbir_product.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,8 +27,12 @@ public class UserEntity {
     @Column(name = "user_number", nullable = false)
     private int userNumber;
 
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER) // @ElementCollection is mainly for mapping non-entities (embeddable or basic)
+    // while @OneToMany is used to map entities.
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "role_type")
-    private Role role;
+    private Set<Role> role;
 
     @ManyToOne
     @JoinColumn(name = "team_id")
@@ -37,7 +42,7 @@ public class UserEntity {
     }
 
     public UserEntity(String login, String password, String firstName,
-                      String lastName, TeamEntity teamId, Role role) {
+                      String lastName, TeamEntity teamId, Set<Role> role) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -94,11 +99,11 @@ public class UserEntity {
         this.userNumber = userNumber;
     }
 
-    public Role getRole() {
+    public Set<Role> getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Set<Role> role) {
         this.role = role;
     }
 

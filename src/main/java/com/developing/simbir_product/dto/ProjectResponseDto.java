@@ -1,24 +1,18 @@
-package com.developing.simbir_product.controller.Dto;
+package com.developing.simbir_product.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 
 @Schema(description = "Проект")
-public class ProjectRequestDto {
+public class ProjectResponseDto {
 
     @Schema(description = "Навзвание проекта")
-    @NotBlank
-    @Size(max = 50)
     private String name;
 
     @Schema(description = "Описание проекта")
     private String description;
 
     @Schema(description = "Команда")
-    @Size(max = 50)
     private String teamName;
 
     @Schema(description = "Статус")

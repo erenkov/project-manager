@@ -8,8 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends  JpaRepository<UserEntity, UUID>{
-        Optional<UserEntity> findByLogin(String login);
-
-//        UserEntity findByLogin(String login);
+public interface UserRepository extends  JpaRepository<UserEntity, Long>{
+        Optional<UserEntity> findByLogin(String username);
 }
