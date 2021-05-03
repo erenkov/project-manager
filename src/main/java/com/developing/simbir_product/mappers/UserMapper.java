@@ -25,7 +25,7 @@ public abstract class UserMapper {
 
 
     public String fullNameByUser(UserEntity userEntity) {
-        return String.format("%s %s", userEntity.getFirstName(), userEntity.getFirstName());
+        return String.format("%s %s", userEntity.getFirstName(), userEntity.getLastName());
     }
 
     @Named("firstNameByFullName")

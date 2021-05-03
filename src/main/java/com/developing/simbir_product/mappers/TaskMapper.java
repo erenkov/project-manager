@@ -48,7 +48,7 @@ public abstract class TaskMapper {
     @Named("assigneeByTask")
     public String assigneeByTask(TaskEntity taskEntity) {
         UserEntity assignee = getUserEntity(taskEntity);
-        return String.format("%s %s %s", assignee.getFirstName(), assignee.getFirstName(), assignee.getUserNumber());
+        return String.format("%s %s %s", assignee.getFirstName(), assignee.getLastName(), assignee.getUserNumber());
     }
 
     @Named("releaseByTask")

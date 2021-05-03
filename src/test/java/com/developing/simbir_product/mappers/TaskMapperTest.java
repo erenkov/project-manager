@@ -4,6 +4,7 @@ import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.*;
 import com.developing.simbir_product.service.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TaskMapperTest {
 
     final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    ProjectEntity projectEntity;
+    UserTaskHistoryEntity userTaskHistoryEntity;
+    TaskReleaseHistoryEntity taskReleaseHistoryEntity;
     TaskRequestDto taskDto;
     TaskEntity taskEntity;
     TeamEntity teamEntity;
@@ -48,7 +52,7 @@ class TaskMapperTest {
         teamEntity = new TeamEntity("team name", "description");
         teamEntity = teamService.addTeam(teamEntity);
 
-        ProjectEntity projectEntity = new ProjectEntity("project name",
+        projectEntity = new ProjectEntity("project name",
                 "description",
                 ProjectStatus.BACKLOG,
                 OffsetDateTime.now(),
@@ -80,18 +84,17 @@ class TaskMapperTest {
 
         taskEntity = taskService.addTaskEntity(taskEntity);
 
-        UserTaskHistoryEntity userTaskHistoryEntity =
-                new UserTaskHistoryEntity(OffsetDateTime.parse("2099-01-01T10:00:00+00:00"));
+        userTaskHistoryEntity = new UserTaskHistoryEntity(OffsetDateTime.parse("2099-01-01T10:00:00+00:00"));
         userTaskHistoryEntity.setTaskId(taskEntity);
         userTaskHistoryEntity.setUserId(userEntity);
-        userTaskHistoryService.addUserTaskHistory(userTaskHistoryEntity);
+        userTaskHistoryEntity = userTaskHistoryService.addUserTaskHistory(userTaskHistoryEntity);
 
         releaseEntity = new ReleaseEntity("release name",
                 OffsetDateTime.now().minusMonths(1),
                 OffsetDateTime.now().plusMonths(2));
         releaseEntity = releaseService.addReleaseEntity(releaseEntity);
 
-        TaskReleaseHistoryEntity taskReleaseHistoryEntity = new TaskReleaseHistoryEntity();
+        taskReleaseHistoryEntity = new TaskReleaseHistoryEntity();
         taskReleaseHistoryEntity.setTaskId(taskEntity);
         taskReleaseHistoryEntity.setReleaseId(releaseEntity);
         taskReleaseHistoryService.addTaskRelease(taskReleaseHistoryEntity);
@@ -109,6 +112,16 @@ class TaskMapperTest {
         taskDto.setFinishDate(dateToString(OffsetDateTime.now().plusMonths(2)));
         taskDto.setRelease("release name");
         taskDto.setTeam("team name");
+    }
+
+    @AfterEach
+    void after() {
+        userTaskHistoryService.deleteById(userTaskHistoryEntity.getId());
+        userService.deleteById(userEntity.getId());
+        taskReleaseHistoryService.deleteById(taskReleaseHistoryEntity.getId());
+        taskService.deleteById(taskEntity.getId());
+        projectService.deleteById(projectEntity.getId());
+        teamService.deleteById(teamEntity.getId());
     }
 
     private String dateToString(OffsetDateTime dateTime) {
@@ -129,7 +142,7 @@ class TaskMapperTest {
         assertEquals(testTaskDto.getPriority(), taskEntity.getPriority());
         assertEquals(testTaskDto.getAssigneeName(), String.format("%s %s %s",
                 userEntity.getFirstName(),
-                userEntity.getFirstName(),
+                userEntity.getLastName(),
                 userEntity.getUserNumber()));
         assertEquals(testTaskDto.getDescription(), taskEntity.getDescription());
         assertEquals(testTaskDto.getRelease(), String.format("%s (%s - %s)",

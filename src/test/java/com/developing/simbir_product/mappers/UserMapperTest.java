@@ -70,7 +70,7 @@ class UserMapperTest {
         assertEquals(userDtoTest.getEmail(), userEntity.getLogin());
         assertEquals(userDtoTest.getFullName(), String.format("%s %s",
                 userEntity.getFirstName(),
-                userEntity.getFirstName()));
+                userEntity.getLastName()));
         assertEquals(userDtoTest.getTeam(), userEntity.getTeamId().getName());
         assertEquals(userDtoTest.getPassword(), userEntity.getPassword());
         assertEquals(userDtoTest.getRole(), userEntity.getRole().name());
