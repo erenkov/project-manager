@@ -11,16 +11,14 @@ import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 
-@Service
 @Mapper(uses = DateTimeMapper.class, componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class TaskMapper {
 
     @Autowired
-    DateTimeMapper dateTimeMapper;
+    private DateTimeMapper dateTimeMapper;
 
     @Autowired
     private UserTaskHistoryService userTaskHistoryService;
