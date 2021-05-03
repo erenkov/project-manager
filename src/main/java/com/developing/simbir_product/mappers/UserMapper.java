@@ -10,7 +10,7 @@ import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-@Mapper(uses = DateTimeMapper.class, componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class UserMapper {
 
