@@ -5,7 +5,8 @@ import com.developing.simbir_product.controller.Dto.UserResponseDto;
 import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.TeamEntity;
 import com.developing.simbir_product.entity.UserEntity;
-import com.developing.simbir_product.service.*;
+import com.developing.simbir_product.service.TeamService;
+import com.developing.simbir_product.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,19 +30,7 @@ class UserMapperTest {
     @Autowired
     TeamService teamService;
     @Autowired
-    TaskReleaseHistoryService taskReleaseHistoryService;
-    @Autowired
-    ReleaseService releaseService;
-    @Autowired
-    UserTaskHistoryService userTaskHistoryService;
-    @Autowired
     UserService userService;
-    @Autowired
-    TaskService taskService;
-    @Autowired
-    TaskMapper taskMapper;
-    @Autowired
-    ProjectService projectService;
 
 
     @BeforeEach
