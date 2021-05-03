@@ -56,6 +56,17 @@ public class TaskRequestDto {
     @Size(max = 50)
     private String release;
 
+    @Schema(description = "Проект")
+    @Size(max = 50)
+    private String project;
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
 
     public String getName() {
         return name;
