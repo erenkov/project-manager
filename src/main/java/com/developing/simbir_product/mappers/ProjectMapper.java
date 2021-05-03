@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class ProjectMapper {
 
     @Autowired
-    ProjectService projectService;
+    private ProjectService projectService;
 
 
     @Mapping(target = "teamName", source = "teamId.name")
