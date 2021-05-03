@@ -3,20 +3,13 @@ package com.developing.simbir_product.mappers;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
-import com.developing.simbir_product.entity.TeamEntity;
 import com.developing.simbir_product.entity.UserEntity;
-import com.developing.simbir_product.service.TeamService;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
+@Mapper(uses = TeamMapper.class, componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class UserMapper {
-
-    @Autowired
-    private TeamService teamService;
-
 
     @Mapping(target = "fullName", source = ".")
     @Mapping(target = "team", source = "teamId.name")
@@ -43,9 +36,5 @@ public abstract class UserMapper {
     @Named("lastNameByFullName")
     public String lastNameByFullName(String fullName) {
         return fullName.split(" ")[1];
-    }
-
-    public TeamEntity teamByName(String teamName) {
-        return teamService.findByName(teamName);
     }
 }
