@@ -16,17 +16,17 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
-    public ResponseEntity<String> getBoardPage() {
+    public String getBoardPage() {
         // Запрос страницы с доской проекта
-        return null;
+        return "task-board";
     }
 
     @Operation(summary = "Получить страницу с задачей")
     @GetMapping("/task/{id}")
-    public ResponseEntity<String> getTaskPage() {
+    public String getTaskPage() {
         //if (id == -1) => создать пустую задачу и отобразить на редактирование
         // Получить страницу с запрашиваемой задачей
-        return null;
+        return "task-details";
     }
 
     @Operation(summary = "Редактирование задачи")
@@ -45,8 +45,8 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу с фильтрами")
     @GetMapping("/filter")
-    public ResponseEntity<String> getFilterPage() {
-        return null;
+    public String getFilterPage() {
+        return "task-filters";
     }
 
     @Operation(summary = "Преминить фильтр")

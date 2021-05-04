@@ -16,16 +16,16 @@ public class ProjectsController {
 
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping()
-    public ResponseEntity<String> getProjectsPage() {
+    public String getProjectsPage() {
         // Возвращаем страницу с проектами
-        return null;
+        return "projects";
     }
 
     @Operation(summary = "Получить страницу создания нового проекта")
     @GetMapping("/create")
-    public ResponseEntity<String> getNewProjectPage() {
+    public String getNewProjectPage() {
         // Запрос страницы для создания нового проекта
-        return null;
+        return "create-project";
     }
 
     @Operation(summary = "Создать новый проект")
@@ -37,9 +37,9 @@ public class ProjectsController {
 
     @Operation(summary = "Получить страницу редактирования проекта")
     @GetMapping("/edit")
-    public ResponseEntity<String> getEditProjectPage() {
+    public String getEditProjectPage() {
         // Запрос страницы для редактирования проекта
-        return null;
+        return "edit-project";
     }
 
     @Operation(summary = "Редактировать проект")
