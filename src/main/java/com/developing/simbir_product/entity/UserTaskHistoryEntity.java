@@ -20,8 +20,8 @@ public class UserTaskHistoryEntity {
     @JoinColumn(name = "task_id")
     private TaskEntity taskId;
 
-    @Column(name = "valid_to_date")
-    private OffsetDateTime validToDate;
+    @Column(name = "valid_to_date", nullable = false)
+    private OffsetDateTime validToDate = OffsetDateTime.parse("2099-01-01T10:00:00+00:00");
 
     public UserTaskHistoryEntity() {
     }
