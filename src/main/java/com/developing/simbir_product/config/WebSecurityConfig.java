@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
@@ -28,15 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(8);
     }
 
-    public WebSecurityConfig(UserDetailsServiceImpl customUserDetailsService) {
-        this.userDetailsService = customUserDetailsService;
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-
                     .antMatchers("/projects/**").hasRole("ADMIN")
                     .antMatchers("/board/**", "/profile/**").fullyAuthenticated()
                     .antMatchers("/registration").not().fullyAuthenticated()

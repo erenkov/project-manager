@@ -38,20 +38,6 @@ public class UserServiceImpl implements UserService {
 //        return userResponseDto;
 //    }
 
-
-//    @Transactional
-//    @Override
-//    public UserResponseDto addUser(UserRequestDto userRequestDto) {
-//
-//        UserEntity userEntity = new UserEntity();
-//
-//        //todo userEntity = mapFrom userRequestDto ??????????????????????????????
-//
-//        userRepository.save(userEntity);
-//
-//        return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-//    }
-
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
@@ -59,17 +45,18 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
 
         if (userFromDb.isPresent()) {
-            return false;
+            return false; //TODO: ??? или exception?
         }
 
         UserEntity newUser = new UserEntity();
 
         //todo userEntity = mapFrom userRequestDto ??????????????????????????????
+        //заглушка вместо маппера
         newUser.setLogin(userRequestDto.getEmail());
         newUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         newUser.setFirstName(userRequestDto.getFullName());
         newUser.setLastName(userRequestDto.getFullName());
-        newUser.setRole(Role.ADMIN);
+        newUser.setRole(Role.ADMIN); // Все админы
 
         userRepository.save(newUser);
 
