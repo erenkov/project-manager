@@ -2,6 +2,8 @@ package com.developing.simbir_product.controller.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
+
 
 @Schema(description = "Задача")
 public class TaskResponseDto {
@@ -19,13 +21,13 @@ public class TaskResponseDto {
     private String description;
 
     @Schema(description = "Дата создания")
-    private String createDate;
+    private LocalDateTime createDate;
 
     @Schema(description = "Ориентировочная дата завершения")
-    private String dueDate;
+    private LocalDateTime dueDate;
 
     @Schema(description = "Дата завершения")
-    private String finishDate;
+    private LocalDateTime finishDate;
 
     @Schema(description = "Ориентировочные затраты")
     private int estCosts;
@@ -92,27 +94,27 @@ public class TaskResponseDto {
         this.description = description;
     }
 
-    public String getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public String getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
-    public String getFinishDate() {
+    public LocalDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(String finishDate) {
+    public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
     }
 
