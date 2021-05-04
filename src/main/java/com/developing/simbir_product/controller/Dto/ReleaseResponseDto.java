@@ -2,6 +2,8 @@ package com.developing.simbir_product.controller.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
+
 
 @Schema(description = "Релиз")
 public class ReleaseResponseDto {
@@ -10,10 +12,10 @@ public class ReleaseResponseDto {
     private String name;
 
     @Schema(description = "Дата начала релиза")
-    private String startDate;
+    private LocalDateTime startDate;
 
     @Schema(description = "Дата конца релиза")
-    private String finishDate;
+    private LocalDateTime finishDate;
 
 
     public String getName() {
@@ -24,19 +26,19 @@ public class ReleaseResponseDto {
         this.name = name;
     }
 
-    public String getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public String getFinishDate() {
+    public LocalDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(String finishDate) {
+    public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
     }
 }
