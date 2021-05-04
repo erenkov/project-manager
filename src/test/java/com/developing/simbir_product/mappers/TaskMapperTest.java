@@ -107,9 +107,9 @@ class TaskMapperTest {
         taskDto.setPriority(300);
         taskDto.setStatus("BACKLOG");
         taskDto.setType("FEATURE");
-        taskDto.setCreateDate(dateToString(OffsetDateTime.now()));
-        taskDto.setDueDate(dateToString(OffsetDateTime.now().plusMonths(1)));
-        taskDto.setFinishDate(dateToString(OffsetDateTime.now().plusMonths(2)));
+        taskDto.setCreateDate(OffsetDateTime.now().toLocalDateTime());
+        taskDto.setDueDate(OffsetDateTime.now().plusMonths(1).toLocalDateTime());
+        taskDto.setFinishDate(OffsetDateTime.now().plusMonths(2).toLocalDateTime());
         taskDto.setRelease("release name");
         taskDto.setTeam("team name");
     }
@@ -132,8 +132,8 @@ class TaskMapperTest {
     @Test
     void taskEntityToDto() {
         TaskResponseDto testTaskDto = taskMapper.taskEntityToDto(taskEntity);
-        assertEquals(testTaskDto.getCreateDate(), taskEntity.getCreateDate().format(dateFormatter));
-        assertEquals(testTaskDto.getDueDate(), taskEntity.getDueDate().format(dateFormatter));
+        assertEquals(testTaskDto.getCreateDate(), taskEntity.getCreateDate().toLocalDateTime());
+        assertEquals(testTaskDto.getDueDate(), taskEntity.getDueDate().toLocalDateTime());
         assertEquals(testTaskDto.getProject(), taskEntity.getProjectId().getName());
         assertEquals(testTaskDto.getName(), taskEntity.getName());
         assertEquals(testTaskDto.getActualCosts(), taskEntity.getActualCosts());
@@ -152,7 +152,7 @@ class TaskMapperTest {
         assertEquals(testTaskDto.getTeam(), teamEntity.getName());
         assertEquals(testTaskDto.getStatus(), taskEntity.getTaskStatus().name());
         assertEquals(testTaskDto.getType(), taskEntity.getTaskType().name());
-        assertEquals(testTaskDto.getFinishDate(), dateToString(taskEntity.getFinishDate()));
+        assertEquals(testTaskDto.getFinishDate(), taskEntity.getFinishDate().toLocalDateTime());
     }
 
     @Test
@@ -167,8 +167,8 @@ class TaskMapperTest {
         assertEquals(testTaskEntity.getName(), taskDto.getName());
         assertEquals(testTaskEntity.getComments(), taskDto.getComments());
         assertEquals(testTaskEntity.getProjectId().getName(), taskDto.getProject());
-        assertEquals(dateToString(testTaskEntity.getDueDate()), taskDto.getDueDate());
-        assertEquals(dateToString(testTaskEntity.getCreateDate()), taskDto.getCreateDate());
-        assertEquals(dateToString(testTaskEntity.getFinishDate()), taskDto.getFinishDate());
+        assertEquals(testTaskEntity.getDueDate().toLocalDateTime(), taskDto.getDueDate());
+        assertEquals(testTaskEntity.getCreateDate().toLocalDateTime(), taskDto.getCreateDate());
+        assertEquals(testTaskEntity.getFinishDate().toLocalDateTime(), taskDto.getFinishDate());
     }
 }

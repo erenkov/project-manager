@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
 class ProjectMapperTest {
 
-    final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     ProjectEntity projectEntity;
     ProjectRequestDto projectDto;
     TeamEntity teamEntity;
@@ -53,8 +52,8 @@ class ProjectMapperTest {
         projectDto = new ProjectRequestDto();
         projectDto.setName("project name");
         projectDto.setDescription("description");
-        projectDto.setStartDate(dateToString(OffsetDateTime.now()));
-        projectDto.setEstFinishDate(dateToString(OffsetDateTime.now().plusMonths(1)));
+        projectDto.setStartDate(LocalDateTime.now());
+        projectDto.setEstFinishDate(LocalDateTime.now().plusMonths(1));
         projectDto.setTeamName("team name");
         projectDto.setStatus("BACKLOG");
     }
@@ -65,17 +64,14 @@ class ProjectMapperTest {
         teamService.deleteById(teamEntity.getId());
     }
 
-    private String dateToString(OffsetDateTime dateTime) {
-        return dateTime.format(dateFormatter);
-    }
 
     @Test
     void projectEntityToDto() {
         ProjectResponseDto projectDtoTest = projectMapper.projectEntityToDto(projectEntity);
         assertEquals(projectDtoTest.getDescription(), projectEntity.getDescription());
         assertEquals(projectDtoTest.getName(), projectEntity.getName());
-        assertEquals(projectDtoTest.getStartDate(), dateToString(projectEntity.getStartDate()));
-        assertEquals(projectDtoTest.getEstFinishDate(), dateToString(projectEntity.getEstFinishDate()));
+        assertEquals(projectDtoTest.getStartDate(), projectEntity.getStartDate().toLocalDateTime());
+        assertEquals(projectDtoTest.getEstFinishDate(), projectEntity.getEstFinishDate().toLocalDateTime());
         assertEquals(projectDtoTest.getStatus(), projectEntity.getProjectStatus().name());
         assertEquals(projectDtoTest.getTeamName(), projectEntity.getTeamId().getName());
     }
@@ -87,7 +83,7 @@ class ProjectMapperTest {
         assertEquals(projectEntityTest.getDescription(), projectDto.getDescription());
         assertEquals(projectEntityTest.getProjectStatus().name(), projectDto.getStatus());
         assertEquals(projectEntityTest.getTeamId().getName(), projectDto.getTeamName());
-        assertEquals(dateToString(projectEntityTest.getEstFinishDate()), projectDto.getEstFinishDate());
-        assertEquals(dateToString(projectEntityTest.getStartDate()), projectDto.getStartDate());
+        assertEquals(projectEntityTest.getEstFinishDate().toLocalDateTime(), projectDto.getEstFinishDate());
+        assertEquals(projectEntityTest.getStartDate().toLocalDateTime(), projectDto.getStartDate());
     }
 }

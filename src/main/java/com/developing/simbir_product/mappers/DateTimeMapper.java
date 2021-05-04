@@ -5,8 +5,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -19,8 +18,12 @@ public abstract class DateTimeMapper {
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
 
-    public OffsetDateTime stringToDate(String stringDate) { // TODO: Получать ZoneOffset клиента
-        return OffsetDateTime.of(LocalDate.parse(stringDate, dateFormatter), LocalTime.MIDNIGHT, ZoneOffset.UTC);
+    public OffsetDateTime localToOffsetDateTime(LocalDateTime localDateTime) { // TODO: Получать ZoneOffset клиента
+        return OffsetDateTime.of(localDateTime, ZoneOffset.UTC);
+    }
+
+    public LocalDateTime offsetToLocalDateTime(OffsetDateTime offsetDateTime) {
+        return offsetDateTime.toLocalDateTime();
     }
 
     public String dateToString(OffsetDateTime dateTime) {

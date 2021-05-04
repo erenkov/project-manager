@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
 class ReleaseMapperTest {
 
-    final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     ReleaseRequestDto releaseDto;
     ReleaseEntity releaseEntity;
 
@@ -40,8 +39,8 @@ class ReleaseMapperTest {
 
         releaseDto = new ReleaseRequestDto();
         releaseDto.setName("release name");
-        releaseDto.setFinishDate(dateToString(OffsetDateTime.now().plusMonths(1)));
-        releaseDto.setStartDate(dateToString(OffsetDateTime.now().minusMonths(1)));
+        releaseDto.setFinishDate(LocalDateTime.now().plusMonths(1));
+        releaseDto.setStartDate(LocalDateTime.now().minusMonths(1));
     }
 
     @AfterEach
@@ -50,24 +49,19 @@ class ReleaseMapperTest {
     }
 
 
-    private String dateToString(OffsetDateTime dateTime) {
-        return dateTime.format(dateFormatter);
-    }
-
-
     @Test
     void releaseEntityToDto() {
         ReleaseResponseDto releaseDtoTest = releaseMapper.releaseEntityToDto(releaseEntity);
         assertEquals(releaseDtoTest.getName(), releaseEntity.getName());
-        assertEquals(releaseDtoTest.getFinishDate(), dateToString(releaseEntity.getFinishDate()));
-        assertEquals(releaseDtoTest.getStartDate(), dateToString(releaseEntity.getStartDate()));
+        assertEquals(releaseDtoTest.getFinishDate(), releaseEntity.getFinishDate().toLocalDateTime());
+        assertEquals(releaseDtoTest.getStartDate(), releaseEntity.getStartDate().toLocalDateTime());
     }
 
     @Test
     void releaseDtoToEntity() {
         ReleaseEntity releaseEntityTest = releaseMapper.releaseDtoToEntity(releaseDto);
         assertEquals(releaseEntityTest.getName(), releaseDto.getName());
-        assertEquals(dateToString(releaseEntityTest.getFinishDate()), releaseDto.getFinishDate());
-        assertEquals(dateToString(releaseEntityTest.getStartDate()), releaseDto.getStartDate());
+        assertEquals(releaseEntityTest.getFinishDate().toLocalDateTime(), releaseDto.getFinishDate());
+        assertEquals(releaseEntityTest.getStartDate().toLocalDateTime(), releaseDto.getStartDate());
     }
 }
