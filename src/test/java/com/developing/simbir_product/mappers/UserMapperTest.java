@@ -49,7 +49,8 @@ class UserMapperTest {
 
         userRequestDto = new UserRequestDto();
         userRequestDto.setEmail("email");
-        userRequestDto.setFullName("FirstName LastName");
+        userRequestDto.setFirstName("FirstName");
+        userRequestDto.setLastName("LastName");
         userRequestDto.setPassword("password");
         userRequestDto.setTeam("team name");
         userRequestDto.setRole("USER");
@@ -83,8 +84,8 @@ class UserMapperTest {
     void userDtoToEntity() {
         UserEntity userEntityTest = userMapper.userDtoToEntity(userRequestDto);
         assertEquals(userEntityTest.getUserNumber(), userRequestDto.getUserNumber());
-        assertEquals(userEntityTest.getFirstName(), userRequestDto.getFullName().split(" ")[0]);
-        assertEquals(userEntityTest.getLastName(), userRequestDto.getFullName().split(" ")[1]);
+        assertEquals(userEntityTest.getFirstName(), userRequestDto.getFirstName());
+        assertEquals(userEntityTest.getLastName(), userRequestDto.getLastName());
         assertEquals(userEntityTest.getPassword(), userRequestDto.getPassword());
         assertEquals(userEntityTest.getRole().name(), userRequestDto.getRole());
         assertEquals(userEntityTest.getLogin(), userRequestDto.getEmail());

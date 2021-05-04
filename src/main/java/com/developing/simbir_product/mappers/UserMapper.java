@@ -4,7 +4,10 @@ package com.developing.simbir_product.mappers;
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
 import com.developing.simbir_product.entity.UserEntity;
-import org.mapstruct.*;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValueCheckStrategy;
 
 
 @Mapper(uses = TeamMapper.class, componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
@@ -18,23 +21,11 @@ public abstract class UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "login", source = "email")
-    @Mapping(target = "firstName", source = "fullName", qualifiedByName = "firstNameByFullName")
-    @Mapping(target = "lastName", source = "fullName", qualifiedByName = "lastNameByFullName")
     @Mapping(target = "teamId", source = "team")
     public abstract UserEntity userDtoToEntity(UserRequestDto userRequestDto);
 
 
     public String fullNameByUser(UserEntity userEntity) {
         return String.format("%s %s", userEntity.getFirstName(), userEntity.getLastName());
-    }
-
-    @Named("firstNameByFullName")
-    public String firstNameByFullName(String fullName) {
-        return fullName.split(" ")[0];
-    }
-
-    @Named("lastNameByFullName")
-    public String lastNameByFullName(String fullName) {
-        return fullName.split(" ")[1];
     }
 }
