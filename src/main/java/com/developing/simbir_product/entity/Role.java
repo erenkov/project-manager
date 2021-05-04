@@ -1,6 +1,8 @@
 package com.developing.simbir_product.entity;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     ADMIN("A"),
     MANAGER("M"),
     USER("U");
@@ -13,5 +15,11 @@ public enum Role {
 
     public String getShortName() {
         return shortName;
+    }
+
+
+    @Override
+    public String getAuthority() {
+        return name();
     }
 }
