@@ -14,6 +14,6 @@ public class UserProfileController {
     @Operation(summary = "Получить страницу c профилем пользователя")
     @GetMapping
     public String getProfile() {
-        return "user-profile";
+        return "profile";
     }
 }

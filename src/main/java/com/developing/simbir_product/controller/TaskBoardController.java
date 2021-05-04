@@ -29,6 +29,20 @@ public class TaskBoardController {
         return "task-details";
     }
 
+    @Operation(summary = "Получить страницу создания новой задачи")
+    @GetMapping("/create")
+    public String getNewTaskPage() {
+        // Запрос страницы с доской проекта
+        return "create-task";
+    }
+
+    @Operation(summary = "Получить страницу создания новой задачи")
+    @PostMapping("/create")
+    public ResponseEntity<String> saveNewTask() {
+        // Запрос страницы с доской проекта
+        return null;
+    }
+
     @Operation(summary = "Редактирование задачи")
     @PostMapping("/task")
     public ResponseEntity<String> editTask() {
@@ -44,13 +58,13 @@ public class TaskBoardController {
     }
 
     @Operation(summary = "Получить страницу с фильтрами")
-    @GetMapping("/filter")
+    @GetMapping("/filters")
     public String getFilterPage() {
         return "task-filters";
     }
 
     @Operation(summary = "Преминить фильтр")
-    @PostMapping("/filter")
+    @PostMapping("/filters")
     public ResponseEntity<String> applyFilter() {
         return null;
     }

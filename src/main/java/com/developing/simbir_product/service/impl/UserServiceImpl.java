@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         newUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         newUser.setFirstName(userRequestDto.getFullName());
         newUser.setLastName(userRequestDto.getFullName());
-        newUser.setRole(Role.ADMIN); // Все админы
+        newUser.setRole(Role.ROLE_ADMIN); // Все админы
 
         userRepository.save(newUser);
 

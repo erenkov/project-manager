@@ -9,6 +9,6 @@ import java.util.Map;
 public class HomeController {
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
-        return "redirect:/board/task-board";
+        return "redirect:/board";
     }
 }
