@@ -1,10 +1,14 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+
 @Entity
+@DynamicInsert
 @Table(name = "user_task_history")
 public class UserTaskHistoryEntity {
 
@@ -20,8 +24,8 @@ public class UserTaskHistoryEntity {
     @JoinColumn(name = "task_id")
     private TaskEntity taskId;
 
-    @Column(name = "valid_to_date", nullable = false)
-    private OffsetDateTime validToDate = OffsetDateTime.parse("2099-01-01T10:00:00+00:00");
+    @Column(name = "valid_to_date")
+    private OffsetDateTime validToDate;
 
     public UserTaskHistoryEntity() {
     }
