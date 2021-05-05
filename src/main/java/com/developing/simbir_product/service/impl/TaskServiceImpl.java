@@ -5,12 +5,15 @@ import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.TaskRepository;
+import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -18,6 +21,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private ProjectService projectService;
 
 
     @Transactional
@@ -46,6 +52,11 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(taskEntity);
 
         return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+    }
+
+    @Override
+    public TaskEntity addTaskEntity(TaskEntity taskEntity) {
+        return taskRepository.save(taskEntity);
     }
 
 
@@ -82,5 +93,9 @@ public class TaskServiceImpl implements TaskService {
         //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!
 
         return taskResponseDto;
+    }
+
+    public List<TaskEntity> getTasksByProjectsName(String projectName) {
+        return projectService.getProjectEntity(projectName).getTasks();
     }
 }

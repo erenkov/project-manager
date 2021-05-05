@@ -1,14 +1,20 @@
 package com.developing.simbir_product.service.impl;
 
+import com.developing.simbir_product.entity.TaskEntity;
+import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.entity.UserTaskHistoryEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.UserTaskHistoryRepository;
 import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
+
+@Service
 public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
 
     @Autowired
@@ -46,6 +52,16 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     @Override
     public void deleteById(UUID id) {
         userTaskHistoryRepository.deleteById(id);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+    }
+
+    @Transactional
+    @Override
+    public UserEntity getCurrentUserByTask(TaskEntity taskEntity) {
+        UserTaskHistoryEntity current = userTaskHistoryRepository.
+                findByTaskIdAndValidToDateIsAfter(taskEntity, OffsetDateTime.now())
+                .orElseThrow(() -> new NotFoundException(String.format("Task %s has no assignee.",
+                        taskEntity.getName())));
+        return current.getUserId();
     }
 
 //    @Transactional
