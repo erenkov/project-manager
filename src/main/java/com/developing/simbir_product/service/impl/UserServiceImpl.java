@@ -55,8 +55,8 @@ public class UserServiceImpl implements UserService {
         //заглушка вместо маппера
         newUser.setLogin(userRequestDto.getEmail());
         newUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        newUser.setFirstName(userRequestDto.getFullName());
-        newUser.setLastName(userRequestDto.getFullName());
+        newUser.setFirstName(userRequestDto.getFirstName());
+        newUser.setLastName(userRequestDto.getLastName());
         newUser.setRole(Role.ROLE_ADMIN); // Все админы
 
         userRepository.save(newUser);
@@ -104,7 +104,8 @@ public class UserServiceImpl implements UserService {
         UserResponseDto userResponseDto = new UserResponseDto();
 
         userResponseDto.setEmail(userEntity.getLogin());
-        userResponseDto.setFullName(userEntity.getFirstName());
+        //TODO: del FULLNAME
+        userResponseDto.setFullName(String.format("%s %s", userEntity.getFirstName(), userEntity.getLastName()));
         userResponseDto.setPassword(userEntity.getPassword());
         userResponseDto.setRole(userEntity.getRole().toString());
         userResponseDto.setUserNumber(userEntity.getUserNumber());

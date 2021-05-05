@@ -42,7 +42,7 @@ class UserMapperTest {
                 "password",
                 "firstname",
                 "lastname",
-                Role.USER);
+                Role.ROLE_USER);
         userEntity.setUserNumber(100);
         userEntity.setTeamId(teamEntity);
         userEntity = userService.addUserEntity(userEntity);
