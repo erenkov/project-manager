@@ -1,5 +1,7 @@
 package com.developing.simbir_product.service.impl;
 
+import com.developing.simbir_product.entity.ReleaseEntity;
+import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TaskReleaseHistoryEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.TaskReleaseHistoryRepository;
@@ -40,5 +42,16 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     @Override
     public void deleteById(UUID id) {
         taskReleaseHistoryRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+    }
+
+    @Transactional
+    @Override
+    public ReleaseEntity getCurrentReleaseByTask(TaskEntity taskEntity) {
+        return taskReleaseHistoryRepository.findByTaskId(taskEntity).stream()
+                .map(TaskReleaseHistoryEntity::getReleaseId)
+                .filter(releaseEntity -> taskEntity.getDueDate().isAfter(releaseEntity.getStartDate()) &&
+                        taskEntity.getDueDate().isBefore(releaseEntity.getFinishDate()))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 }

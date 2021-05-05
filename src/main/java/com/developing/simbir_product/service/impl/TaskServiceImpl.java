@@ -48,6 +48,11 @@ public class TaskServiceImpl implements TaskService {
         return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Override
+    public TaskEntity addTaskEntity(TaskEntity taskEntity) {
+        return taskRepository.save(taskEntity);
+    }
+
 
     @Transactional
     @Override

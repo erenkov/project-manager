@@ -65,6 +65,11 @@ public class UserServiceImpl implements UserService {
 //        return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Override
+    public UserEntity addUserEntity(UserEntity userEntity) {
+        return userRepository.save(userEntity);
+    }
+
     @Transactional
     @Override
     public UserResponseDto editUser(UserRequestDto userRequestDto) {
