@@ -1,9 +1,14 @@
 package com.developing.simbir_product.controller;
 
+import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
+import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
+import com.developing.simbir_product.service.impl.ProjectServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/projects")
 @Controller
 public class ProjectsController {
+
+    @Autowired
+    ProjectServiceImpl projectService;
 
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping()
@@ -30,9 +38,11 @@ public class ProjectsController {
 
     @Operation(summary = "Создать новый проект")
     @PostMapping("/create")
-    public ResponseEntity<String> createProject() {
-        // Создаём новый проект
-        return null; //Перейти на доску
+    public String createProject(ProjectRequestDto projectRequestDto, Model model) {
+        ProjectResponseDto projectResponseDto;
+        projectResponseDto = projectService.addProject(projectRequestDto);
+
+        return "board/{projectResponseDto.getName()}"; //Перейти на доску
     }
 
     @Operation(summary = "Получить страницу редактирования проекта")

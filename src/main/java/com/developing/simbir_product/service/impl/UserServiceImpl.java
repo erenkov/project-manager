@@ -4,6 +4,7 @@ import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
 import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.UserEntity;
+import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,21 +85,27 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
-//    @Transactional
-//    @Override
-//    public UserResponseDto findByEmail(String email) {
-//
-//        String login = email; // Т.К. логин и email в нашем случае одно и тоже
-//                              // Front знает о email, DB знает о логине
-//                              // Service знает что делать с этим
-//
-//        UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
-//                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
-//
-//        UserResponseDto userResponseDto = new UserResponseDto();
-//
-//        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//        return userResponseDto;
-//    }
+    @Transactional
+    @Override
+    public UserResponseDto findByEmail(String email) {
+
+        String login = email; // Т.К. логин и email в нашем случае одно и тоже
+                              // Front знает о email, DB знает о логине
+                              // Service знает что делать с этим
+
+        UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
+                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+
+        userResponseDto.setEmail(userEntity.getLogin());
+        userResponseDto.setFullName(userEntity.getFirstName());
+        userResponseDto.setPassword(userEntity.getPassword());
+        userResponseDto.setRole(userEntity.getRole().toString());
+        userResponseDto.setUserNumber(userEntity.getUserNumber());
+        userResponseDto.setTeam("team-1");
+        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        return userResponseDto;
+    }
 }
