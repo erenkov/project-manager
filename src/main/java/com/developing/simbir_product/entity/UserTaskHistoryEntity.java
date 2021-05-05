@@ -1,10 +1,14 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+
 @Entity
+@DynamicInsert
 @Table(name = "user_task_history")
 public class UserTaskHistoryEntity {
 

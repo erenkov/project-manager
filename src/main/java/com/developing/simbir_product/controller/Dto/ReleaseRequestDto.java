@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 
 @Schema(description = "Релиз")
@@ -15,10 +16,10 @@ public class ReleaseRequestDto {
     private String name;
 
     @Schema(description = "Дата начала релиза")
-    private String startDate;
+    private LocalDateTime startDate;
 
     @Schema(description = "Дата конца релиза")
-    private String finishDate;
+    private LocalDateTime finishDate;
 
 
     public String getName() {
@@ -29,19 +30,19 @@ public class ReleaseRequestDto {
         this.name = name;
     }
 
-    public String getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public String getFinishDate() {
+    public LocalDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(String finishDate) {
+    public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
     }
 }

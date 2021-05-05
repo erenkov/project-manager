@@ -184,7 +184,7 @@ databaseChangeLog:
                     nullable: false
                   defaultValue: 01-01-2099 10:00:00
                   name: valid_to_date
-                  type: TIMESTAMP WITHOUT TIME ZONE
+                  type: TIMESTAMP WITH TIME ZONE
             remarks: Информация о пользователях и задачах, над которыми они работали
             tableName: user_task_history
   - changeSet:
@@ -401,8 +401,8 @@ databaseChangeLog:
             schemaName: public
             startWith: 1
             tableName: usr
-  - changeSet:
 
+  - changeSet:
       id: addForeignKey-19
       author: Rebrin Konstantin
       changes:
@@ -417,3 +417,13 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: task
             validate: true
+
+  - changeSet:
+      id: modifyDataType-20
+      author: Rebrin Konstantin
+      changes:
+        - modifyDataType:
+            columnName: pass
+            newDataType: VARCHAR(100)
+            schemaName: public
+            tableName: usr
