@@ -58,7 +58,9 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     @Override
     public UserEntity getCurrentUserByTask(TaskEntity taskEntity) {
         UserTaskHistoryEntity current = userTaskHistoryRepository.
-                findByTaskIdAndValidToDateIsAfter(taskEntity, OffsetDateTime.now());
+                findByTaskIdAndValidToDateIsAfter(taskEntity, OffsetDateTime.now())
+                .orElseThrow(() -> new NotFoundException(String.format("Task %s has no assignee.",
+                        taskEntity.getName())));
         return current.getUserId();
     }
 
