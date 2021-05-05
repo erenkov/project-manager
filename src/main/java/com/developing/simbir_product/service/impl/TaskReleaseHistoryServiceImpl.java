@@ -44,6 +44,7 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
         taskReleaseHistoryRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Transactional
     @Override
     public ReleaseEntity getCurrentReleaseByTask(TaskEntity taskEntity) {
         return taskReleaseHistoryRepository.findByTaskId(taskEntity).stream()

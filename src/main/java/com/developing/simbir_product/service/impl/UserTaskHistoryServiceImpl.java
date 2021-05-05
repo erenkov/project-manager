@@ -54,6 +54,7 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
         userTaskHistoryRepository.deleteById(id);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Transactional
     @Override
     public UserEntity getCurrentUserByTask(TaskEntity taskEntity) {
         UserTaskHistoryEntity current = userTaskHistoryRepository.

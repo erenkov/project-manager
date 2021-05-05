@@ -88,6 +88,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectResponseDto;
     }
 
+    @Transactional
     public ProjectEntity getProjectEntity(String name) {
         return projectRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));

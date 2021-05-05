@@ -82,6 +82,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseResponseDto;
     }
 
+    @Transactional
     @Override
     public ReleaseEntity addReleaseEntity(ReleaseEntity releaseEntity) {
         return releaseRepository.save(releaseEntity);
