@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
@@ -48,6 +49,11 @@ public class ProjectServiceImpl implements ProjectService {
         return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Transactional
+    @Override
+    public ProjectEntity addProjectEntity(ProjectEntity projectEntity) {
+        return projectRepository.save(projectEntity);
+    }
 
     @Transactional
     @Override
@@ -73,13 +79,18 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public ProjectResponseDto findByName(String name) {
-        ProjectEntity projectEntity = projectRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
+        ProjectEntity projectEntity = getProjectEntity(name);
 
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
 
         //todo ProjectResponseDto = mapFrom projectEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return projectResponseDto;
+    }
+
+    @Transactional
+    public ProjectEntity getProjectEntity(String name) {
+        return projectRepository.findByName(name).orElseThrow(
+                () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
     }
 }

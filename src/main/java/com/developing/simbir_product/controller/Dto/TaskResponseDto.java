@@ -50,6 +50,17 @@ public class TaskResponseDto {
     @Schema(description = "Релиз")
     private String release;
 
+    @Schema(description = "Проект")
+    private String project;
+
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
 
     public String getName() {
         return name;

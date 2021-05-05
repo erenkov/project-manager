@@ -1,8 +1,11 @@
 package com.developing.simbir_product.service;
 
+import com.developing.simbir_product.entity.TaskEntity;
+import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.entity.UserTaskHistoryEntity;
 
 import java.util.UUID;
+
 
 public interface UserTaskHistoryService {
 
@@ -18,4 +21,5 @@ public interface UserTaskHistoryService {
 
 //    void deleteByUserIdAndTaskId(UUID userId, UUID taskId); //todo 3 поле
 
+    UserEntity getCurrentUserByTask(TaskEntity taskEntity);
 }
