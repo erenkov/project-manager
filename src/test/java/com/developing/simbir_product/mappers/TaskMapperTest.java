@@ -100,7 +100,7 @@ class TaskMapperTest {
         taskReleaseHistoryService.addTaskRelease(taskReleaseHistoryEntity);
 
         taskDto = new TaskRequestDto();
-        taskDto.setProject("project name");
+        taskDto.setProjectName("project name");
         taskDto.setEstCosts(100);
         taskDto.setActualCosts(200);
         taskDto.setComments("comments");
@@ -132,43 +132,43 @@ class TaskMapperTest {
     @Test
     void taskEntityToDto() {
         TaskResponseDto testTaskDto = taskMapper.taskEntityToDto(taskEntity);
-        assertEquals(testTaskDto.getCreateDate(), taskEntity.getCreateDate().toLocalDateTime());
-        assertEquals(testTaskDto.getDueDate(), taskEntity.getDueDate().toLocalDateTime());
-        assertEquals(testTaskDto.getProject(), taskEntity.getProjectId().getName());
-        assertEquals(testTaskDto.getName(), taskEntity.getName());
-        assertEquals(testTaskDto.getActualCosts(), taskEntity.getActualCosts());
-        assertEquals(testTaskDto.getComments(), taskEntity.getComments());
-        assertEquals(testTaskDto.getEstCosts(), taskEntity.getEstCosts());
-        assertEquals(testTaskDto.getPriority(), taskEntity.getPriority());
-        assertEquals(testTaskDto.getAssigneeName(), String.format("%s %s %s",
+        assertEquals(taskEntity.getCreateDate().toLocalDateTime(), testTaskDto.getCreateDate());
+        assertEquals(taskEntity.getDueDate().toLocalDateTime(), testTaskDto.getDueDate());
+        assertEquals(taskEntity.getProjectId().getName(), testTaskDto.getProjectName());
+        assertEquals(taskEntity.getName(), testTaskDto.getName());
+        assertEquals(taskEntity.getActualCosts(), testTaskDto.getActualCosts());
+        assertEquals(taskEntity.getComments(), testTaskDto.getComments());
+        assertEquals(taskEntity.getEstCosts(), testTaskDto.getEstCosts());
+        assertEquals(taskEntity.getPriority(), testTaskDto.getPriority());
+        assertEquals(String.format("%s %s %s",
                 userEntity.getFirstName(),
                 userEntity.getLastName(),
-                userEntity.getUserNumber()));
-        assertEquals(testTaskDto.getDescription(), taskEntity.getDescription());
-        assertEquals(testTaskDto.getRelease(), String.format("%s (%s - %s)",
+                userEntity.getUserNumber()), testTaskDto.getAssigneeName());
+        assertEquals(taskEntity.getDescription(), testTaskDto.getDescription());
+        assertEquals(String.format("%s (%s - %s)",
                 releaseEntity.getName(),
                 dateToString(releaseEntity.getStartDate()),
-                dateToString(releaseEntity.getFinishDate())));
-        assertEquals(testTaskDto.getTeam(), teamEntity.getName());
-        assertEquals(testTaskDto.getStatus(), taskEntity.getTaskStatus().name());
-        assertEquals(testTaskDto.getType(), taskEntity.getTaskType().name());
-        assertEquals(testTaskDto.getFinishDate(), taskEntity.getFinishDate().toLocalDateTime());
+                dateToString(releaseEntity.getFinishDate())), testTaskDto.getRelease());
+        assertEquals(teamEntity.getName(), testTaskDto.getTeam());
+        assertEquals(taskEntity.getTaskStatus().name(), testTaskDto.getStatus());
+        assertEquals(taskEntity.getTaskType().name(), testTaskDto.getType());
+        assertEquals(taskEntity.getFinishDate().toLocalDateTime(), testTaskDto.getFinishDate());
     }
 
     @Test
     void taskDtoToEntity() {
         TaskEntity testTaskEntity = taskMapper.taskDtoToEntity(taskDto);
-        assertEquals(testTaskEntity.getTaskType().name(), taskDto.getType());
-        assertEquals(testTaskEntity.getTaskStatus().name(), taskDto.getStatus());
-        assertEquals(testTaskEntity.getActualCosts(), taskDto.getActualCosts());
-        assertEquals(testTaskEntity.getEstCosts(), taskDto.getEstCosts());
-        assertEquals(testTaskEntity.getPriority(), taskDto.getPriority());
-        assertEquals(testTaskEntity.getDescription(), taskDto.getDescription());
-        assertEquals(testTaskEntity.getName(), taskDto.getName());
-        assertEquals(testTaskEntity.getComments(), taskDto.getComments());
-        assertEquals(testTaskEntity.getProjectId().getName(), taskDto.getProject());
-        assertEquals(testTaskEntity.getDueDate().toLocalDateTime(), taskDto.getDueDate());
-        assertEquals(testTaskEntity.getCreateDate().toLocalDateTime(), taskDto.getCreateDate());
-        assertEquals(testTaskEntity.getFinishDate().toLocalDateTime(), taskDto.getFinishDate());
+        assertEquals(taskDto.getType(), testTaskEntity.getTaskType().name());
+        assertEquals(taskDto.getStatus(), testTaskEntity.getTaskStatus().name());
+        assertEquals(taskDto.getActualCosts(), testTaskEntity.getActualCosts());
+        assertEquals(taskDto.getEstCosts(), testTaskEntity.getEstCosts());
+        assertEquals(taskDto.getPriority(), testTaskEntity.getPriority());
+        assertEquals(taskDto.getDescription(), testTaskEntity.getDescription());
+        assertEquals(taskDto.getName(), testTaskEntity.getName());
+        assertEquals(taskDto.getComments(), testTaskEntity.getComments());
+        assertEquals(taskDto.getProjectName(), testTaskEntity.getProjectId().getName());
+        assertEquals(taskDto.getDueDate(), testTaskEntity.getDueDate().toLocalDateTime());
+        assertEquals(taskDto.getCreateDate(), testTaskEntity.getCreateDate().toLocalDateTime());
+        assertEquals(taskDto.getFinishDate(), testTaskEntity.getFinishDate().toLocalDateTime());
     }
 }

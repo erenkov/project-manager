@@ -68,22 +68,22 @@ class ProjectMapperTest {
     @Test
     void projectEntityToDto() {
         ProjectResponseDto projectDtoTest = projectMapper.projectEntityToDto(projectEntity);
-        assertEquals(projectDtoTest.getDescription(), projectEntity.getDescription());
-        assertEquals(projectDtoTest.getName(), projectEntity.getName());
-        assertEquals(projectDtoTest.getStartDate(), projectEntity.getStartDate().toLocalDateTime());
-        assertEquals(projectDtoTest.getEstFinishDate(), projectEntity.getEstFinishDate().toLocalDateTime());
-        assertEquals(projectDtoTest.getStatus(), projectEntity.getProjectStatus().name());
-        assertEquals(projectDtoTest.getTeamName(), projectEntity.getTeamId().getName());
+        assertEquals(projectEntity.getDescription(), projectDtoTest.getDescription());
+        assertEquals(projectEntity.getName(), projectDtoTest.getName());
+        assertEquals(projectEntity.getStartDate().toLocalDateTime(), projectDtoTest.getStartDate());
+        assertEquals(projectEntity.getEstFinishDate().toLocalDateTime(), projectDtoTest.getEstFinishDate());
+        assertEquals(projectEntity.getProjectStatus().name(), projectDtoTest.getStatus());
+        assertEquals(projectEntity.getTeamId().getName(), projectDtoTest.getTeamName());
     }
 
     @Test
     void projectDtoToEntity() {
         ProjectEntity projectEntityTest = projectMapper.projectDtoToEntity(projectDto);
-        assertEquals(projectEntityTest.getName(), projectDto.getName());
-        assertEquals(projectEntityTest.getDescription(), projectDto.getDescription());
-        assertEquals(projectEntityTest.getProjectStatus().name(), projectDto.getStatus());
-        assertEquals(projectEntityTest.getTeamId().getName(), projectDto.getTeamName());
-        assertEquals(projectEntityTest.getEstFinishDate().toLocalDateTime(), projectDto.getEstFinishDate());
-        assertEquals(projectEntityTest.getStartDate().toLocalDateTime(), projectDto.getStartDate());
+        assertEquals(projectDto.getName(), projectEntityTest.getName());
+        assertEquals(projectDto.getDescription(), projectEntityTest.getDescription());
+        assertEquals(projectDto.getStatus(), projectEntityTest.getProjectStatus().name());
+        assertEquals(projectDto.getTeamName(), projectEntityTest.getTeamId().getName());
+        assertEquals(projectDto.getEstFinishDate(), projectEntityTest.getEstFinishDate().toLocalDateTime());
+        assertEquals(projectDto.getStartDate(), projectEntityTest.getStartDate().toLocalDateTime());
     }
 }

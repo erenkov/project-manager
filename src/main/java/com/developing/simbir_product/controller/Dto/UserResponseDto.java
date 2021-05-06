@@ -12,8 +12,11 @@ public class UserResponseDto {
     @Schema(description = "Пароль")
     private String password;
 
-    @Schema(description = "Имя и фамилия")
-    private String fullName;
+    @Schema(description = "Имя")
+    private String firstName;
+
+    @Schema(description = "Фамилия")
+    private String lastName;
 
     @Schema(description = "Роль")
     private String role;
@@ -41,12 +44,20 @@ public class UserResponseDto {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getRole() {
