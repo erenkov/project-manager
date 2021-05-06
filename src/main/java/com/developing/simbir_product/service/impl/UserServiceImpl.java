@@ -30,20 +30,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Transactional
-    @Override
-    public UserResponseDto getById(UUID id) {
-
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
-
-        UserResponseDto userResponseDto = new UserResponseDto();
-
-        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        return userResponseDto;
-    }
+//    @Transactional
+//    @Override
+//    public UserResponseDto getById(UUID id) {
+//
+//        UserEntity userEntity = userRepository.findById(id).orElseThrow(
+//                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
+//
+//        UserResponseDto userResponseDto = new UserResponseDto();
+//
+//        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+//
+//        return userResponseDto;
+//    }
 
 
     @Transactional
@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
         return userResponseDto;
     }
 
+    @Override
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = null;
         try {
