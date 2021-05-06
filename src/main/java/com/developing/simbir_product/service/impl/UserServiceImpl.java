@@ -95,7 +95,8 @@ public class UserServiceImpl implements UserService {
 
         userResponseDto.setEmail(userEntity.getLogin());
         //TODO: del FULLNAME
-        userResponseDto.setFullName(String.format("%s %s", userEntity.getFirstName(), userEntity.getLastName()));
+        userResponseDto.setFirstName(userEntity.getFirstName());
+        userResponseDto.setLastName(userEntity.getLastName());
         userResponseDto.setPassword(userEntity.getPassword());
         userResponseDto.setRole(userEntity.getRole().toString());
         userResponseDto.setUserNumber(userEntity.getUserNumber());
