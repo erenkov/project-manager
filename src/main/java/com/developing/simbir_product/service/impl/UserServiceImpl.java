@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -117,6 +118,13 @@ public class UserServiceImpl implements UserService {
         //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return userResponseDto;
+    }
+
+    @Transactional
+    @Override
+    public UserEntity findUserEntity(String login) {
+        return userRepository.findByLogin(login).orElseThrow(
+                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
     }
 
     public String getUserNameAndNumber(TaskEntity taskEntity) {

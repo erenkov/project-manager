@@ -1,6 +1,5 @@
 package com.developing.simbir_product.controller;
 
-
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 
 @Tag(name = "Управление задачами")
@@ -32,8 +31,8 @@ public class FiltersController {
 
     @Operation(summary = "Преминить фильтр")
     @PostMapping
-    public ResponseEntity<String> applyFilter(TaskRequestDto taskRequestDto, Model model, HttpServletRequest http) {
-        model.addAttribute("filteredTasks", taskService.getTasksByFilter(taskRequestDto, http));
+    public ResponseEntity<String> applyFilter(TaskRequestDto taskRequestDto, Model model, Principal principal) {
+        model.addAttribute("filteredTasks", taskService.getTasksByFilter(taskRequestDto, principal));
         return ResponseEntity.ok("task-filters");
     }
 }

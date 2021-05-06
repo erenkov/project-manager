@@ -4,7 +4,7 @@ import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
 
-import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,5 +25,5 @@ public interface TaskService {
 
     List<TaskEntity> getTasksByProjectsName(String projectName);
 
-    List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, HttpServletRequest http);
+    List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal http);
 }
