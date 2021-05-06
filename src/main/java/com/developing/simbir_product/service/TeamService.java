@@ -3,6 +3,7 @@ package com.developing.simbir_product.service;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TeamEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface TeamService {
@@ -18,4 +19,6 @@ public interface TeamService {
     TeamEntity findByName(String name);
 
     String getTeamName(TaskEntity taskEntity);
+
+    List<String> findAll();
 }

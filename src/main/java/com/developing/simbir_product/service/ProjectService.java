@@ -4,6 +4,7 @@ import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProjectService {
@@ -21,4 +22,6 @@ public interface ProjectService {
     ProjectEntity getProjectEntity(String name);
 
     ProjectEntity addProjectEntity(ProjectEntity projectEntity);
+
+    List<ProjectEntity> findAll();
 }
