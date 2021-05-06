@@ -52,16 +52,16 @@ class ReleaseMapperTest {
     @Test
     void releaseEntityToDto() {
         ReleaseResponseDto releaseDtoTest = releaseMapper.releaseEntityToDto(releaseEntity);
-        assertEquals(releaseDtoTest.getName(), releaseEntity.getName());
-        assertEquals(releaseDtoTest.getFinishDate(), releaseEntity.getFinishDate().toLocalDateTime());
-        assertEquals(releaseDtoTest.getStartDate(), releaseEntity.getStartDate().toLocalDateTime());
+        assertEquals(releaseEntity.getName(), releaseDtoTest.getName());
+        assertEquals(releaseEntity.getFinishDate().toLocalDateTime(), releaseDtoTest.getFinishDate());
+        assertEquals(releaseEntity.getStartDate().toLocalDateTime(), releaseDtoTest.getStartDate());
     }
 
     @Test
     void releaseDtoToEntity() {
         ReleaseEntity releaseEntityTest = releaseMapper.releaseDtoToEntity(releaseDto);
-        assertEquals(releaseEntityTest.getName(), releaseDto.getName());
-        assertEquals(releaseEntityTest.getFinishDate().toLocalDateTime(), releaseDto.getFinishDate());
-        assertEquals(releaseEntityTest.getStartDate().toLocalDateTime(), releaseDto.getStartDate());
+        assertEquals(releaseDto.getName(), releaseEntityTest.getName());
+        assertEquals(releaseDto.getFinishDate(), releaseEntityTest.getFinishDate().toLocalDateTime());
+        assertEquals(releaseDto.getStartDate(), releaseEntityTest.getStartDate().toLocalDateTime());
     }
 }

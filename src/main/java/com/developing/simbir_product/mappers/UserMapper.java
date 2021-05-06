@@ -12,20 +12,14 @@ import org.mapstruct.NullValueCheckStrategy;
 
 @Mapper(uses = TeamMapper.class, componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public abstract class UserMapper {
+public interface UserMapper {
 
-    @Mapping(target = "fullName", source = ".")
     @Mapping(target = "team", source = "teamId.name")
     @Mapping(target = "email", source = "login")
-    public abstract UserResponseDto userEntityToDto(UserEntity userEntity);
+    UserResponseDto userEntityToDto(UserEntity userEntity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "login", source = "email")
     @Mapping(target = "teamId", source = "team")
-    public abstract UserEntity userDtoToEntity(UserRequestDto userRequestDto);
-
-
-    public String fullNameByUser(UserEntity userEntity) {
-        return String.format("%s %s", userEntity.getFirstName(), userEntity.getLastName());
-    }
+    UserEntity userDtoToEntity(UserRequestDto userRequestDto);
 }

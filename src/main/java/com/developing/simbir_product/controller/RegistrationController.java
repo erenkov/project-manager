@@ -33,7 +33,8 @@ public class RegistrationController {
                 || user.getPassword().isEmpty()
                 || user.getFirstName().isEmpty()
                 || user.getLastName().isEmpty()) {
-            model.addAttribute("regError", "er");
+
+                model.addAttribute("regError", "er");
             return "registration";
         }
         if (!userService.addUser(user)) {

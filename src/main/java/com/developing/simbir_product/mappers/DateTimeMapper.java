@@ -19,10 +19,16 @@ public abstract class DateTimeMapper {
 
 
     public OffsetDateTime localToOffsetDateTime(LocalDateTime localDateTime) { // TODO: Получать ZoneOffset клиента
+        if (localDateTime == null) {
+            return null;
+        }
         return OffsetDateTime.of(localDateTime, ZoneOffset.UTC);
     }
 
     public LocalDateTime offsetToLocalDateTime(OffsetDateTime offsetDateTime) {
+        if (offsetDateTime == null) {
+            return null;
+        }
         return offsetDateTime.toLocalDateTime();
     }
 

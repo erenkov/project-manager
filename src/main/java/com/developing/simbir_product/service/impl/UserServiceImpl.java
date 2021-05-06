@@ -3,10 +3,12 @@ package com.developing.simbir_product.service.impl;
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
 import com.developing.simbir_product.entity.Role;
+import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.UserService;
+import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserTaskHistoryService userTaskHistoryService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -61,9 +66,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(newUser);
 
-        return true;
-
-//        return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return true; //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
@@ -113,5 +116,15 @@ public class UserServiceImpl implements UserService {
         //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return userResponseDto;
+    }
+
+    public String getUserNameAndNumber(TaskEntity taskEntity) {
+        UserEntity assignee = null;
+        try {
+            assignee = userTaskHistoryService.getCurrentUserByTask(taskEntity);
+        } catch (NotFoundException e) {
+            return "";
+        }
+        return String.format("%s %s %s", assignee.getFirstName(), assignee.getLastName(), assignee.getUserNumber());
     }
 }
