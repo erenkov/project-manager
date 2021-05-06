@@ -79,7 +79,24 @@ public class UserServiceImpl implements UserService {
 
         //todo userEntity = mapFrom userRequestDto ????????????????????????
 
-        userRepository.save(userEntity);
+        userEntity.setLastName(userRequestDto.getLastName());
+        userEntity.setFirstName(userRequestDto.getFirstName());
+        userEntity.setLogin();
+        userEntity.setPassword();
+        userEntity.setRole();
+        userEntity.setUserNumber();
+
+        userEntity = userRepository.save(userEntity);
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+
+        userResponseDto.setEmail(userEntity.getLogin());
+        //TODO: del FULLNAME
+        userResponseDto.setFullName(String.format("%s %s", userEntity.getFirstName(), userEntity.getLastName()));
+        userResponseDto.setPassword(userEntity.getPassword());
+        userResponseDto.setRole(userEntity.getRole().toString());
+        userResponseDto.setUserNumber(userEntity.getUserNumber());
+        userResponseDto.setTeam("team-1");
 
         return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
