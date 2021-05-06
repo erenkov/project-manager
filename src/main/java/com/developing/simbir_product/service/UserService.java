@@ -12,7 +12,7 @@ public interface UserService {
 
 //    UserResponseDto getById(UUID id);
 //
-//    UserResponseDto findByEmail(String email);
+    UserResponseDto findByEmail(String email);
 
     boolean addUser(UserRequestDto userRequestDto);
 

@@ -30,20 +30,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Transactional
-    @Override
-    public UserResponseDto getById(UUID id) {
-
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
-
-        UserResponseDto userResponseDto = new UserResponseDto();
-
-        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        return userResponseDto;
-    }
+//    @Transactional
+//    @Override
+//    public UserResponseDto getById(UUID id) {
+//
+//        UserEntity userEntity = userRepository.findById(id).orElseThrow(
+//                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
+//
+//        UserResponseDto userResponseDto = new UserResponseDto();
+//
+//        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+//
+//        return userResponseDto;
+//    }
 
 
     @Transactional
@@ -62,13 +62,13 @@ public class UserServiceImpl implements UserService {
         //заглушка вместо маппера
         newUser.setLogin(userRequestDto.getEmail());
         newUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        newUser.setFirstName(userRequestDto.getFullName());
-        newUser.setLastName(userRequestDto.getFullName());
+        newUser.setFirstName(userRequestDto.getFirstName());
+        newUser.setLastName(userRequestDto.getLastName());
         newUser.setRole(Role.ROLE_ADMIN); // Все админы
 
         userRepository.save(newUser);
 
-        return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return true; //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override

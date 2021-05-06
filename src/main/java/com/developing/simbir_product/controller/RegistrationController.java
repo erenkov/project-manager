@@ -31,8 +31,10 @@ public class RegistrationController {
     public String registerUser(UserRequestDto user, Model model) {
         if (user.getEmail().isEmpty()               //TODO: Проверять все поля
                 || user.getPassword().isEmpty()
-                || user.getFullName().isEmpty()) {
-            model.addAttribute("regError", "er");
+                || user.getFirstName().isEmpty()
+                || user.getLastName().isEmpty()) {
+
+                model.addAttribute("regError", "er");
             return "registration";
         }
         if (!userService.addUser(user)) {
