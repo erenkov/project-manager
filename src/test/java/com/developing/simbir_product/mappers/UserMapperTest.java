@@ -67,14 +67,13 @@ class UserMapperTest {
     @Test
     void userEntityToDto() {
         UserResponseDto userDtoTest = userMapper.userEntityToDto(userEntity);
-        assertEquals(userDtoTest.getUserNumber(), userEntity.getUserNumber());
-        assertEquals(userDtoTest.getEmail(), userEntity.getLogin());
-        assertEquals(userDtoTest.getFullName(), String.format("%s %s",
-                userEntity.getFirstName(),
-                userEntity.getLastName()));
-        assertEquals(userDtoTest.getTeam(), userEntity.getTeamId().getName());
-        assertEquals(userDtoTest.getPassword(), userEntity.getPassword());
-        assertEquals(userDtoTest.getRole(), userEntity.getRole().name());
+        assertEquals(userEntity.getUserNumber(), userDtoTest.getUserNumber());
+        assertEquals(userEntity.getLogin(), userDtoTest.getEmail());
+        assertEquals(userEntity.getFirstName(), userDtoTest.getFirstName());
+        assertEquals(userEntity.getLastName(), userDtoTest.getLastName());
+        assertEquals(userEntity.getTeamId().getName(), userDtoTest.getTeam());
+        assertEquals(userEntity.getPassword(), userDtoTest.getPassword());
+        assertEquals(userEntity.getRole().name(), userDtoTest.getRole());
         userEntity.setTeamId(null);
         userDtoTest = userMapper.userEntityToDto(userEntity);
         assertNull(userDtoTest.getTeam());
@@ -83,12 +82,12 @@ class UserMapperTest {
     @Test
     void userDtoToEntity() {
         UserEntity userEntityTest = userMapper.userDtoToEntity(userRequestDto);
-        assertEquals(userEntityTest.getUserNumber(), userRequestDto.getUserNumber());
-        assertEquals(userEntityTest.getFirstName(), userRequestDto.getFirstName());
-        assertEquals(userEntityTest.getLastName(), userRequestDto.getLastName());
-        assertEquals(userEntityTest.getPassword(), userRequestDto.getPassword());
-        assertEquals(userEntityTest.getRole().name(), userRequestDto.getRole());
-        assertEquals(userEntityTest.getLogin(), userRequestDto.getEmail());
-        assertEquals(userEntityTest.getTeamId().getName(), userRequestDto.getTeam());
+        assertEquals(userRequestDto.getUserNumber(), userEntityTest.getUserNumber());
+        assertEquals(userRequestDto.getFirstName(), userEntityTest.getFirstName());
+        assertEquals(userRequestDto.getLastName(), userEntityTest.getLastName());
+        assertEquals(userRequestDto.getPassword(), userEntityTest.getPassword());
+        assertEquals(userRequestDto.getRole(), userEntityTest.getRole().name());
+        assertEquals(userRequestDto.getEmail(), userEntityTest.getLogin());
+        assertEquals(userRequestDto.getTeam(), userEntityTest.getTeamId().getName());
     }
 }

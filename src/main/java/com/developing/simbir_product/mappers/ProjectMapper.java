@@ -4,7 +4,7 @@ import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.TaskEntity;
-import com.developing.simbir_product.service.ProjectService;
+import com.developing.simbir_product.service.TaskService;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class ProjectMapper {
 
     @Autowired
-    private ProjectService projectService;
+    private TaskService taskService;
 
 
     @Mapping(target = "teamName", source = "teamId.name")
@@ -34,6 +34,6 @@ public abstract class ProjectMapper {
     public abstract ProjectEntity projectDtoToEntity(ProjectRequestDto projectRequestDto);
 
     public List<TaskEntity> tasksOfProject(String projectName) {
-        return projectService.getProjectEntity(projectName).getTasks();
+        return taskService.getTasksByProjectsName(projectName);
     }
 }

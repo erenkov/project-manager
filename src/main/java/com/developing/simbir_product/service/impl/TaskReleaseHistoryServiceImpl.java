@@ -47,6 +47,9 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     @Transactional
     @Override
     public ReleaseEntity getCurrentReleaseByTask(TaskEntity taskEntity) {
+        if (taskEntity.getDueDate() == null) {
+            throw new NotFoundException(String.format("Task %s has no due date.", taskEntity.getName()));
+        }
         return taskReleaseHistoryRepository.findByTaskId(taskEntity).stream()
                 .map(TaskReleaseHistoryEntity::getReleaseId)
                 .filter(releaseEntity -> taskEntity.getDueDate().isAfter(releaseEntity.getStartDate()) &&

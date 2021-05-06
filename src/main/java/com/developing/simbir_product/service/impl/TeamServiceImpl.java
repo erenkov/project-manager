@@ -1,5 +1,7 @@
 package com.developing.simbir_product.service.impl;
 
+import com.developing.simbir_product.entity.ProjectEntity;
+import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TeamEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.repository.TeamRepository;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -47,6 +50,14 @@ public class TeamServiceImpl implements TeamService {
     public TeamEntity findByName(String name) {
         return teamRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException(String.format("Team with name = '%s' not found", name)));
-         //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+    }
+
+    public String getTeamName(TaskEntity taskEntity) {
+        ProjectEntity projectEntity = taskEntity.getProjectId();
+        if (projectEntity.getTeamId() == null) {
+            return "";
+        }
+        return projectEntity.getTeamId().getName();
     }
 }
