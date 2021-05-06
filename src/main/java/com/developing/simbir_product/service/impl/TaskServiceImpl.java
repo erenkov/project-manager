@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,5 +98,10 @@ public class TaskServiceImpl implements TaskService {
 
     public List<TaskEntity> getTasksByProjectsName(String projectName) {
         return projectService.getProjectEntity(projectName).getTasks();
+    }
+
+    @Override
+    public List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, HttpServletRequest http) {
+        return null;
     }
 }
