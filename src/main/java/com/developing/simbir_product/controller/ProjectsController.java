@@ -22,7 +22,7 @@ import java.util.UUID;
 public class ProjectsController {
 
     @Autowired
-    ProjectServiceImpl projectService;
+    private ProjectServiceImpl projectService;
 
     @Autowired
     TeamServiceImpl teamService;

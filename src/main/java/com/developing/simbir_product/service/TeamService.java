@@ -21,4 +21,7 @@ public interface TeamService {
     String getTeamName(TaskEntity taskEntity);
 
     List<String> findAll();
+
+    public List<String> getListOfAllTeamNames();
+
 }

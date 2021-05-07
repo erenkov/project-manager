@@ -29,13 +29,13 @@
                             Edit your profile
                         </h4>
                     </div>
-                    <form action="/profile" method="post" class="p-4">
+                    <form action="/profile" method="post" class="p-4" th:object="${currentUser}">
                         <div class="mb-3 row">
                             <label for="inputEmail" class="col-3 col-form-label"
                             >Email</label
                             >
                             <div class="col-9">
-                                <input th:placeholder="${currentUser.email}"
+                                <input th:value="${currentUser.email}"
                                        type="email"
                                        class="form-control"
                                        id="inputEmail"
@@ -49,12 +49,12 @@
                             >Password</label
                             >
                             <div class="col-9">
-                                <input  placeholder="*****"
-                                        type="password"
-                                        class="form-control"
-                                        id="inputPassword"
-                                        disabled
-                                        required
+                                <input value="*****"
+                                       type="password"
+                                       class="form-control"
+                                       id="inputPassword"
+                                       disabled
+                                       required
                                 />
                             </div>
                         </div>
@@ -63,11 +63,12 @@
                             >Name</label
                             >
                             <div class="col-9">
-                                <input th:placeholder="${currentUser.firstName}"
-                                        type="text"
-                                        class="form-control"
-                                        id="inputName"
-                                        required
+                                <input th:value="${currentUser.firstName}"
+                                       type="text"
+                                       class="form-control"
+                                       id="inputName"
+                                       name="firstName"
+                                       required
                                 />
                             </div>
                         </div>
@@ -76,11 +77,12 @@
                             >Last name</label
                             >
                             <div class="col-9">
-                                <input  th:placeholder="${currentUser.lastName}"
-                                        type="text"
-                                        class="form-control"
-                                        id="inputLastName"
-                                        required
+                                <input th:value="${currentUser.lastName}"
+                                       type="text"
+                                       class="form-control"
+                                       id="inputLastName"
+                                       name="lastName"
+                                       required
                                 />
                             </div>
                         </div>
@@ -89,8 +91,10 @@
                             >Role</label
                             >
                             <div class="col-9">
-                                <select class="form-select" id="inputRole" disabled>
-                                    <option th:value="${currentUser.role}">One</option>
+                                <select class="form-select" id="inputRole" name="role" >
+                                    <th:block th:each="role : ${roles}">
+                                        <option th:text="${role}" th:selected="${role == currentUser.role}"></option>
+                                    </th:block>
                                 </select>
                             </div>
                         </div>
@@ -99,18 +103,16 @@
                             >Team name</label
                             >
                             <div class="col-9">
-                                <input th:placeholder="${currentUser.team}"
-                                        type="text"
-                                        class="form-control"
-                                        id="inputTeamName"
-                                        disabled
-                                        required
-                                />
+                                <select class="form-select" id="inputTeamName" name="team">
+                                    <th:block th:each="teamName : ${teamNames}">
+                                        <option th:text="${teamName}" th:selected="${teamName == currentUser.team}"></option>
+                                    </th:block>
+                                </select>
                             </div>
                         </div>
                         <div class="d-block text-center">
                             <button type="submit" class="btn btn-primary me-3 px-4">
-                                Edit
+                                Update
                             </button>
                             <button type="reset" class="btn btn-secondary px-4">
                                 Cancel

@@ -55,12 +55,17 @@ public class TeamServiceImpl implements TeamService {
         //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
+    @Override
     public String getTeamName(TaskEntity taskEntity) {
         ProjectEntity projectEntity = taskEntity.getProjectId();
         if (projectEntity.getTeamId() == null) {
             return "";
         }
         return projectEntity.getTeamId().getName();
+    }
+
+    public List <String> getListOfAllTeamNames() {
+        return teamRepository.findAll().stream().map(TeamEntity::getName).collect(Collectors.toList());
     }
 
     public List<String> findAll(){
