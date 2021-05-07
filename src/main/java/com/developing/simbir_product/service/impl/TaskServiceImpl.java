@@ -3,7 +3,9 @@ package com.developing.simbir_product.service.impl;
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
+import com.developing.simbir_product.entity.TaskStatus;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.mappers.TaskMapper;
 import com.developing.simbir_product.repository.TaskRepository;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TaskService;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -24,6 +27,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private TaskMapper taskMapper;
 
 
     @Transactional
@@ -96,6 +102,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public List<TaskEntity> getTasksByProjectsName(String projectName) {
+        return projectService.getProjectEntity(projectName).getTasks();
+    }
+
+    public List<TaskResponseDto> findBacklogTasks(String projectName) {
+
+        return findAllTasksByProjectName(projectName).stream().filter(task -> task.getTaskStatus() == TaskStatus.BACKLOG)
+                .map(taskMapper::taskEntityToDto).collect(Collectors.toList());
+
+//        return taskRepository.findByTaskStatus(TaskStatus.BACKLOG).orElseThrow(
+//                () -> new NotFoundException("No projects with status BACKLOG found")
+//        ).stream().filter(task -> findAllTasksByProjectName(projectName)).map(taskMapper::taskEntityToDto).collect(Collectors.toList());
+    }
+
+    private List<TaskEntity> findAllTasksByProjectName (String projectName) {
         return projectService.getProjectEntity(projectName).getTasks();
     }
 }

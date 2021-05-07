@@ -1,23 +1,32 @@
 package com.developing.simbir_product.controller;
 
+import com.developing.simbir_product.controller.Dto.TaskResponseDto;
+import com.developing.simbir_product.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Управление задачами")
 @RequestMapping(value = "/board")
 @Controller
 public class TaskBoardController {
 
+    @Autowired
+    private TaskService taskService;
+
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
-    public String getBoardPage() {
+    public String getBoardPage(@ModelAttribute("projectName") String projectName, Model model) {
+
+        model.addAttribute("listBacklogTasks", );
         // Запрос страницы с доской проекта
+
         return "task-board";
     }
 
