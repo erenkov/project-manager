@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -29,7 +29,7 @@
                   Sign up for Task Management System
                 </h4>
               </div>
-              <form action="/registration" class="p-4" method="post">
+              <form action="/registration" class="p-4" method="post" th:object="${newUser}">
                 <div class="mb-3 row">
                   <label for="inputEmail" class="col-3 col-form-label"
                     >Email</label
@@ -54,6 +54,7 @@
                       class="form-control"
                       id="inputPassword"
                       name="password"
+                      title="Не менее 8 символов"
                       required
                     />
                   </div>
@@ -91,24 +92,23 @@
                     >Role</label
                   >
                   <div class="col-9">
-                    <select class="form-select" id="inputRole">
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                    <select class="form-select" id="inputRole" name="role">
+                      <th:block th:each="role : ${roles}">
+                        <option th:text="${role}"></option>
+                      </th:block>
                     </select>
                   </div>
                 </div>
                 <div class="mb-3 row">
                   <label for="inputTeamName" class="col-3 col-form-label"
-                    >Team name</label
+                  >Team name</label
                   >
                   <div class="col-9">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="inputTeamName"
-                      required
-                    />
+                    <select class="form-select" id="inputTeamName" name="team">
+                      <th:block th:each="teamName : ${teamNames}">
+                        <option th:text="${teamName}"></option>
+                      </th:block>
+                    </select>
                   </div>
                 </div>
                 <div class="d-block text-center">

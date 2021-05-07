@@ -22,4 +22,4 @@ public interface TeamService {
 
     public List<String> getListOfAllTeamNames();
 
-    }
+}

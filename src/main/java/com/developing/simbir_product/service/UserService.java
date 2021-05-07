@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface UserService {
 
 //    UserResponseDto getById(UUID id);
-//
+
     UserResponseDto findByEmail(String email);
 
     boolean addUser(UserRequestDto userRequestDto);
@@ -26,4 +26,4 @@ public interface UserService {
     String getUserNameAndNumber(TaskEntity taskEntity);
 
     List<String> getListOfAllRoles();
-    }
+}

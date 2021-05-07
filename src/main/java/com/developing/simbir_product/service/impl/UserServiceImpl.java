@@ -54,20 +54,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-
         Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
 
         if (userFromDb.isPresent()) {
-            return false; //TODO: ??? или exception?
+            return false;
         }
 
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        UserEntity newUser = userMapper.userDtoToEntity(userRequestDto);
-        newUser.setRole(Role.ROLE_ADMIN); // Все админы
-
-        userRepository.save(newUser);
-
-        return true; //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        userRepository.save(userMapper.userDtoToEntity(userRequestDto));
+        return true;
     }
 
     @Override
@@ -78,7 +73,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponseDto editUser(UserRequestDto userRequestDto) {
-
         UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
 
         UserEntity tempUserFromDB = findEntityByEmail(userEntity.getLogin());
@@ -87,9 +81,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setUserNumber(tempUserFromDB.getUserNumber());
         userEntity = userRepository.save(userEntity);
 
-        UserResponseDto userResponseDto = userMapper.userEntityToDto(userEntity);
-
-        return userResponseDto;
+        return userMapper.userEntityToDto(userEntity);
     }
 
     @Transactional
@@ -130,9 +122,9 @@ public class UserServiceImpl implements UserService {
 
        private UserEntity findEntityByEmail(String email) {
 
-        String login = email; // Т.К. логин и email в нашем случае одно и тоже
-        // Front знает о email, DB знает о логине
-        // Service знает что делать с этим
+        String login = email;   // Т.К. логин и email в нашем случае одно и тоже
+                                // Front знает о email, DB знает о логине
+                                // Service знает что делать с этим
 
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
                 () -> new NotFoundException(String.format("User with login = '%s' not found", login)));

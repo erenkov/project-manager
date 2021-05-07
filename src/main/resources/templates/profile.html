@@ -94,7 +94,6 @@
                                 <select class="form-select" id="inputRole" name="role" >
                                     <th:block th:each="role : ${roles}">
                                         <option th:text="${role}" th:selected="${role == currentUser.role}"></option>
-<!--                                        <option th:value="${role}" th:text="${role}" th:selected="${role == currentUser.role}"></option>-->
                                     </th:block>
                                 </select>
                             </div>
