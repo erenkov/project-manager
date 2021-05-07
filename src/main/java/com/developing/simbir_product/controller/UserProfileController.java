@@ -37,9 +37,9 @@ public class UserProfileController {
 
     @Operation(summary = "Получить страницу c профилем пользователя")
     @PostMapping
-    public String updateProfile(@ModelAttribute UserRequestDto user, Model model, Principal principal) {
-        user.setEmail(principal.getName());
-        model.addAttribute("currentUser", userService.editUser(user));
+    public String updateProfile(@ModelAttribute("currentUser") UserRequestDto currentUser, Model model, Principal principal) {
+        currentUser.setEmail(principal.getName());
+        model.addAttribute("currentUser", userService.editUser(currentUser));
         return "redirect:/profile";
     }
 }

@@ -39,7 +39,7 @@ public class RegistrationController {
 
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping
-    public ModelAndView registerUser(@Valid @ModelAttribute UserRequestDto newUser) {
+    public ModelAndView registerUser(@Valid @ModelAttribute("newUser") UserRequestDto newUser) {
         ModelAndView modelAndView = new ModelAndView();
         if (!userService.addUser(newUser)) {
             modelAndView.setViewName("registration");
