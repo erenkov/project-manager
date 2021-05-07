@@ -41,7 +41,7 @@ public class RegistrationController {
             modelAndView.setStatus(HttpStatus.CONFLICT);
             modelAndView.addObject("userError", "User exists!");
         } else {
-            modelAndView.setViewName("login");
+            modelAndView.setViewName("redirect:/login");
             modelAndView.setStatus(HttpStatus.CREATED);
         }
         return modelAndView;
