@@ -1,7 +1,7 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
-import com.developing.simbir_product.service.impl.UserServiceImpl;
+import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RegistrationController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Operation(summary = "Получить страницу регистрации")
     @GetMapping
@@ -29,7 +29,7 @@ public class RegistrationController {
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping
     public String registerUser(UserRequestDto user, Model model) {
-        if (user.getEmail().isEmpty()               //TODO: Проверять все поля
+        if (user.getEmail().isEmpty()
                 || user.getPassword().isEmpty()
                 || user.getFirstName().isEmpty()
                 || user.getLastName().isEmpty()) {

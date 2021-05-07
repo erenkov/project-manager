@@ -6,6 +6,7 @@ import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.mappers.UserMapper;
 import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
@@ -14,8 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserMapper userMapper;
 
 //    @Transactional
 //    @Override
@@ -54,14 +61,8 @@ public class UserServiceImpl implements UserService {
             return false; //TODO: ??? или exception?
         }
 
-        UserEntity newUser = new UserEntity();
-
-        //todo userEntity = mapFrom userRequestDto ??????????????????????????????
-        //заглушка вместо маппера
-        newUser.setLogin(userRequestDto.getEmail());
-        newUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        newUser.setFirstName(userRequestDto.getFirstName());
-        newUser.setLastName(userRequestDto.getLastName());
+        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        UserEntity newUser = userMapper.userDtoToEntity(userRequestDto);
         newUser.setRole(Role.ROLE_ADMIN); // Все админы
 
         userRepository.save(newUser);
@@ -78,31 +79,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto editUser(UserRequestDto userRequestDto) {
 
-        UserEntity userEntity = new UserEntity();
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
 
-        //todo userEntity = mapFrom userRequestDto ????????????????????????
-
-        userEntity.setLastName(userRequestDto.getLastName());
-        userEntity.setFirstName(userRequestDto.getFirstName());
-        userEntity.setLogin();
-        userEntity.setPassword();
-        userEntity.setRole();
-        userEntity.setUserNumber();
-
+        UserEntity tempUserFromDB = findEntityByEmail(userEntity.getLogin());
+        userEntity.setId(tempUserFromDB.getId());
+        userEntity.setPassword(tempUserFromDB.getPassword());
+        userEntity.setUserNumber(tempUserFromDB.getUserNumber());
         userEntity = userRepository.save(userEntity);
 
-        UserResponseDto userResponseDto = new UserResponseDto();
+        UserResponseDto userResponseDto = userMapper.userEntityToDto(userEntity);
 
-        userResponseDto.setEmail(userEntity.getLogin());
-        //TODO: del FULLNAME
-        userResponseDto.setFirstName(userEntity.getFirstName());
-        userResponseDto.setLastName(userEntity.getLastName());
-        userResponseDto.setPassword(userEntity.getPassword());
-        userResponseDto.setRole(userEntity.getRole().toString());
-        userResponseDto.setUserNumber(userEntity.getUserNumber());
-        userResponseDto.setTeam("team-1");
-
-        return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return userResponseDto;
     }
 
     @Transactional
@@ -122,21 +109,10 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
                 () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
 
-        UserResponseDto userResponseDto = new UserResponseDto();
-
-        userResponseDto.setEmail(userEntity.getLogin());
-        //TODO: del FULLNAME
-        userResponseDto.setFirstName( userEntity.getFirstName());
-        userResponseDto.setLastName(userEntity.getLastName());
-        userResponseDto.setPassword(userEntity.getPassword());
-        userResponseDto.setRole(userEntity.getRole().toString());
-        userResponseDto.setUserNumber(userEntity.getUserNumber());
-        userResponseDto.setTeam("team-1");
-        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return userResponseDto;
+        return userMapper.userEntityToDto(userEntity);
     }
 
+    @Override
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = null;
         try {
@@ -145,5 +121,22 @@ public class UserServiceImpl implements UserService {
             return "";
         }
         return String.format("%s %s %s", assignee.getFirstName(), assignee.getLastName(), assignee.getUserNumber());
+    }
+
+    @Override
+    public List<String> getListOfAllRoles() {
+        return Arrays.stream(Role.values()).map(Role::toString).collect(Collectors.toList());
+    }
+
+       private UserEntity findEntityByEmail(String email) {
+
+        String login = email; // Т.К. логин и email в нашем случае одно и тоже
+        // Front знает о email, DB знает о логине
+        // Service знает что делать с этим
+
+        UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
+                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+
+        return userEntity;
     }
 }
