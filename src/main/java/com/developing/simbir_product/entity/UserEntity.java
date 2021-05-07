@@ -1,10 +1,13 @@
 package com.developing.simbir_product.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "usr")
+@DynamicInsert
 public class UserEntity {
 
     @Id
@@ -23,8 +26,8 @@ public class UserEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "user_number", nullable = false)
-    private int userNumber;
+    @Column(name = "user_number")
+    private Integer userNumber;
 
     @Column(name = "role_type")
     private Role role;
@@ -85,11 +88,11 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    public int getUserNumber() {
+    public Integer getUserNumber() {
         return userNumber;
     }
 
-    public void setUserNumber(int userNumber) {
+    public void setUserNumber(Integer userNumber) {
         this.userNumber = userNumber;
     }
 

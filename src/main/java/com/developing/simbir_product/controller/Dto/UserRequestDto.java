@@ -41,7 +41,7 @@ public class UserRequestDto {
     private String team;
 
     @Schema(description = "Табельный номер")
-    private int userNumber;
+    private Integer userNumber;
 
 
     public String getEmail() {
@@ -92,11 +92,11 @@ public class UserRequestDto {
         this.team = team;
     }
 
-    public int getUserNumber() {
+    public Integer getUserNumber() {
         return userNumber;
     }
 
-    public void setUserNumber(int userNumber) {
+    public void setUserNumber(Integer userNumber) {
         this.userNumber = userNumber;
     }
 }
