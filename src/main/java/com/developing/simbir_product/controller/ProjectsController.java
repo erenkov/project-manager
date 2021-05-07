@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProjectsController {
 
     @Autowired
-    ProjectServiceImpl projectService;
+    private ProjectServiceImpl projectService;
 
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping()
