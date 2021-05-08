@@ -80,4 +80,12 @@ public class TeamEntity {
     public void setProjects(List<ProjectEntity> projects) {
         this.projects = projects;
     }
+
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
+    }
 }
