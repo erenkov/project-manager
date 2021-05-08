@@ -372,7 +372,6 @@ databaseChangeLog:
             referencedTableName: team
             validate: true
   - changeSet:
-
       id: 1619863834457-17
       author: Rebrin Konstantin
       changes:
@@ -387,7 +386,6 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: usr
             validate: true
-
   - changeSet:
       id: addAutoIncrement-18
       author: Maxim Nikitin
@@ -401,7 +399,6 @@ databaseChangeLog:
             schemaName: public
             startWith: 1
             tableName: usr
-
   - changeSet:
       id: addForeignKey-19
       author: Rebrin Konstantin
@@ -417,7 +414,6 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: task
             validate: true
-
   - changeSet:
       id: modifyDataType-20
       author: Rebrin Konstantin
@@ -427,3 +423,38 @@ databaseChangeLog:
             newDataType: VARCHAR(100)
             schemaName: public
             tableName: usr
+  - changeSet:
+      id: addUniqueConstraint-21
+      author: Rebrin Konstantin
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: project_name_key
+            tableName: project
+  - changeSet:
+      id: addColumn-22
+      author: Rebrin Konstantin
+      changes:
+        - addColumn:
+            tableName: release
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: project_id
+                  type: UUID
+  - changeSet:
+      id: addForeignKey-23
+      author: Rebrin Konstantin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: release
+            constraintName: release_project_fk
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: project
+            validate: true
