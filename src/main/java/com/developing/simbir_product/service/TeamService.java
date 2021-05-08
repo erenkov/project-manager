@@ -24,4 +24,5 @@ public interface TeamService {
 
     public List<String> getListOfAllTeamNames();
 
+    TeamEntity mapTeamByName(String teamName);
 }

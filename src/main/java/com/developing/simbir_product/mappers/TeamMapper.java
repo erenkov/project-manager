@@ -26,6 +26,6 @@ public abstract class TeamMapper {
     public abstract TeamResponseDto teamEntityToDto(TeamEntity teamEntity);
 
     public TeamEntity teamByName(String teamName) {
-        return teamService.findByName(teamName);
+        return teamService.mapTeamByName(teamName);
     }
 }
