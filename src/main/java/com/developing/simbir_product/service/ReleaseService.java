@@ -22,4 +22,6 @@ public interface ReleaseService {
     ReleaseEntity addReleaseEntity(ReleaseEntity releaseEntity);
 
     String getReleaseString(TaskEntity taskEntity);
+
+    String getCurrentRelease();
 }

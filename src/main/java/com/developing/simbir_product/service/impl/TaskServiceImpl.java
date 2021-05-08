@@ -105,9 +105,9 @@ public class TaskServiceImpl implements TaskService {
         return projectService.getProjectEntity(projectName).getTasks();
     }
 
-    public List<TaskResponseDto> findBacklogTasks(String projectName) {
+    public List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus) {
 
-        return findAllTasksByProjectName(projectName).stream().filter(task -> task.getTaskStatus() == TaskStatus.BACKLOG)
+        return getTasksByProjectsName(projectName).stream().filter(task -> task.getTaskStatus() == taskStatus)
                 .map(taskMapper::taskEntityToDto).collect(Collectors.toList());
 
 //        return taskRepository.findByTaskStatus(TaskStatus.BACKLOG).orElseThrow(
@@ -115,7 +115,4 @@ public class TaskServiceImpl implements TaskService {
 //        ).stream().filter(task -> findAllTasksByProjectName(projectName)).map(taskMapper::taskEntityToDto).collect(Collectors.toList());
     }
 
-    private List<TaskEntity> findAllTasksByProjectName (String projectName) {
-        return projectService.getProjectEntity(projectName).getTasks();
-    }
 }

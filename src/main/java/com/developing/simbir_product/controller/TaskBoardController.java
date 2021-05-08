@@ -1,6 +1,7 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
+import com.developing.simbir_product.entity.TaskStatus;
 import com.developing.simbir_product.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,10 +23,12 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
-    public String getBoardPage(@ModelAttribute("projectName") String projectName, Model model) {
-
-        model.addAttribute("listBacklogTasks", );
+    public String getBoardPage(@RequestParam("projectName") String projectName, Model model) {
         // Запрос страницы с доской проекта
+        model.addAttribute("listBacklogTasks", taskService.findTasksByStatus(projectName, TaskStatus.BACKLOG));
+        model.addAttribute("listInProgressTasks", taskService.findTasksByStatus(projectName, TaskStatus.IN_PROGRESS));
+        model.addAttribute("listDoneTasks", taskService.findTasksByStatus(projectName, TaskStatus.DONE));
+
 
         return "task-board";
     }

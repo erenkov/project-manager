@@ -110,4 +110,6 @@ public class ReleaseServiceImpl implements ReleaseService {
                 dateTimeMapper.dateToString(release.getStartDate()),
                 dateTimeMapper.dateToString(release.getFinishDate()));
     }
+
+
 }

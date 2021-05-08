@@ -3,6 +3,7 @@ package com.developing.simbir_product.service;
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
+import com.developing.simbir_product.entity.TaskStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,4 +24,6 @@ public interface TaskService {
     TaskResponseDto findByName(String name);
 
     List<TaskEntity> getTasksByProjectsName(String projectName);
+
+    List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus);
 }
