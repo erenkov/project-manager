@@ -26,4 +26,6 @@ public interface UserService {
     String getUserNameAndNumber(TaskEntity taskEntity);
 
     List<String> getListOfAllRoles();
+
+    List<UserResponseDto> getListOfAllUsers();
 }

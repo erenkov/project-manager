@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -51,9 +52,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
 
-        TaskEntity taskEntity = new TaskEntity();
-
-        //todo taskEntity = mapFrom taskRequestDto ??????????????????????????
+//        taskRepository.findById()
+        TaskEntity taskEntity = taskMapper.taskDtoToEntity(taskRequestDto);
 
         taskRepository.save(taskEntity);
 
@@ -109,10 +109,11 @@ public class TaskServiceImpl implements TaskService {
 
         return getTasksByProjectsName(projectName).stream().filter(task -> task.getTaskStatus() == taskStatus)
                 .map(taskMapper::taskEntityToDto).collect(Collectors.toList());
+    }
 
-//        return taskRepository.findByTaskStatus(TaskStatus.BACKLOG).orElseThrow(
-//                () -> new NotFoundException("No projects with status BACKLOG found")
-//        ).stream().filter(task -> findAllTasksByProjectName(projectName)).map(taskMapper::taskEntityToDto).collect(Collectors.toList());
+    @Override
+    public List<String> getListOfTaskTypes() {
+        return Arrays.stream(TaskStatus.values()).map(TaskStatus::toString).collect(Collectors.toList());
     }
 
 }

@@ -6,6 +6,7 @@ import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.DateTimeMapper;
+import com.developing.simbir_product.mappers.ReleaseMapper;
 import com.developing.simbir_product.repository.ReleaseRepository;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
@@ -33,6 +34,8 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Autowired
     private DateTimeMapper dateTimeMapper;
 
+    @Autowired
+    private ReleaseMapper releaseMapper;
 
     @Transactional
     @Override
@@ -102,6 +105,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseRepository.save(releaseEntity);
     }
 
+    //данный метод думаю не акутален после того как мы ввели новое поле project_id
     public String getReleaseString(TaskEntity taskEntity) {
         ReleaseEntity release = null;
         try {
@@ -117,12 +121,11 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Transactional
     @Override
-    public String getCurrentRelease(String projectName) {
-        releaseRepository.getCurrentRelease(projectService.getProjectEntity(projectName).getId()).orElseThrow(
+    public ReleaseResponseDto getCurrentRelease(String projectName) {
+        ReleaseEntity releaseEntity = releaseRepository.getCurrentRelease(projectService.getProjectEntity(projectName).getId()).orElseThrow(
                 () -> new NotFoundException(String.format("Release for project with name = '%s' not found", projectName))
         );
-        return null;
+        return releaseMapper.releaseEntityToDto(releaseEntity);
     }
-
 
 }

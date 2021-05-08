@@ -23,5 +23,5 @@ public interface ReleaseService {
 
     String getReleaseString(TaskEntity taskEntity);
 
-    String getCurrentRelease();
+    ReleaseResponseDto getCurrentRelease(String projectName);
 }

@@ -26,4 +26,6 @@ public interface TaskService {
     List<TaskEntity> getTasksByProjectsName(String projectName);
 
     List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus);
+
+    List<String> getListOfTaskTypes();
 }
