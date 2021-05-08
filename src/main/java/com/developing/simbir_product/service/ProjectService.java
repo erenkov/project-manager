@@ -24,4 +24,9 @@ public interface ProjectService {
     ProjectEntity addProjectEntity(ProjectEntity projectEntity);
 
     List<ProjectEntity> findAll();
-}
+
+    List<String> getListOfAllProjectNames();
+
+    List<String> getListOfAllProjectStatus();
+
+    }

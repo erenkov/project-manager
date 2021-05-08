@@ -28,7 +28,7 @@ public abstract class ProjectMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "finishDate", ignore = true)
-    @Mapping(target = "tasks", source = "name")
+    @Mapping(target = "tasks", ignore = true)
     @Mapping(target = "teamId", source = "teamName")
     @Mapping(target = "projectStatus", source = "status")
     public abstract ProjectEntity projectDtoToEntity(ProjectRequestDto projectRequestDto);

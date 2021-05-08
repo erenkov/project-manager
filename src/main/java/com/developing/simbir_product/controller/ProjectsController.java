@@ -2,9 +2,8 @@ package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
-import com.developing.simbir_product.entity.ProjectEntity;
-import com.developing.simbir_product.service.impl.ProjectServiceImpl;
-import com.developing.simbir_product.service.impl.TeamServiceImpl;
+import com.developing.simbir_product.service.ProjectService;
+import com.developing.simbir_product.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,39 +21,57 @@ import java.util.UUID;
 public class ProjectsController {
 
     @Autowired
-    private ProjectServiceImpl projectService;
+    private ProjectService projectService;
 
     @Autowired
-    TeamServiceImpl teamService;
-
+    private TeamService teamService;
 
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping()
     public String getProjectsPage(Model model) {
         // Посылает на фронт лист проектов. Фронт должен обрабатывать
-        // Сделал через repository, мб через сервис
-        List<ProjectEntity> projects = projectService.findAll(); //Maybe use Iterable<> instead of List<>
-        model.addAttribute("projects", projects);
+        model.addAttribute("projectNames", projectService.getListOfAllProjectNames());
         return "projects";
     }
 
     @Operation(summary = "Получить страницу создания нового проекта")
     @GetMapping("/create")
-    public String getNewProjectPage() {
-
-        return "create-project";
+    public String getNewProjectPage(Model model) {
+        model.addAttribute("newProject", new ProjectRequestDto());
+        model.addAttribute("projectStatus", projectService.getListOfAllProjectStatus());
+            return "create-project";
     }
 
     @Operation(summary = "Создать новый проект")
-    @PostMapping("/create") //TODO: Validation
-    public String createProject(@ModelAttribute("project") ProjectRequestDto projectRequestDto) {
-        // @ModelAttribute парсит формы и создает объект с уже заполненными значениями
-        // name у форм должны совпадать с полями объекта
-        // если не работает - сделать через @RequestParam
+    @PostMapping("/create")                                 //TODO: Validation
+    public String createProject(@ModelAttribute("newProject") ProjectRequestDto projectRequestDto) {
+
         projectService.addProject(projectRequestDto);
 
         return "redirect:/projects";
     }
+
+//    @Operation(summary = "Создать новый проект")
+//    @PostMapping("/create")                                 //TODO: Validation
+//    public String createProject(@ModelAttribute("newProject") ProjectRequestDto projectRequestDto,
+//                                @RequestParam(value = "strStartDate", required = false) String strStartDate,
+//                                @RequestParam(value = "strEstFinishDate" , required = false) String strEstFinishDate) {
+//        //TODO: Костыль
+//        DateTimeFormatter DATEFORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//        LocalDate ldStart = LocalDate.parse(strStartDate, DATEFORMATTER);
+////        projectRequestDto.setStartDate(LocalDateTime.of(ldStart, LocalDateTime.now().toLocalTime()));
+//        projectRequestDto.setStartDate(ldStart.atStartOfDay());
+//
+//        LocalDate ldFinish = LocalDate.parse(strEstFinishDate, DATEFORMATTER);
+//        projectRequestDto.setEstFinishDate(ldFinish.atStartOfDay());
+////        projectRequestDto.setEstFinishDate(LocalDateTime.of(ldFinish, LocalDateTime.now().toLocalTime()));
+//
+//
+//        projectService.addProject(projectRequestDto);
+//
+//        return "redirect:/projects";
+//    }
 
     // TODO: Вместо ID в URL придумать что-то новое
     // Данный метод передачи id возможно не работает.
@@ -71,7 +88,6 @@ public class ProjectsController {
         // form с уже имеющимися значениями, на которые можно кликнуть и изменить
         return "edit-project";
     }
-
 
     @Operation(summary = "Редактировать проект")
     @PostMapping("/edit/{id}") //TODO: Validation

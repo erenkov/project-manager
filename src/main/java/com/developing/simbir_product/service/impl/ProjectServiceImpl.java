@@ -3,6 +3,7 @@ package com.developing.simbir_product.service.impl;
 import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
+import com.developing.simbir_product.entity.ProjectStatus;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.ProjectMapper;
 import com.developing.simbir_product.repository.ProjectRepository;
@@ -11,18 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+
     @Autowired
     ProjectMapper projectMapper;
 
     @Autowired
     private ProjectRepository projectRepository;
-
 
     @Transactional
     @Override
@@ -43,9 +46,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
 
-        ProjectEntity projectEntity = new ProjectEntity();
+        projectRequestDto.setStatus(ProjectStatus.BACKLOG.toString());
 
-        //todo projectEntity = mapFrom projectRequestDto ???????????????????????????????????????
+        ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
 
         projectRepository.save(projectEntity);
 
@@ -83,6 +86,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Transactional
+    @Override
     public ProjectEntity getProjectEntity(String name) {
         return projectRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
@@ -92,5 +96,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectEntity> findAll(){
         return projectRepository.findAll();
+    }
+
+    @Transactional
+    @Override
+    public List<String> getListOfAllProjectNames() {
+        return projectRepository.findAll().stream().map(ProjectEntity::getName).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getListOfAllProjectStatus() {
+        return Arrays.stream(ProjectStatus.values()).map(ProjectStatus::toString).collect(Collectors.toList());
     }
 }
