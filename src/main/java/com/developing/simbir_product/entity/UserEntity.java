@@ -3,6 +3,7 @@ package com.developing.simbir_product.entity;
 import javax.persistence.*;
 import java.util.UUID;
 
+
 @Entity
 @Table(name = "usr")
 public class UserEntity {

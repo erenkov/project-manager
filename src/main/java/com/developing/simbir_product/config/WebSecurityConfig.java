@@ -38,7 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/**").hasRole("ADMIN")
                 .and()
                     .formLogin()
-                    .loginProcessingUrl("/login")
                     .loginPage("/login")
                     .usernameParameter("email").passwordParameter("password")
                     .defaultSuccessUrl("/board", true)
