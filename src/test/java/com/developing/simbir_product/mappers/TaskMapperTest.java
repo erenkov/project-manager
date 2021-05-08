@@ -92,6 +92,7 @@ class TaskMapperTest {
         releaseEntity = new ReleaseEntity("release name",
                 OffsetDateTime.now().minusMonths(1),
                 OffsetDateTime.now().plusMonths(2));
+        releaseEntity.setProjectId(projectEntity);
         releaseEntity = releaseService.addReleaseEntity(releaseEntity);
 
         taskReleaseHistoryEntity = new TaskReleaseHistoryEntity();
@@ -120,6 +121,7 @@ class TaskMapperTest {
         userService.deleteById(userEntity.getId());
         taskReleaseHistoryService.deleteById(taskReleaseHistoryEntity.getId());
         taskService.deleteById(taskEntity.getId());
+        releaseService.deleteById(releaseEntity.getId());
         projectService.deleteById(projectEntity.getId());
         teamService.deleteById(teamEntity.getId());
     }

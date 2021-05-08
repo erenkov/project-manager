@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
-
 @Schema(description = "Релиз")
 public class ReleaseResponseDto {
 
@@ -17,6 +16,8 @@ public class ReleaseResponseDto {
     @Schema(description = "Дата конца релиза")
     private LocalDateTime finishDate;
 
+    @Schema(description = "Название проекта")
+    private String projectName;
 
     public String getName() {
         return name;
@@ -40,5 +41,13 @@ public class ReleaseResponseDto {
 
     public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

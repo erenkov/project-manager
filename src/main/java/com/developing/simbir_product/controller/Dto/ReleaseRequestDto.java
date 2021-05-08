@@ -21,6 +21,9 @@ public class ReleaseRequestDto {
     @Schema(description = "Дата конца релиза")
     private LocalDateTime finishDate;
 
+    @Schema(description = "Название проекта")
+    @Size(max = 50)
+    private String projectName;
 
     public String getName() {
         return name;
@@ -44,5 +47,13 @@ public class ReleaseRequestDto {
 
     public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }
