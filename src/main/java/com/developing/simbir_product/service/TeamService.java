@@ -23,6 +23,4 @@ public interface TeamService {
     List<String> getListOfAllTeamNames();
 
     TeamEntity mapTeamByName(String teamName);
-
-    UUID getUuidFromString(String stringUuid);
 }
