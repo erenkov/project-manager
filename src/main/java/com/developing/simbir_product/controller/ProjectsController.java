@@ -29,7 +29,6 @@ public class ProjectsController {
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping()
     public String getProjectsPage(Model model) {
-        // Посылает на фронт лист проектов. Фронт должен обрабатывать
         model.addAttribute("projectNames", projectService.getListOfAllProjectNames());
         return "projects";
     }
