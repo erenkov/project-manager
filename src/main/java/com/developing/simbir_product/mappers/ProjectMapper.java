@@ -33,7 +33,7 @@ public abstract class ProjectMapper {
     @Mapping(target = "projectStatus", source = "status")
     public abstract ProjectEntity projectDtoToEntity(ProjectRequestDto projectRequestDto);
 
-    public List<TaskEntity> tasksOfProject(String projectName) {
-        return taskService.getTasksByProjectsName(projectName);
-    }
+//    public List<TaskEntity> tasksOfProject(String projectName) {
+//        return taskService.getTasksByProjectsName(projectName);
+//    }
 }

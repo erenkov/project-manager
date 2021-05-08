@@ -21,6 +21,10 @@ public class ReleaseEntity {
     @Column(name = "finish_date", nullable = false)
     private OffsetDateTime finishDate;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private ProjectEntity projectId;
+
     public ReleaseEntity() {
     }
 
@@ -60,5 +64,13 @@ public class ReleaseEntity {
 
     public void setFinishDate(OffsetDateTime finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public ProjectEntity getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(ProjectEntity projectId) {
+        this.projectId = projectId;
     }
 }
