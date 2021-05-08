@@ -1,13 +1,14 @@
 package com.developing.simbir_product.entity;
 
-import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.util.UUID;
 
+
 @Entity
 @Table(name = "usr")
-@DynamicInsert
 public class UserEntity {
 
     @Id
@@ -26,7 +27,8 @@ public class UserEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "user_number")
+    @Generated(GenerationTime.INSERT)
+    @Column(name = "user_number", insertable = false, updatable = false)
     private Integer userNumber;
 
     @Column(name = "role_type")

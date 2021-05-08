@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 @Schema(description = "Задача")
 public class TaskRequestDto {
 
+    @Schema(description = "ID задачи")
+    private String id;
+
     @Schema(description = "Название задачи")
     @NotBlank
     @Size(max = 50)
@@ -60,6 +63,15 @@ public class TaskRequestDto {
     @Schema(description = "Название проекта")
     @Size(max = 50)
     private String projectName;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getProjectName() {
         return projectName;

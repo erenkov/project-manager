@@ -20,6 +20,7 @@ public interface TeamService {
 
     String getTeamName(TaskEntity taskEntity);
 
-    public List<String> getListOfAllTeamNames();
+    List<String> getListOfAllTeamNames();
 
+    TeamEntity mapTeamByName(String teamName);
 }
