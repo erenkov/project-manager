@@ -2,9 +2,7 @@ package com.developing.simbir_product.controller.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-
 
 @Schema(description = "Релиз")
 public class ReleaseResponseDto {

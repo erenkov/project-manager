@@ -72,6 +72,8 @@ class ReleaseMapperTest {
     @AfterEach
     void after() {
         releaseService.deleteById(releaseEntity.getId());
+        projectService.deleteById(projectEntity.getId());
+        teamService.deleteById(teamEntity.getId());
     }
 
 
