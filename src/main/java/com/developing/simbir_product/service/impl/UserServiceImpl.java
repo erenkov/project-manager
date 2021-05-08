@@ -106,7 +106,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.userEntityToDto(userEntity);
     }
 
-    @Override
     @Transactional
     @Override
     public UserEntity findUserEntity(String login) {
