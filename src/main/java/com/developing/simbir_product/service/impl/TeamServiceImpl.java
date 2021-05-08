@@ -1,5 +1,6 @@
 package com.developing.simbir_product.service.impl;
 
+import com.developing.simbir_product.controller.Dto.TeamRequestDto;
 import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TeamEntity;
@@ -64,7 +65,7 @@ public class TeamServiceImpl implements TeamService {
         return projectEntity.getTeamId().getName();
     }
 
-    public List <String> getListOfAllTeamNames() {
+    public List<String> getListOfAllTeamNames() {
         return teamRepository.findAll().stream().map(TeamEntity::getName).collect(Collectors.toList());
     }
 
@@ -74,5 +75,17 @@ public class TeamServiceImpl implements TeamService {
             return null;
         }
         return findByName(teamName);
+    }
+
+    @Override
+    public boolean addTeamDto(TeamRequestDto teamRequestDto) {
+        //TODO:
+        return false;
+    }
+
+    @Override
+    public boolean editTeamDto(TeamRequestDto teamRequestDto) {
+        //TODO:
+        return false;
     }
 }
