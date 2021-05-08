@@ -53,7 +53,7 @@ class UserMapperTest {
         userRequestDto.setLastName("LastName");
         userRequestDto.setPassword("password");
         userRequestDto.setTeam("team name");
-        userRequestDto.setRole("USER");
+        userRequestDto.setRole("ROLE_USER");
         userRequestDto.setUserNumber(100);
     }
 

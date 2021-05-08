@@ -75,4 +75,12 @@ public class TeamServiceImpl implements TeamService {
         }
         return findByName(teamName);
     }
+
+    @Override
+    public UUID getUuidFromString(String stringUuid) {
+        if (stringUuid == null || stringUuid.isEmpty()) {
+            return null;
+        }
+        return UUID.fromString(stringUuid);
+    }
 }
