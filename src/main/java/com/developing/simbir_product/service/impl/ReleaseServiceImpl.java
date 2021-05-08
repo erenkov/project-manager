@@ -7,6 +7,7 @@ import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.DateTimeMapper;
 import com.developing.simbir_product.repository.ReleaseRepository;
+import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Autowired
     private ReleaseRepository releaseRepository;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private TaskReleaseHistoryService taskReleaseHistoryService;
@@ -109,6 +113,15 @@ public class ReleaseServiceImpl implements ReleaseService {
                 release.getName(),
                 dateTimeMapper.dateToString(release.getStartDate()),
                 dateTimeMapper.dateToString(release.getFinishDate()));
+    }
+
+    @Transactional
+    @Override
+    public String getCurrentRelease(String projectName) {
+        releaseRepository.getCurrentRelease(projectService.getProjectEntity(projectName).getId()).orElseThrow(
+                () -> new NotFoundException(String.format("Release for project with name = '%s' not found", projectName))
+        );
+        return null;
     }
 
 
