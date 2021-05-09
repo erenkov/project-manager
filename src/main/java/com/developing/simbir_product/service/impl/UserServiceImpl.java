@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
+
         Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
 
         if (userFromDb.isPresent()) {
@@ -103,7 +105,13 @@ public class UserServiceImpl implements UserService {
         return userMapper.userEntityToDto(userEntity);
     }
 
+    @Transactional
     @Override
+    public UserEntity findUserEntity(String login) {
+        return userRepository.findByLogin(login).orElseThrow(
+                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+    }
+
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = null;
         try {
