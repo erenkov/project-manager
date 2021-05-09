@@ -23,7 +23,7 @@ public interface ProjectService {
 
     ProjectEntity addProjectEntity(ProjectEntity projectEntity);
 
-    List<ProjectEntity> findAll();
+    List<ProjectResponseDto> findAll();
 
     List<String> getListOfAllProjectNames();
 

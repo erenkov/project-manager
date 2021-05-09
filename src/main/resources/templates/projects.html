@@ -31,7 +31,7 @@
                     <span>&nbsp;|&nbsp;</span>
                     <a href="/profile">Profile</a>
                 </div>
-                <h1 class="mb-5">Hello, Name LastName!</h1>
+                <h1 class="mb-5" th:text="'Hello, ' + ${userName} + '!'"></h1>
                 <h2 class="mb-4">List of available Projects:</h2>
                 <ul class="border rounded-3 list-group p-4 bg-light text-dark mb-3">
                     <th:block th:each="projectName : ${projectNames}">

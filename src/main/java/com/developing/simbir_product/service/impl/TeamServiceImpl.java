@@ -69,7 +69,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<String> findAll(){
+    public List<String> findAllTeamNames(){
         return teamRepository.findAll().stream().map(TeamEntity::getName).collect(Collectors.toList());
     }
 

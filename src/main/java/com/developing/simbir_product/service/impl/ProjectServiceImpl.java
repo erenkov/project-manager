@@ -65,9 +65,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponseDto editProject(ProjectRequestDto projectRequestDto) {
 
+        ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
+        ProjectEntity tempProjectFromDB = getProjectEntity(projectEntity.getName());
+        projectEntity.setId(tempProjectFromDB.getId());
+        projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
 
-        projectRepository.save(getProjectEntity(projectRequestDto.getName()));
-        return findByName(projectRequestDto.getName());
+        return projectMapper.projectEntityToDto(projectRepository.save(projectEntity));
     }
 
 
@@ -94,8 +97,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public List<ProjectEntity> findAll(){
-        return projectRepository.findAll();
+    public List<ProjectResponseDto> findAll() {
+        return projectRepository
+                .findAll()
+                .stream()
+                .map(pE -> projectMapper.projectEntityToDto(pE))
+                .collect(Collectors.toList());
     }
 
     @Transactional
