@@ -70,6 +70,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public List<String> findAllTeamNames(){
+        return teamRepository.findAll().stream().map(TeamEntity::getName).collect(Collectors.toList());
+    }
+
+    @Override
     public TeamEntity mapTeamByName(String teamName) {
         if (teamName.isEmpty()) {
             return null;

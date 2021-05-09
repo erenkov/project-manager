@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -32,10 +32,10 @@
               <div class="p-4 border-bottom">
                 <h4 class="mb-0">Create new project</h4>
               </div>
-              <form action="#" class="p-4">
+              <form action="/projects/create" method="post" id="newProjectForm" class="p-4" th:object="${newPoject}">
                 <div class="mb-3">
                   <label for="inputName" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="inputName" />
+                  <input type="text" class="form-control" id="inputName" name="name" />
                 </div>
                 <div class="mb-3">
                   <label for="inputDescription" class="form-label"
@@ -45,6 +45,7 @@
                     type="text"
                     class="form-control"
                     id="inputDescription"
+                    name="description"
                   />
                 </div>
                 <div class="row mb-3">
@@ -53,9 +54,10 @@
                       >Start date</label
                     >
                     <input
-                      type="date"
+                      type="datetime-local"
                       class="form-control"
                       id="inputStartDate"
+                      name="startDate"
                     />
                   </div>
                   <div class="col-6">
@@ -63,29 +65,30 @@
                       >Finish date</label
                     >
                     <input
-                      type="date"
+                      type="datetime-local"
                       class="form-control"
                       id="inputFinishDate"
+                      name="estFinishDate"
                     />
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="inputStatus" class="form-label">Status</label>
-                  <select class="form-select" id="inputStatus">
-                    <option value="1">In progress</option>
-                    <option value="2">Done</option>
-                  </select>
+                    <select class="form-select" id="inputStatus" name="status" disabled>
+                      <th:block th:each="statusItem : ${projectStatusList}">
+                        <option th:text="${statusItem}"  th:selected="${statusItem == 'BACKLOG'}"></option>
+                      </th:block>
+                    </select>
                 </div>
                 <div class="mb-3">
                   <label for="inputTeamName" class="col-3 col-form-label"
                     >Team name</label
                   >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputTeamName"
-                    required
-                  />
+                  <select class="form-select" id="inputTeamName" name="teamName">
+                    <th:block th:each="team : ${teamList}">
+                      <option th:text="${team}"></option>
+                    </th:block>
+                  </select>
                 </div>
                 <div class="d-block text-center">
                   <button type="submit" class="btn btn-primary me-3 px-4">

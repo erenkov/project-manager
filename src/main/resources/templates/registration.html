@@ -93,8 +93,8 @@
                   >
                   <div class="col-9">
                     <select class="form-select" id="inputRole" name="role">
-                      <th:block th:each="role : ${roles}">
-                        <option th:text="${role}"></option>
+                      <th:block th:each="roleItem : ${roles}">
+                        <option th:text="${roleItem}"></option>
                       </th:block>
                     </select>
                   </div>
