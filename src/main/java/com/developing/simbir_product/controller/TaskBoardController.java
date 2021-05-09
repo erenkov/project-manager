@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Tag(name = "Управление задачами")
-@RequestMapping(value = "/board")
+@RequestMapping("/board")
 @Controller
 public class TaskBoardController {
 
@@ -55,17 +55,5 @@ public class TaskBoardController {
     public ResponseEntity<String> deleteTask() {
         // Удалить задачу
         return null; //boardPage
-    }
-
-    @Operation(summary = "Получить страницу с фильтрами")
-    @GetMapping("/filters")
-    public String getFilterPage() {
-        return "task-filters";
-    }
-
-    @Operation(summary = "Преминить фильтр")
-    @PostMapping("/filters")
-    public ResponseEntity<String> applyFilter() {
-        return null;
     }
 }
