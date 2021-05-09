@@ -54,14 +54,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-
-        Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
+        Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
 
         if (userFromDb.isPresent()) {
             return false;
         }
 
-        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(userMapper.userDtoToEntity(userRequestDto));
         return true;
     }
