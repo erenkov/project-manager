@@ -4,6 +4,8 @@ import com.developing.simbir_product.controller.Dto.TeamRequestDto;
 import com.developing.simbir_product.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/teams")
 @Controller
 public class TeamsController {
-
+    Logger logger = LoggerFactory.getLogger(TeamsController.class);
     @Autowired
     private TeamService teamService;
 
