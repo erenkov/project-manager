@@ -8,12 +8,15 @@ import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
+import com.developing.simbir_product.utils.Converter;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.UUID;
 
-@Mapper(uses = DateTimeMapper.class, componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+
+@Mapper(uses = DateTimeMapper.class, imports = {UUID.class, Converter.class}, componentModel = "spring",
+        injectionStrategy = InjectionStrategy.FIELD, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class TaskMapper {
 
     @Autowired
@@ -29,6 +32,7 @@ public abstract class TaskMapper {
     private ReleaseService releaseService;
 
 
+    @Mapping(target = "id", expression = "java(taskEntity.getId().toString())")
     @Mapping(target = "status", source = "taskStatus")
     @Mapping(target = "type", source = "taskType")
     @Mapping(target = "projectName", source = "projectId.name")
@@ -37,7 +41,7 @@ public abstract class TaskMapper {
     @Mapping(target = "team", source = ".", qualifiedByName = "teamByTask")
     public abstract TaskResponseDto taskEntityToDto(TaskEntity taskEntity);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", expression = "java(Converter.getUuidFromString(taskRequestDto.getId()))")
     @Mapping(target = "projectId", source = "projectName")
     @Mapping(target = "taskType", source = "type")
     @Mapping(target = "taskStatus", source = "status")

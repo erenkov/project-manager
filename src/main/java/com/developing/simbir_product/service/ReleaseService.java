@@ -11,9 +11,9 @@ public interface ReleaseService {
 
     ReleaseResponseDto getById(UUID id);
 
-    ReleaseResponseDto addRelease(ReleaseRequestDto releaseRequestDto);
+    boolean addRelease(ReleaseRequestDto releaseRequestDto);
 
-    ReleaseResponseDto editRelease(ReleaseRequestDto releaseRequestDto);
+    boolean editRelease(ReleaseRequestDto releaseRequestDto);
 
     void deleteById(UUID id);
 
