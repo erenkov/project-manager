@@ -2,7 +2,6 @@ package com.developing.simbir_product.service.impl;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
-import com.developing.simbir_product.controller.RegistrationController;
 import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
@@ -57,15 +56,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-
-        Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
+        Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
 
         if (userFromDb.isPresent()) {
             return false;
         }
 
-        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        userRepository.save(userMapper.userDtoToEntity(userRequestDto));
+        userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        userRepository.save(userEntity);
         logger.trace("{} has been created", userRequestDto.getEmail());
         return true;
     }
