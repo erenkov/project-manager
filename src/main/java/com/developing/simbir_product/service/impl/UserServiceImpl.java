@@ -66,7 +66,6 @@ public class UserServiceImpl implements UserService {
 
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(userMapper.userDtoToEntity(userRequestDto));
-        logger.trace("{} has been created", userRequestDto.getEmail());
         return true;
     }
 
