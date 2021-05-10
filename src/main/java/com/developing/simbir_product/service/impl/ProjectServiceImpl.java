@@ -3,23 +3,29 @@ package com.developing.simbir_product.service.impl;
 import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
+import com.developing.simbir_product.entity.ProjectStatus;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.mappers.ProjectMapper;
 import com.developing.simbir_product.repository.ProjectRepository;
 import com.developing.simbir_product.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+    @Autowired
+    ProjectMapper projectMapper;
 
     @Autowired
     private ProjectRepository projectRepository;
-
 
     @Transactional
     @Override
@@ -40,9 +46,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
 
-        ProjectEntity projectEntity = new ProjectEntity();
+        projectRequestDto.setStatus(ProjectStatus.BACKLOG.toString());
 
-        //todo projectEntity = mapFrom projectRequestDto ???????????????????????????????????????
+        ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
 
         projectRepository.save(projectEntity);
 
@@ -59,13 +65,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponseDto editProject(ProjectRequestDto projectRequestDto) {
 
-        ProjectEntity projectEntity = new ProjectEntity();
+        ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
+        ProjectEntity tempProjectFromDB = getProjectEntity(projectEntity.getName());
+        projectEntity.setId(tempProjectFromDB.getId());
+        projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
 
-        //todo projectEntity = mapFrom projectRequestDto ???????????????????????????????????
-
-        projectRepository.save(projectEntity);
-
-        return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return projectMapper.projectEntityToDto(projectRepository.save(projectEntity));
     }
 
 
@@ -79,18 +84,35 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public ProjectResponseDto findByName(String name) {
-        ProjectEntity projectEntity = getProjectEntity(name);
 
-        ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-
-        //todo ProjectResponseDto = mapFrom projectEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return projectResponseDto;
+        return projectMapper.projectEntityToDto(getProjectEntity(name));
     }
 
     @Transactional
+    @Override
     public ProjectEntity getProjectEntity(String name) {
         return projectRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
+    }
+
+    @Transactional
+    @Override
+    public List<ProjectResponseDto> findAll() {
+        return projectRepository
+                .findAll()
+                .stream()
+                .map(pE -> projectMapper.projectEntityToDto(pE))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public List<String> getListOfAllProjectNames() {
+        return projectRepository.findAll().stream().map(ProjectEntity::getName).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getListOfAllProjectStatus() {
+        return Arrays.stream(ProjectStatus.values()).map(ProjectStatus::toString).collect(Collectors.toList());
     }
 }

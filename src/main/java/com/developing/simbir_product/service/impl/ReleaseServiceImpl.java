@@ -54,20 +54,21 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Transactional
     @Override
-    public ReleaseResponseDto addRelease(ReleaseRequestDto releaseRequestDto) {
+    public boolean addRelease(ReleaseRequestDto releaseRequestDto) {
 
         ReleaseEntity releaseEntity = new ReleaseEntity();
         //todo releaseEntity = mapFrom releaseRequestDto ???????????????????????????????
 
         releaseRepository.save(releaseEntity);
 
-        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+//        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return false;
     }
 
 
     @Transactional
     @Override
-    public ReleaseResponseDto editRelease(ReleaseRequestDto releaseRequestDto) {
+    public boolean editRelease(ReleaseRequestDto releaseRequestDto) {
 
         ReleaseEntity releaseEntity = new ReleaseEntity();
 
@@ -75,7 +76,8 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         releaseRepository.save(releaseEntity);
 
-        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+//        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return false;
     }
 
 

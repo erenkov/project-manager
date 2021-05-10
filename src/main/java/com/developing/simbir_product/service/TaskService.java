@@ -5,6 +5,7 @@ import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TaskStatus;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,4 +29,6 @@ public interface TaskService {
     List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus);
 
     List<String> getListOfTaskTypes();
+
+    List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal http);
 }

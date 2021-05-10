@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 @Schema(description = "Задача")
 public class TaskResponseDto {
 
+    @Schema(description = "ID задачи")
+    private String id;
+
     @Schema(description = "Название задачи")
     private String name;
 
@@ -53,6 +56,14 @@ public class TaskResponseDto {
     @Schema(description = "Название проекта")
     private String projectName;
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getProjectName() {
         return projectName;

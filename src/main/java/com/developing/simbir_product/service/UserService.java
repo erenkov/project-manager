@@ -12,8 +12,10 @@ import java.util.UUID;
 public interface UserService {
 
 //    UserResponseDto getById(UUID id);
-
+//
     UserResponseDto findByEmail(String email);
+
+    UserEntity findUserEntity(String email);
 
     boolean addUser(UserRequestDto userRequestDto);
 

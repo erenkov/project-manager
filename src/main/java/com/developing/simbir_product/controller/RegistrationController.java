@@ -1,7 +1,6 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
-import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +30,7 @@ public class RegistrationController {
     @Operation(summary = "Получить страницу регистрации")
     @GetMapping
     public String getRegistrationPage(Model model) {
-        model.addAttribute("newUser", new UserEntity());
+        model.addAttribute("newUser", new UserRequestDto());
         model.addAttribute("teamNames", teamService.getListOfAllTeamNames());
         model.addAttribute("roles", userService.getListOfAllRoles());
         return "registration";

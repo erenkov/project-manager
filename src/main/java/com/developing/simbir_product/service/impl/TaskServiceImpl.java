@@ -4,16 +4,21 @@ import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TaskStatus;
+import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.TaskMapper;
 import com.developing.simbir_product.repository.TaskRepository;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TaskService;
+import com.developing.simbir_product.service.UserService;
+import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.Arrays;
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,6 +33,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserTaskHistoryService userTaskHistoryService;
 
     @Autowired
     private TaskMapper taskMapper;
@@ -113,4 +124,25 @@ public class TaskServiceImpl implements TaskService {
         return Arrays.stream(TaskStatus.values()).map(TaskStatus::toString).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal principal) {
+        TaskEntity example = taskMapper.taskDtoToEntity(taskRequestDto);
+        UserEntity userEntity = userService.findUserEntity(principal.getName());
+        List<TaskEntity> usersTasks = userTaskHistoryService.getTasksByUser(userEntity);
+        return usersTasks.stream()
+                .filter(task -> example.getName() == null || task.getName().equals(example.getName()))
+                .filter(task -> example.getTaskType() == null || task.getTaskType().equals(example.getTaskType()))
+                .filter(task -> example.getTaskStatus() == null || task.getTaskStatus().equals(example.getTaskStatus()))
+                .filter(task -> example.getDueDate() == null || task.getDueDate().equals(example.getDueDate()))
+                .filter(task -> example.getFinishDate() == null || task.getFinishDate().equals(example.getFinishDate()))
+                .filter(task -> example.getComments() == null || task.getComments().equals(example.getComments()))
+                .filter(task -> example.getCreateDate() == null || task.getCreateDate().equals(example.getCreateDate()))
+                .filter(task -> example.getProjectId() == null || task.getProjectId().equals(example.getProjectId()))
+                .filter(task -> example.getActualCosts() == 0 || task.getActualCosts() == example.getActualCosts())
+                .filter(task -> example.getEstCosts() == 0 || task.getEstCosts() == example.getEstCosts())
+                .filter(task -> example.getPriority() == 0 || task.getPriority() == example.getPriority())
+                .map(taskMapper::taskEntityToDto)
+                .collect(Collectors.toList());
+    }
 }

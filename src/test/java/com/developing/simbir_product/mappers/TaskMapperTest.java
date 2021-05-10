@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @SpringBootTest
@@ -113,6 +114,7 @@ class TaskMapperTest {
         taskDto.setFinishDate(OffsetDateTime.now().plusMonths(2).toLocalDateTime());
         taskDto.setRelease("release name");
         taskDto.setTeam("team name");
+        taskDto.setId("09fe5ba7-d7a6-4e9e-bd50-7e84e7d1b306");
     }
 
     @AfterEach
@@ -155,6 +157,7 @@ class TaskMapperTest {
         assertEquals(taskEntity.getTaskStatus().name(), testTaskDto.getStatus());
         assertEquals(taskEntity.getTaskType().name(), testTaskDto.getType());
         assertEquals(taskEntity.getFinishDate().toLocalDateTime(), testTaskDto.getFinishDate());
+        assertEquals(taskEntity.getId().toString(), testTaskDto.getId());
     }
 
     @Test
@@ -172,5 +175,12 @@ class TaskMapperTest {
         assertEquals(taskDto.getDueDate(), testTaskEntity.getDueDate().toLocalDateTime());
         assertEquals(taskDto.getCreateDate(), testTaskEntity.getCreateDate().toLocalDateTime());
         assertEquals(taskDto.getFinishDate(), testTaskEntity.getFinishDate().toLocalDateTime());
+        assertEquals(taskDto.getId(), testTaskEntity.getId().toString());
+        taskDto.setId("");
+        testTaskEntity = taskMapper.taskDtoToEntity(taskDto);
+        assertNull(testTaskEntity.getId());
+        taskDto.setId(null);
+        testTaskEntity = taskMapper.taskDtoToEntity(taskDto);
+        assertNull(testTaskEntity.getId());
     }
 }

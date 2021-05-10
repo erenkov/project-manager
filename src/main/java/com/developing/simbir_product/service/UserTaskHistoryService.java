@@ -4,6 +4,7 @@ import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.entity.UserTaskHistoryEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -22,4 +23,6 @@ public interface UserTaskHistoryService {
 //    void deleteByUserIdAndTaskId(UUID userId, UUID taskId); //todo 3 поле
 
     UserEntity getCurrentUserByTask(TaskEntity taskEntity);
+
+    List<TaskEntity> getTasksByUser(UserEntity userEntity);
 }
