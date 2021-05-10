@@ -1,9 +1,7 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
-import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskStatus;
-import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Управление задачами")
@@ -58,34 +55,36 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу создания новой задачи")
     @GetMapping("/create")
-    public String getNewTaskPage(@RequestParam("projectName") String projectName, Model model) {
+    public ResponseEntity<String> getNewTaskPage(@RequestParam("projectName") String projectName, Model model) {
         model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatus", taskService.getListOfTaskTypes());
         model.addAttribute("listUsers", userService.getListOfAllUsers());
-        return "create-task";
+        return ResponseEntity.ok("create-task");
     }
 
-    @Operation(summary = "Получить страницу создания новой задачи")
+    @Operation(summary = "Создать новую задачу")
     @PostMapping("/create")
-    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto taskRequestDto) {
+    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask) {
         ModelAndView modelAndView = new ModelAndView("redirect:/board");
-        taskService.addTask(taskRequestDto);
+        modelAndView.addObject("newTask",taskService.addTask(newTask));
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;
     }
 
     @Operation(summary = "Редактирование задачи")
     @PostMapping("/task")
-    public ResponseEntity<String> editTask() {
-        // Редактировать задачу
-        return null; //boardPage
+    public ModelAndView editTask(@ModelAttribute("task") TaskRequestDto editTask) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/board");
+        modelAndView.addObject("editTask",taskService.editTask(editTask));
+        modelAndView.setStatus(HttpStatus.OK);
+        return modelAndView;
     }
 
     @Operation(summary = "Удаление задачи")
     @DeleteMapping("/task/{id}")
-    public ResponseEntity<String> deleteTask() {
-        // Удалить задачу
-        return null; //boardPage
+    public ResponseEntity<String> deleteTask(@PathVariable("id") String id) {
+        taskService.deleteById(UUID.fromString(id));
+        return ResponseEntity.ok("redirect:/board");
     }
 }

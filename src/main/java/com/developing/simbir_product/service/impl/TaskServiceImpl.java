@@ -78,13 +78,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto editTask(TaskRequestDto taskRequestDto) {
 
-        TaskEntity taskEntity = new TaskEntity();
+        TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
 
-        //todo taskEntity = mapFrom taskRequestDto ???????????????????????????????
-
-        taskRepository.save(taskEntity);
-
-        return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
