@@ -93,8 +93,8 @@
                   >
                   <div class="col-9">
                     <select class="form-select" id="inputRole" name="role">
-                      <th:block th:each="role : ${roles}">
-                        <option th:selected="${role == newUser.role}" th:text="${role}"></option>
+                      <th:block th:each="roleItem : ${roles}">
+                        <option th:selected="${roleItem == newUser.role}" th:text="${roleItem}"></option>
                       </th:block>
                     </select>
                   </div>

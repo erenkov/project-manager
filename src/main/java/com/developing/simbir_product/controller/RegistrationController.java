@@ -36,12 +36,12 @@ public class RegistrationController {
     @PostMapping
     public ModelAndView registerUser(@Valid @ModelAttribute("newUser") UserRequestDto newUser) {
         ModelAndView modelAndView;
-        if (!userService.addUser(newUser)) {
+        if (userService.addUser(newUser)) {
+            modelAndView = new ModelAndView("redirect:/login", HttpStatus.CREATED);
+        } else {
             modelAndView = getRegistrationModel(newUser);
             modelAndView.setStatus(HttpStatus.CONFLICT);
             modelAndView.addObject("userError", "User exists!");
-        } else {
-            modelAndView = new ModelAndView("redirect:/login", HttpStatus.CREATED);
         }
         return modelAndView;
     }
