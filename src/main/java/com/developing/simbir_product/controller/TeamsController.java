@@ -21,7 +21,6 @@ import javax.validation.Valid;
 @RequestMapping(value = "/teams")
 @Controller
 public class TeamsController {
-    Logger logger = LoggerFactory.getLogger(TeamsController.class);
     @Autowired
     private TeamService teamService;
 

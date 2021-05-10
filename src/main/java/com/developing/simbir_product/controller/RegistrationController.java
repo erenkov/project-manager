@@ -46,11 +46,11 @@ public class RegistrationController {
             modelAndView.setViewName("registration");
             modelAndView.setStatus(HttpStatus.CONFLICT);
             modelAndView.addObject("userError", "User exists!");
-            logger.debug("User with credentials " + newUser.getFirstName() + " exist");
+            logger.debug("User with name {} exists", newUser.getFirstName());
         } else {
             modelAndView.setViewName("redirect:/login");
             modelAndView.setStatus(HttpStatus.CREATED);
-            logger.debug("Created the user with credentials: ", newUser);
+            logger.debug("Created the user with credentials: {}", newUser);
         }
         return modelAndView;
 

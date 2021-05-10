@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/board")
 @Controller
 public class TaskBoardController {
-    Logger logger = LoggerFactory.getLogger(TaskBoardController.class);
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
     public String getBoardPage() {

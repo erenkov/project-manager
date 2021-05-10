@@ -5,8 +5,6 @@ import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +17,6 @@ import java.security.Principal;
 @RequestMapping("/projects")
 @Controller
 public class ProjectsController {
-    Logger logger = LoggerFactory.getLogger(ProjectsController.class);
     @Autowired
     private ProjectService projectService;
 
@@ -31,7 +28,6 @@ public class ProjectsController {
     public String getProjectsPage(Model model, Principal principal) {
         model.addAttribute("projectNames", projectService.getListOfAllProjectNames());
         model.addAttribute("userName", principal.getName());
-        logger.trace(principal.getName() + " accessed the projects page");
         return "projects";
     }
 
@@ -49,7 +45,6 @@ public class ProjectsController {
     public String createProject(@ModelAttribute("newProject") ProjectRequestDto projectRequestDto) {
 
         projectService.addProject(projectRequestDto);
-        logger.trace(projectRequestDto.getName() + " has been created");
         return "redirect:/projects";
     }
 
@@ -70,7 +65,6 @@ public class ProjectsController {
                               @ModelAttribute("project") ProjectRequestDto projectRequestDto) {
         projectRequestDto.setName(prName);              //todo: Плохое решение
         projectService.editProject(projectRequestDto);  //todo: return dto?
-        logger.debug(prName + " project has been created");
         return "redirect:/projects";
     }
 }

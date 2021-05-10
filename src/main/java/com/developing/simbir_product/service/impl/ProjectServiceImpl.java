@@ -8,6 +8,8 @@ import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.ProjectMapper;
 import com.developing.simbir_product.repository.ProjectRepository;
 import com.developing.simbir_product.service.ProjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+    Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
     @Autowired
     ProjectMapper projectMapper;
 
@@ -50,7 +53,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
 
         projectRepository.save(projectEntity);
-
+        logger.trace("{} project has been created", projectRequestDto.getName());
         return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
@@ -68,7 +71,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity tempProjectFromDB = getProjectEntity(projectEntity.getName());
         projectEntity.setId(tempProjectFromDB.getId());
         projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
-
+        logger.trace(projectRequestDto.getName() + " has been edited");
         return projectMapper.projectEntityToDto(projectRepository.save(projectEntity));
     }
 
@@ -76,7 +79,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        projectRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        projectRepository.deleteById(id);
+        //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 

@@ -1,6 +1,5 @@
 package com.developing.simbir_product.exception;
 
-import com.developing.simbir_product.controller.RegistrationController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,7 @@ public class NotFoundException extends RuntimeException {
 
     public NotFoundException(String message) {
         super(message);
-        logger.debug(message);
+        logger.error(message);
     }
 
     public NotFoundException(String message, Throwable cause) {

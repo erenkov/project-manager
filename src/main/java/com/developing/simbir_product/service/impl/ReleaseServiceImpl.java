@@ -9,6 +9,8 @@ import com.developing.simbir_product.mappers.DateTimeMapper;
 import com.developing.simbir_product.repository.ReleaseRepository;
 import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +20,7 @@ import java.util.UUID;
 
 @Service
 public class ReleaseServiceImpl implements ReleaseService {
-
-
+    Logger logger = LoggerFactory.getLogger(ReleaseServiceImpl.class);
     @Autowired
     private ReleaseRepository releaseRepository;
 
@@ -53,7 +54,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         //todo releaseEntity = mapFrom releaseRequestDto ???????????????????????????????
 
         releaseRepository.save(releaseEntity);
-
+        logger.trace(releaseRequestDto.getName() + " release for " + releaseRequestDto.getProjectName() + " has been added");
 //        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
         return false;
     }
@@ -68,8 +69,8 @@ public class ReleaseServiceImpl implements ReleaseService {
         //todo releaseEntity = mapFrom releaseRequestDto ?????????????????????????????????????
 
         releaseRepository.save(releaseEntity);
-
-//        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        logger.trace(releaseRequestDto.getName() + " release for " + releaseRequestDto.getProjectName() + " has been edited");
+        //        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
         return false;
     }
 
