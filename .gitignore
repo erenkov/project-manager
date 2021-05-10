@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /.mvn/
+/src/main/resources/spring-boot-logger-log4j2.log

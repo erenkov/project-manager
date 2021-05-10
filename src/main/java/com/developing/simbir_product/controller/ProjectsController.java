@@ -17,7 +17,6 @@ import java.security.Principal;
 @RequestMapping("/projects")
 @Controller
 public class ProjectsController {
-
     @Autowired
     private ProjectService projectService;
 
@@ -46,16 +45,15 @@ public class ProjectsController {
     public String createProject(@ModelAttribute("newProject") ProjectRequestDto projectRequestDto) {
 
         projectService.addProject(projectRequestDto);
-
         return "redirect:/projects";
     }
 
     @Operation(summary = "Получить страницу редактирования проекта")
     @GetMapping("/edit/{prName}")
-    public String getEditProjectPage(@PathVariable(value = "prName") String prName, Model model) {
+    public String getEditProjectPage(@PathVariable("prName") String prName, Model model) {
 
         model.addAttribute("project",  projectService.findByName(prName));
-        model.addAttribute("teamsList", teamService.findAllTeamNames());
+        model.addAttribute("teamList", teamService.findAllTeamNames());
         model.addAttribute("projectStatusList", projectService.getListOfAllProjectStatus());
 
         return "edit-project";
@@ -63,7 +61,7 @@ public class ProjectsController {
 
     @Operation(summary = "Редактировать проект")
     @PostMapping("/edit/{prName}")                  //TODO: Validation
-    public String editProject(@PathVariable(value = "prName") String prName,
+    public String editProject(@PathVariable("prName") String prName,
                               @ModelAttribute("project") ProjectRequestDto projectRequestDto) {
         projectRequestDto.setName(prName);              //todo: Плохое решение
         projectService.editProject(projectRequestDto);  //todo: return dto?

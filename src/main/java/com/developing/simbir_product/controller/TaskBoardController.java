@@ -2,6 +2,8 @@ package com.developing.simbir_product.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/board")
 @Controller
 public class TaskBoardController {
-
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
     public String getBoardPage() {

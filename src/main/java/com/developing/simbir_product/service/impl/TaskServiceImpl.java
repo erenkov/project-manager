@@ -11,6 +11,8 @@ import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TaskService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-
-
+    Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     @Autowired
     private TaskRepository taskRepository;
 
@@ -65,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
         //todo taskEntity = mapFrom taskRequestDto ??????????????????????????
 
         taskRepository.save(taskEntity);
-
+        logger.trace("{} task has been created", taskRequestDto.getName() );
         return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
@@ -84,7 +85,7 @@ public class TaskServiceImpl implements TaskService {
         //todo taskEntity = mapFrom taskRequestDto ???????????????????????????????
 
         taskRepository.save(taskEntity);
-
+        logger.trace("{} has been edited", taskRequestDto.getName());
         return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 

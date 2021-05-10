@@ -5,6 +5,8 @@ import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
+
+    Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
     @Autowired
     private UserService userService;
@@ -38,10 +42,12 @@ public class RegistrationController {
         ModelAndView modelAndView;
         if (userService.addUser(newUser)) {
             modelAndView = new ModelAndView("redirect:/login", HttpStatus.CREATED);
+            logger.debug("Created the user with credentials: {}", newUser);
         } else {
             modelAndView = getRegistrationModel(newUser);
             modelAndView.setStatus(HttpStatus.CONFLICT);
             modelAndView.addObject("userError", "User exists!");
+            logger.debug("User with name {} exists", newUser.getFirstName());
         }
         return modelAndView;
     }
