@@ -12,6 +12,6 @@ import java.util.UUID;
 public interface ReleaseRepository extends JpaRepository<ReleaseEntity, UUID> {
     Optional<ReleaseEntity> findByName(String name);
 
-    @Query("SELECT r FROM ReleaseEntity r WHERE r.projectId = :projectId AND r.finishDate = (SELECT MAX(r2.finishDate) FROM ReleaseEntity r2)")
+    @Query("SELECT r FROM ReleaseEntity r WHERE r.projectId.id = :projectId AND r.finishDate = (SELECT MAX(r2.finishDate) FROM ReleaseEntity r2)")
     Optional<ReleaseEntity> getCurrentRelease(UUID projectId);
 }
