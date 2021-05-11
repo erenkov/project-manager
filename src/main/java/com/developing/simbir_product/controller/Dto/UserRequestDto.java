@@ -3,6 +3,7 @@ package com.developing.simbir_product.controller.Dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,14 +26,17 @@ public class UserRequestDto {
     private String password;
 
     @Schema(description = "Имя")
+    @NotEmpty
     @Size(max = 50)
     private String firstName;
 
     @Schema(description = "Фамилия")
+    @NotEmpty
     @Size(max = 50)
     private String lastName;
 
     @Schema(description = "Роль")
+    @NotNull
     @Size(max = 50)
     private String role;
 
