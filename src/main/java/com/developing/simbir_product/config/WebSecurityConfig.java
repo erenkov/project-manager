@@ -32,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("static/favicon.ico").permitAll()
                     .antMatchers( "/board/create").hasAnyRole("MANAGER", "ADMIN")
                     .antMatchers("/", "/board/**", "/profile/**").fullyAuthenticated()
                     .antMatchers("/registration").not().fullyAuthenticated()
