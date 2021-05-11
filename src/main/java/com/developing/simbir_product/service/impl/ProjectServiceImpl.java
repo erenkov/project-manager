@@ -22,7 +22,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+
     Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
+
     @Autowired
     ProjectMapper projectMapper;
 
@@ -46,15 +48,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
-
+    public boolean addProject(ProjectRequestDto projectRequestDto) {
+        if (projectRepository.findByName(projectRequestDto.getName()).isPresent()) {
+            return false;
+        }
         projectRequestDto.setStatus(ProjectStatus.BACKLOG.toString());
-
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
-
         projectRepository.save(projectEntity);
         logger.trace("{} project has been created", projectRequestDto.getName());
-        return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return true;
     }
 
     @Transactional

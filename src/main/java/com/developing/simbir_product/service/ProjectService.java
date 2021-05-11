@@ -11,7 +11,7 @@ public interface ProjectService {
 
     ProjectResponseDto getById(UUID id);
 
-    ProjectResponseDto addProject(ProjectRequestDto projectRequestDto);
+    boolean addProject(ProjectRequestDto projectRequestDto);
 
     ProjectResponseDto editProject(ProjectRequestDto projectRequestDto);
 

@@ -1,5 +1,6 @@
 package com.developing.simbir_product.controller.Dto;
 
+import com.developing.simbir_product.validators.ProjectWithDates;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 
 @Schema(description = "Проект")
+@ProjectWithDates
 public class ProjectRequestDto {
 
     @Schema(description = "Навзвание проекта")
