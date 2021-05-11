@@ -10,6 +10,8 @@ import com.developing.simbir_product.mappers.UserMapper;
 import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private UserRepository userRepository;
 
@@ -54,15 +56,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-
-        Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
+        Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
 
         if (userFromDb.isPresent()) {
             return false;
         }
 
-        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        userRepository.save(userMapper.userDtoToEntity(userRequestDto));
+        userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        userRepository.save(userEntity);
+        logger.trace("{} has been created", userRequestDto.getEmail());
         return true;
     }
 
@@ -81,7 +84,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(tempUserFromDB.getPassword());
         userEntity.setUserNumber(tempUserFromDB.getUserNumber());
         userEntity = userRepository.save(userEntity);
-
+        logger.trace(userEntity.getLogin() + " has been edited");
         return userMapper.userEntityToDto(userEntity);
     }
 

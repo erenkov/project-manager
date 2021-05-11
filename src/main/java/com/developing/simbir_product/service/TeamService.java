@@ -1,6 +1,7 @@
 package com.developing.simbir_product.service;
 
 import com.developing.simbir_product.controller.Dto.TeamRequestDto;
+import com.developing.simbir_product.controller.Dto.TeamResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TeamEntity;
 
@@ -16,7 +17,7 @@ public interface TeamService {
 
     boolean addTeamDto(TeamRequestDto teamRequestDto);
 
-    TeamEntity editTeam(TeamEntity teamRequestDto);
+    boolean editTeam(TeamRequestDto teamRequestDto);
 
     void deleteById(UUID id);
 
@@ -30,5 +31,5 @@ public interface TeamService {
 
     TeamEntity mapTeamByName(String teamName);
 
-    boolean editTeamDto(TeamRequestDto teamRequestDto);
+    TeamResponseDto findDtoByName(String name);
 }

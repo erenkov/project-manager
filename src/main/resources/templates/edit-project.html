@@ -32,7 +32,7 @@
                     <div class="p-4 border-bottom">
                         <h4 class="mb-0">Edit project</h4>
                     </div>
-                    <form th:action="@{/projects/edit/{prName}(prName=${project.name})}" method="post" id="newProjectForm" class="p-4"
+                    <form th:action="@{/projects/edit/{prName}(prName=${project.name})}" method="post" id="editProjectForm" class="p-4"
                           th:object="${project}">
                         <div class="mb-3">
                             <label for="inputName" class="form-label">Name</label>

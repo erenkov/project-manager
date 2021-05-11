@@ -1,5 +1,8 @@
 package com.developing.simbir_product.controller.errors;
 
+import com.developing.simbir_product.controller.RegistrationController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ErrorCodesController implements ErrorController {
+    Logger logger = LoggerFactory.getLogger(ErrorCodesController.class);
 
     @Override
     public String getErrorPath() {
@@ -22,7 +26,7 @@ public class ErrorCodesController implements ErrorController {
 
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
-
+            logger.error("{} has been thrown!", statusCode);
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "error-404";
             }
