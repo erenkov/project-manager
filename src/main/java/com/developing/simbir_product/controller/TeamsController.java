@@ -4,8 +4,6 @@ import com.developing.simbir_product.controller.Dto.TeamRequestDto;
 import com.developing.simbir_product.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -13,13 +11,17 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.List;
+
 
 @Tag(name = "Управление командами")
 @RequestMapping(value = "/teams")
 @Controller
 public class TeamsController {
+
     @Autowired
     private TeamService teamService;
 
@@ -75,19 +77,27 @@ public class TeamsController {
         } else {
             modelAndView.setViewName("edit-team");
             modelAndView.setStatus(HttpStatus.CONFLICT);
+            modelAndView.addObject("team", teamRequestDto);
             modelAndView.addObject("teamError", "Failed to save new values");
         }
         return modelAndView;
     }
 
 
-    //TODO: Рассмотреть возможность выноса обобщенной версии такого обработчика для всех контроллеров
-    //      в ParentErrorController
     @ExceptionHandler(BindException.class)
     private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView("releaseViewName", HttpStatus.BAD_REQUEST);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
         modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());
+        List<String> pathSegments = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPathSegments();
+        if ("create".equals(pathSegments.get(1))) {
+            modelAndView.setViewName("create-team");
+            modelAndView.addObject("newTeam", bindingResult.getModel().get("newTeam"));
+        } else {
+            modelAndView.setViewName("edit-team");
+            modelAndView.addObject("team", bindingResult.getModel().get("team"));
+        }
         return modelAndView;
     }
 }

@@ -39,7 +39,8 @@
                             <label for="inputName" class="form-label">Name</label>
                             <input type="text" class="form-control" id="inputName" name="name"
                                    th:value="${team.name}"
-                                   disabled/>
+                                   readonly
+                                   required/>
                         </div>
                         <div class="mb-3">
                             <label for="inputDescription" class="form-label"
