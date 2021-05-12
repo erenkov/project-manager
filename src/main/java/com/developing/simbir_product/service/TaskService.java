@@ -31,4 +31,6 @@ public interface TaskService {
     List<String> getListOfTaskTypes();
 
     List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal http);
+
+    TaskEntity getTaskById(UUID id);
 }

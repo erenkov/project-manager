@@ -2,6 +2,7 @@ package com.developing.simbir_product.service.impl;
 
 import com.developing.simbir_product.controller.Dto.ReleaseRequestDto;
 import com.developing.simbir_product.controller.Dto.ReleaseResponseDto;
+import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.exception.NotFoundException;
@@ -17,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -129,6 +132,14 @@ public class ReleaseServiceImpl implements ReleaseService {
                 () -> new NotFoundException(String.format("Release for project with name = '%s' not found", projectName))
         );
         return releaseMapper.releaseEntityToDto(releaseEntity);
+    }
+
+    @Transactional
+    @Override
+    public List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity) {
+        return releaseRepository.findAllByProjectId(projectEntity).orElseThrow(
+                () -> new NotFoundException(String.format("Project with name = '%s' not found", projectEntity.getName()))
+        ).stream().map(releaseMapper::releaseEntityToDto).collect(Collectors.toList());
     }
 
 }

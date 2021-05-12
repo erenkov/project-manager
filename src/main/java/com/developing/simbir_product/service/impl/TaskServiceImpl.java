@@ -66,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
 
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
 
-        logger.trace("{} task has been created", taskRequestDto.getName() );
+        logger.trace("{} task has been created", taskRequestDto.getName());
         return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
@@ -142,5 +142,11 @@ public class TaskServiceImpl implements TaskService {
                 .filter(task -> example.getPriority() == 0 || task.getPriority() == example.getPriority())
                 .map(taskMapper::taskEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public TaskEntity getTaskById(UUID id) {
+        return taskRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("Task with id = '%s' not found", id))
+        );
     }
 }

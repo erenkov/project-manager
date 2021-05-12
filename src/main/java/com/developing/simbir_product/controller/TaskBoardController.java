@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.UUID;
 
 @Tag(name = "Управление задачами")
@@ -50,17 +51,21 @@ public class TaskBoardController {
         //if (id == -1) => создать пустую задачу и отобразить на редактирование
         // Получить страницу с запрашиваемой задачей
         model.addAttribute("task", taskService.getById(UUID.fromString(id)));
+        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(taskService.getTaskById(UUID.fromString(id)).getProjectId()));
         return "task-details";
     }
 
     @Operation(summary = "Получить страницу создания новой задачи")
     @GetMapping("/create")
-    public ResponseEntity<String> getNewTaskPage(@RequestParam("projectName") String projectName, Model model) {
+    public String getNewTaskPage(@RequestParam("projectName") String projectName, Model model, Principal principal) {
         model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatus", taskService.getListOfTaskTypes());
         model.addAttribute("listUsers", userService.getListOfAllUsers());
-        return ResponseEntity.ok("create-task");
+        model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
+        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
+        model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
+        return "create-task";
     }
 
     @Operation(summary = "Создать новую задачу")

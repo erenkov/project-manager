@@ -2,9 +2,11 @@ package com.developing.simbir_product.service;
 
 import com.developing.simbir_product.controller.Dto.ReleaseRequestDto;
 import com.developing.simbir_product.controller.Dto.ReleaseResponseDto;
+import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ReleaseService {
@@ -24,4 +26,5 @@ public interface ReleaseService {
     String getReleaseString(TaskEntity taskEntity);
 
     ReleaseResponseDto getCurrentRelease(String projectName);
+    List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity);
 }
