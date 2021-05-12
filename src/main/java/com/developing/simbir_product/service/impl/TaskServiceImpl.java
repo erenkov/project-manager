@@ -63,12 +63,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     @Override
-    public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
+    public void addTask(TaskRequestDto taskRequestDto) {
 
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
 
         logger.trace("{} task has been created", taskRequestDto.getName());
-        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+//        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override

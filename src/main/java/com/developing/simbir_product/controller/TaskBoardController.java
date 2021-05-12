@@ -73,7 +73,8 @@ public class TaskBoardController {
     @PostMapping("/create")
     public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask) {
         ModelAndView modelAndView = new ModelAndView("redirect:/board");
-        modelAndView.addObject("newTask",taskService.addTask(newTask));
+//        modelAndView.addObject("newTask",taskService.addTask(newTask));
+        taskService.addTask(newTask);
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;
     }

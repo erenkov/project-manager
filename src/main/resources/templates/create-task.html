@@ -30,6 +30,11 @@
                 </div>
             </div>
             <form action="/board/create" method="post" id="newTaskForm" class="p-4" th:object="${newTask}">
+                <div>
+                <input type="hidden" name="projectName"
+                       th:value="${#httpServletRequest.getParameter('projectName')}"
+                />
+                </div>
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label">Title</label>
                     <input
