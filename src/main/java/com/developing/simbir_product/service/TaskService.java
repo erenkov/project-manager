@@ -28,6 +28,8 @@ public interface TaskService {
 
     List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus);
 
+    List<String> getListOfTaskStatus();
+
     List<String> getListOfTaskTypes();
 
     List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal http);

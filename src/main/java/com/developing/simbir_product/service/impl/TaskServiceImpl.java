@@ -4,6 +4,7 @@ import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TaskStatus;
+import com.developing.simbir_product.entity.TaskType;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.TaskMapper;
@@ -118,8 +119,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<String> getListOfTaskTypes() {
+    public List<String> getListOfTaskStatus() {
         return Arrays.stream(TaskStatus.values()).map(TaskStatus::toString).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getListOfTaskTypes() {
+        return Arrays.stream(TaskType.values()).map(TaskType::toString).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

@@ -60,7 +60,8 @@ public class TaskBoardController {
     public String getNewTaskPage(@RequestParam("projectName") String projectName, Model model, Principal principal) {
         model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
-        model.addAttribute("taskStatus", taskService.getListOfTaskTypes());
+        model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
+        model.addAttribute("taskType", taskService.getListOfTaskTypes());
         model.addAttribute("listUsers", userService.getListOfAllUsers());
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));

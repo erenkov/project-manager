@@ -55,6 +55,17 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
+                            <label for="inputType" class="col-3 col-form-label">Task status</label>
+                            <div class="col-9">
+                                <select class="form-select" id="inputType" name="type">
+                                    <th:block th:each="typeItem : ${taskType}">
+                                        <option th:text="${typeItem}"
+                                                th:selected="${typeItem == 'FEATURE'}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
                             <label for="inputPriority" class="col-3 col-form-label">Priority</label>
                             <div class="col-9">
                                 <select type="text" class="form-select" id="inputPriority" name="priority">
@@ -85,6 +96,7 @@
                                         type="text"
                                         class="form-control"
                                         id="inputActual"
+                                        value="0"
                                         name="actualCosts"
                                 />
                             </div>
@@ -114,7 +126,6 @@
                                         class="form-control"
                                         id="inputTeam"
                                         th:value="${teamName}"
-                                        disabled
                                         required
                                 />
                             </div>
