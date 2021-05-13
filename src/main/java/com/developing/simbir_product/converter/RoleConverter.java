@@ -17,13 +17,13 @@ public class RoleConverter implements AttributeConverter<Role, String> {
     public Role convertToEntityAttribute(String shortName) {
         switch (shortName) {
             case "A":
-                return Role.ADMIN;
+                return Role.ROLE_ADMIN;
 
             case "M":
-                return Role.MANAGER;
+                return Role.ROLE_MANAGER;
 
             case "U":
-                return Role.USER;
+                return Role.ROLE_USER;
 
             default:
                 throw new IllegalArgumentException("ShortName [" + shortName

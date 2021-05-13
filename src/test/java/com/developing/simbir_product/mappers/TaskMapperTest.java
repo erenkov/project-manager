@@ -65,7 +65,7 @@ class TaskMapperTest {
                 "password",
                 "firstname",
                 "lastname",
-                Role.USER);
+                Role.ROLE_USER);
         userEntity.setTeamId(teamEntity);
         userEntity = userService.addUserEntity(userEntity);
 

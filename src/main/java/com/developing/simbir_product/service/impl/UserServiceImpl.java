@@ -2,6 +2,7 @@ package com.developing.simbir_product.service.impl;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
+import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
@@ -9,11 +10,12 @@ import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
-
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,32 +27,48 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserTaskHistoryService userTaskHistoryService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+//    @Transactional
+//    @Override
+//    public UserResponseDto getById(UUID id) {
+//
+//        UserEntity userEntity = userRepository.findById(id).orElseThrow(
+//                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
+//
+//        UserResponseDto userResponseDto = new UserResponseDto();
+//
+//        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+//
+//        return userResponseDto;
+//    }
+
+
     @Transactional
     @Override
-    public UserResponseDto getById(UUID id) {
+    public boolean addUser(UserRequestDto userRequestDto) {
 
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
+        Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
 
-        UserResponseDto userResponseDto = new UserResponseDto();
+        if (userFromDb.isPresent()) {
+            return false; //TODO: ??? или exception?
+        }
 
-        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return userResponseDto;
-    }
-
-
-    @Transactional
-    @Override
-    public UserResponseDto addUser(UserRequestDto userRequestDto) {
-
-        UserEntity userEntity = new UserEntity();
+        UserEntity newUser = new UserEntity();
 
         //todo userEntity = mapFrom userRequestDto ??????????????????????????????
+        //заглушка вместо маппера
+        newUser.setLogin(userRequestDto.getEmail());
+        newUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        newUser.setFirstName(userRequestDto.getFirstName());
+        newUser.setLastName(userRequestDto.getLastName());
+        newUser.setRole(Role.ROLE_ADMIN); // Все админы
 
-        userRepository.save(userEntity);
+        userRepository.save(newUser);
 
-        return new UserResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return true; //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override

@@ -10,11 +10,11 @@ import java.util.UUID;
 
 public interface UserService {
 
-    UserResponseDto getById(UUID id);
-
+//    UserResponseDto getById(UUID id);
+//
     UserResponseDto findByEmail(String email);
 
-    UserResponseDto addUser(UserRequestDto userRequestDto);
+    boolean addUser(UserRequestDto userRequestDto);
 
     UserEntity addUserEntity(UserEntity userEntity);
 
