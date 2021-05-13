@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -130,7 +131,13 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Transactional
     @Override
     public ReleaseResponseDto getCurrentRelease(String projectName) {
-        ReleaseEntity releaseEntity = releaseRepository.getCurrentRelease(projectService.getProjectEntity(projectName).getId()).orElseThrow(
+        ProjectEntity projectEntity = projectService.getProjectEntity(projectName);
+        List<ReleaseResponseDto> allReleasesByProject = getAllReleasesByProject(projectEntity);
+        if (allReleasesByProject.stream().noneMatch(release -> LocalDateTime.now().isAfter(release.getStartDate()) &&
+                LocalDateTime.now().isBefore(release.getFinishDate()))) {
+            return new ReleaseResponseDto();
+        }
+        ReleaseEntity releaseEntity = releaseRepository.getCurrentRelease(projectEntity.getId()).orElseThrow(
                 () -> new NotFoundException(String.format("Release for project with name = '%s' not found", projectName))
         );
         return releaseMapper.releaseEntityToDto(releaseEntity);

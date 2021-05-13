@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -128,6 +129,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public List<String> getListOfAllProjectNamesByTeam(String teamName) {
+        if (teamName == null || teamName.isBlank()) {
+            return Collections.emptyList();
+        }
         return projectRepository
                 .findAllByTeamId(teamService.findByName(teamName))
                 .stream()
