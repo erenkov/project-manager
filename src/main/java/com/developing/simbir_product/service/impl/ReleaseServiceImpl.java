@@ -6,6 +6,7 @@ import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.DateTimeMapper;
+import com.developing.simbir_product.mappers.ReleaseMapper;
 import com.developing.simbir_product.repository.ReleaseRepository;
 import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
@@ -15,12 +16,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
 public class ReleaseServiceImpl implements ReleaseService {
+
     Logger logger = LoggerFactory.getLogger(ReleaseServiceImpl.class);
+
+    @Autowired
+    ReleaseMapper releaseMapper;
+
     @Autowired
     private ReleaseRepository releaseRepository;
 
@@ -34,44 +43,42 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Transactional
     @Override
     public ReleaseResponseDto getById(UUID id) {
-
         ReleaseEntity releaseEntity = releaseRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Release with ID = '%s' not found", id)));
 
-        ReleaseResponseDto releaseResponseDto = new ReleaseResponseDto();
-
-        //todo ReleaseResponseDto = mapFrom releaseEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return releaseResponseDto;
+        return releaseMapper.releaseEntityToDto(releaseEntity);
     }
 
 
     @Transactional
     @Override
     public boolean addRelease(ReleaseRequestDto releaseRequestDto) {
+//        Optional<ReleaseEntity> tempReleaseFromDb = releaseRepository.findById(Converter.getUuidFromString(releaseRequestDto.getId()));
+//
+//        if (tempReleaseFromDb.isPresent()) { // Если при добавлении релиза в БД уже найден релиз с
+//            return false;                    // тем же именем, то не записываем релиз в БД
+//        }
 
-        ReleaseEntity releaseEntity = new ReleaseEntity();
-        //todo releaseEntity = mapFrom releaseRequestDto ???????????????????????????????
-
-        releaseRepository.save(releaseEntity);
+        releaseRepository.save(releaseMapper.releaseDtoToEntity(releaseRequestDto));
         logger.trace(releaseRequestDto.getName() + " release for " + releaseRequestDto.getProjectName() + " has been added");
-//        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-        return false;
+        return true;
     }
 
 
     @Transactional
     @Override
     public boolean editRelease(ReleaseRequestDto releaseRequestDto) {
+        ReleaseEntity releaseEntity = releaseMapper.releaseDtoToEntity(releaseRequestDto);
+        Optional<ReleaseEntity> tempReleaseFromDB = Optional.ofNullable(getEntityById(releaseEntity.getId()));
 
-        ReleaseEntity releaseEntity = new ReleaseEntity();
+        if (tempReleaseFromDB.isEmpty()) { // Если при редактировании текущий релиз в БД не найден,
+            return false;                  // то не выполняем запись в БД
+        }
 
-        //todo releaseEntity = mapFrom releaseRequestDto ?????????????????????????????????????
-
+        releaseEntity.setId(tempReleaseFromDB.get().getId());
         releaseRepository.save(releaseEntity);
         logger.trace(releaseRequestDto.getName() + " release for " + releaseRequestDto.getProjectName() + " has been edited");
-        //        return new ReleaseResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-        return false;
+        return true;
     }
 
 
@@ -112,5 +119,20 @@ public class ReleaseServiceImpl implements ReleaseService {
                 release.getName(),
                 dateTimeMapper.dateToString(release.getStartDate()),
                 dateTimeMapper.dateToString(release.getFinishDate()));
+    }
+
+    @Transactional
+    @Override
+    public List<ReleaseResponseDto> findAll() {
+        return releaseRepository
+                .findAll()
+                .stream()
+                .map(rE -> releaseMapper.releaseEntityToDto(rE))
+                .collect(Collectors.toList());
+    }
+
+    private ReleaseEntity getEntityById(UUID id) {
+        return releaseRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("Release with ID = '%s' not found", id)));
     }
 }

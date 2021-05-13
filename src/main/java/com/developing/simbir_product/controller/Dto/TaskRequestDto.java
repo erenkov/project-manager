@@ -1,6 +1,7 @@
 package com.developing.simbir_product.controller.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -28,12 +29,15 @@ public class TaskRequestDto {
     private String description;
 
     @Schema(description = "Дата создания")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createDate;
 
     @Schema(description = "Ориентировочная дата завершения")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dueDate;
 
     @Schema(description = "Дата завершения")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime finishDate;
 
     @Schema(description = "Ориентировочные затраты")

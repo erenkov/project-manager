@@ -27,13 +27,13 @@ class ProjectMapperTest {
     ProjectEntity projectEntity;
     ProjectRequestDto projectDto;
     TeamEntity teamEntity;
+
     @Autowired
     ProjectMapper projectMapper;
     @Autowired
     TeamService teamService;
     @Autowired
     ProjectService projectService;
-
 
     @BeforeEach
     void before() {

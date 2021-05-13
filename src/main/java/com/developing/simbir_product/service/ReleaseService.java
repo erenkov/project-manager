@@ -5,6 +5,7 @@ import com.developing.simbir_product.controller.Dto.ReleaseResponseDto;
 import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ReleaseService {
@@ -22,4 +23,7 @@ public interface ReleaseService {
     ReleaseEntity addReleaseEntity(ReleaseEntity releaseEntity);
 
     String getReleaseString(TaskEntity taskEntity);
+
+    List<ReleaseResponseDto> findAll();
+
 }
