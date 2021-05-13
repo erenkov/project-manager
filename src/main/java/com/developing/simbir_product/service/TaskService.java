@@ -3,6 +3,7 @@ package com.developing.simbir_product.service;
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
+import com.developing.simbir_product.entity.TaskStatus;
 
 import java.security.Principal;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface TaskService {
 
     TaskResponseDto getById(UUID id);
 
-    TaskResponseDto addTask(TaskRequestDto taskRequestDto);
+    void addTask(TaskRequestDto taskRequestDto);
 
     TaskEntity addTaskEntity(TaskEntity taskEntity);
 
@@ -25,5 +26,13 @@ public interface TaskService {
 
     List<TaskEntity> getTasksByProjectsName(String projectName);
 
+    List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus);
+
+    List<String> getListOfTaskStatus();
+
+    List<String> getListOfTaskTypes();
+
     List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal http);
+
+    TaskEntity getTaskById(UUID id);
 }

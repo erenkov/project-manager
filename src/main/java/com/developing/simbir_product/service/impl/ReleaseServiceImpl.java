@@ -2,12 +2,14 @@ package com.developing.simbir_product.service.impl;
 
 import com.developing.simbir_product.controller.Dto.ReleaseRequestDto;
 import com.developing.simbir_product.controller.Dto.ReleaseResponseDto;
+import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.DateTimeMapper;
 import com.developing.simbir_product.mappers.ReleaseMapper;
 import com.developing.simbir_product.repository.ReleaseRepository;
+import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import org.slf4j.Logger;
@@ -32,6 +34,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Autowired
     private ReleaseRepository releaseRepository;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private TaskReleaseHistoryService taskReleaseHistoryService;
@@ -108,6 +113,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseRepository.save(releaseEntity);
     }
 
+    //данный метод думаю не акутален после того как мы ввели новое поле project_id
     public String getReleaseString(TaskEntity taskEntity) {
         ReleaseEntity release = null;
         try {
@@ -120,6 +126,24 @@ public class ReleaseServiceImpl implements ReleaseService {
                 dateTimeMapper.dateToString(release.getStartDate()),
                 dateTimeMapper.dateToString(release.getFinishDate()));
     }
+
+    @Transactional
+    @Override
+    public ReleaseResponseDto getCurrentRelease(String projectName) {
+        ReleaseEntity releaseEntity = releaseRepository.getCurrentRelease(projectService.getProjectEntity(projectName).getId()).orElseThrow(
+                () -> new NotFoundException(String.format("Release for project with name = '%s' not found", projectName))
+        );
+        return releaseMapper.releaseEntityToDto(releaseEntity);
+    }
+
+    @Transactional
+    @Override
+    public List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity) {
+        return releaseRepository.findAllByProjectId(projectEntity).orElseThrow(
+                () -> new NotFoundException(String.format("Project with name = '%s' not found", projectEntity.getName()))
+        ).stream().map(releaseMapper::releaseEntityToDto).collect(Collectors.toList());
+    }
+
 
     @Transactional
     @Override

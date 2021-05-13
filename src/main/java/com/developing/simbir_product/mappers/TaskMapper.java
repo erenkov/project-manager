@@ -41,7 +41,6 @@ public abstract class TaskMapper {
     @Mapping(target = "team", source = ".", qualifiedByName = "teamByTask")
     public abstract TaskResponseDto taskEntityToDto(TaskEntity taskEntity);
 
-    @Mapping(target = "id", expression = "java(Converter.getUuidFromString(taskRequestDto.getId()))")
     @Mapping(target = "projectId", source = "projectName")
     @Mapping(target = "taskType", source = "type")
     @Mapping(target = "taskStatus", source = "status")
@@ -65,5 +64,12 @@ public abstract class TaskMapper {
 
     public ProjectEntity projectByName(String projectName) {
         return projectService.getProjectEntity(projectName);
+    }
+
+    public UUID getIdFromString(String id) {
+        if (id.isEmpty()) {
+            return null;
+        }
+        return UUID.fromString(id);
     }
 }

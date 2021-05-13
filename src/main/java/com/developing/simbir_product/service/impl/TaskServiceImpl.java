@@ -3,6 +3,8 @@ package com.developing.simbir_product.service.impl;
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.TaskEntity;
+import com.developing.simbir_product.entity.TaskStatus;
+import com.developing.simbir_product.entity.TaskType;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.TaskMapper;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.Arrays;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
@@ -59,15 +63,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     @Override
-    public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
+    public void addTask(TaskRequestDto taskRequestDto) {
 
-        TaskEntity taskEntity = new TaskEntity();
+        TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
 
-        //todo taskEntity = mapFrom taskRequestDto ??????????????????????????
-
-        taskRepository.save(taskEntity);
-        logger.trace("{} task has been created", taskRequestDto.getName() );
-        return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        logger.trace("{} task has been created", taskRequestDto.getName());
+//        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
@@ -80,13 +81,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto editTask(TaskRequestDto taskRequestDto) {
 
-        TaskEntity taskEntity = new TaskEntity();
-
-        //todo taskEntity = mapFrom taskRequestDto ???????????????????????????????
-
-        taskRepository.save(taskEntity);
+        TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
         logger.trace("{} has been edited", taskRequestDto.getName());
-        return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
 
@@ -115,6 +112,22 @@ public class TaskServiceImpl implements TaskService {
         return projectService.getProjectEntity(projectName).getTasks();
     }
 
+    public List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus) {
+
+        return getTasksByProjectsName(projectName).stream().filter(task -> task.getTaskStatus() == taskStatus)
+                .map(taskMapper::taskEntityToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getListOfTaskStatus() {
+        return Arrays.stream(TaskStatus.values()).map(TaskStatus::toString).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getListOfTaskTypes() {
+        return Arrays.stream(TaskType.values()).map(TaskType::toString).collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal principal) {
@@ -135,5 +148,11 @@ public class TaskServiceImpl implements TaskService {
                 .filter(task -> example.getPriority() == 0 || task.getPriority() == example.getPriority())
                 .map(taskMapper::taskEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public TaskEntity getTaskById(UUID id) {
+        return taskRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("Task with id = '%s' not found", id))
+        );
     }
 }

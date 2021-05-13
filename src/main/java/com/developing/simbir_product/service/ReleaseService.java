@@ -2,6 +2,7 @@ package com.developing.simbir_product.service;
 
 import com.developing.simbir_product.controller.Dto.ReleaseRequestDto;
 import com.developing.simbir_product.controller.Dto.ReleaseResponseDto;
+import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 
@@ -26,4 +27,7 @@ public interface ReleaseService {
 
     List<ReleaseResponseDto> findAll();
 
+
+    ReleaseResponseDto getCurrentRelease(String projectName);
+    List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity);
 }
