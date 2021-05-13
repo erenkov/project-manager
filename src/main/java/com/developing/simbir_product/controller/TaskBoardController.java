@@ -34,14 +34,15 @@ public class TaskBoardController {
     private ProjectService projectService;
 
     @Operation(summary = "Получить страницу с доской проекта")
-    @GetMapping
-    public String getBoardPage(@RequestParam("projectName") String projectName, Model model) {
+    @GetMapping("/{prName}")
+    public String getBoardPage(@PathVariable("prName") String projectName, Model model) {
         // Запрос страницы с доской проекта
         model.addAttribute("listBacklogTasks", taskService.findTasksByStatus(projectName, TaskStatus.BACKLOG));
         model.addAttribute("listInProgressTasks", taskService.findTasksByStatus(projectName, TaskStatus.IN_PROGRESS));
         model.addAttribute("listDoneTasks", taskService.findTasksByStatus(projectName, TaskStatus.DONE));
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
+        model.addAttribute("currentProject", projectService.findByName(projectName));
         return "task-board";
     }
 

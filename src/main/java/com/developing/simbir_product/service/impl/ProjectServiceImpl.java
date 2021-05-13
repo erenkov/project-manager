@@ -8,6 +8,7 @@ import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.ProjectMapper;
 import com.developing.simbir_product.repository.ProjectRepository;
 import com.developing.simbir_product.service.ProjectService;
+import com.developing.simbir_product.service.TeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+
     Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
+
     @Autowired
     ProjectMapper projectMapper;
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private TeamService teamService;
 
     @Transactional
     @Override
@@ -117,5 +123,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<String> getListOfAllProjectStatus() {
         return Arrays.stream(ProjectStatus.values()).map(ProjectStatus::toString).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public List<String> getListOfAllProjectNamesByTeam(String teamName) {
+        return projectRepository
+                .findAllByTeamId(teamService.findByName(teamName))
+                .stream()
+                .map(ProjectEntity::getName)
+                .collect(Collectors.toList());
     }
 }

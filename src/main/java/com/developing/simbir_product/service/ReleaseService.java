@@ -29,5 +29,6 @@ public interface ReleaseService {
 
 
     ReleaseResponseDto getCurrentRelease(String projectName);
+
     List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity);
 }

@@ -29,4 +29,6 @@ public interface ProjectService {
 
     List<String> getListOfAllProjectStatus();
 
+    List<String> getListOfAllProjectNamesByTeam(String teamName);
+
     }
