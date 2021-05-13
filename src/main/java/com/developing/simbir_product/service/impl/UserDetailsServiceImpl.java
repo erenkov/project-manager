@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,6 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     user.get().getPassword(), Set.of(user.get().getRole()));
         }
 
-        throw new UsernameNotFoundException("Invalid username or password.");
+        throw new EntityNotFoundException("Пользователь не был найден");
     }
 }
