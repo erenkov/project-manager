@@ -14,7 +14,7 @@ public interface TaskService {
 
     TaskResponseDto getById(UUID id);
 
-    void addTask(TaskRequestDto taskRequestDto);
+    UUID addTask(TaskRequestDto taskRequestDto);
 
     TaskEntity addTaskEntity(TaskEntity taskEntity);
 

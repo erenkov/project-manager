@@ -2,6 +2,7 @@ package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.entity.TaskStatus;
+import com.developing.simbir_product.entity.UserTaskHistoryEntity;
 import com.developing.simbir_product.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,9 @@ public class TaskBoardController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private UserTaskHistoryService userTaskHistoryService;
 
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
@@ -73,7 +77,7 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу создания новой задачи")
     @GetMapping("/create")
-    public String getNewTaskPage(@RequestParam("projectName") String projectName, Model model, Principal principal) {
+    public String getNewTaskPage(@PathVariable("projectName") String projectName, Model model, Principal principal) {
         model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
@@ -82,6 +86,7 @@ public class TaskBoardController {
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
+        model.addAttribute("projectName", projectName);
         return "create-task";
     }
 
@@ -90,7 +95,11 @@ public class TaskBoardController {
     public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask) {
         ModelAndView modelAndView = new ModelAndView("redirect:/board");
 //        modelAndView.addObject("newTask",taskService.addTask(newTask));
-        taskService.addTask(newTask);
+        UUID taskId = taskService.addTask(newTask);
+        UserTaskHistoryEntity userTaskHistoryEntity = new UserTaskHistoryEntity();
+        userTaskHistoryEntity.setUserId(userService.findByUserNumber(newTask.getAssigneeName().split(" ")[2]));
+        userTaskHistoryEntity.setTaskId(taskService.getTaskById(taskId));
+        userTaskHistoryService.addUserTaskHistory(userTaskHistoryEntity);
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;
     }

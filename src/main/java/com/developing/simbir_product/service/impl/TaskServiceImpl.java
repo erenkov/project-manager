@@ -63,11 +63,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     @Override
-    public void addTask(TaskRequestDto taskRequestDto) {
+    public UUID addTask(TaskRequestDto taskRequestDto) {
 
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
 
         logger.trace("{} task has been created", taskRequestDto.getName());
+        return taskEntity.getId();
 //        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 

@@ -29,12 +29,8 @@
                     <a href="/profile">Profile</a>
                 </div>
             </div>
-            <form action="/board/create" method="post" id="newTaskForm" class="p-4" th:object="${newTask}">
-                <div>
-                <input type="hidden" name="projectName"
-                       th:value="${#httpServletRequest.getParameter('projectName')}"
-                />
-                </div>
+            <form th:action="@{/board/{prName}/create/(prName=${projectName})}" method="post" id="newTaskForm" class="p-4" th:object="${newTask}">
+
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label">Title</label>
                     <input
