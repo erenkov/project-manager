@@ -17,7 +17,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 @Tag(name = "Управление задачами")
-@RequestMapping("/board")
+@RequestMapping("/board/{projectName}")
 @Controller
 public class TaskBoardController {
 
@@ -34,8 +34,8 @@ public class TaskBoardController {
     private ProjectService projectService;
 
     @Operation(summary = "Получить страницу с доской проекта")
-    @GetMapping("/{prName}")
-    public String getBoardPage(@PathVariable("prName") String projectName, Model model) {
+    @GetMapping
+    public String getBoardPage(@PathVariable("projectName") String projectName, Model model) {
         // Запрос страницы с доской проекта
         model.addAttribute("listBacklogTasks", taskService.findTasksByStatus(projectName, TaskStatus.BACKLOG));
         model.addAttribute("listInProgressTasks", taskService.findTasksByStatus(projectName, TaskStatus.IN_PROGRESS));
@@ -48,12 +48,27 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу с задачей")
     @GetMapping("/task/{id}")
-    public String getTaskPage(@PathVariable("id") String id, Model model) {
+    public String getTaskPage(@PathVariable("projectName") String projectName,
+                              @PathVariable("id") String id,
+                              Model model,
+                              Principal principal) {
         //if (id == -1) => создать пустую задачу и отобразить на редактирование
         // Получить страницу с запрашиваемой задачей
+//        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
+//        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(taskService.getTaskById(UUID.fromString(id)).getProjectId()));
+//        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
+//        return "task-details";
+
+//        model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("task", taskService.getById(UUID.fromString(id)));
-        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(taskService.getTaskById(UUID.fromString(id)).getProjectId()));
-        return "task-details";
+        model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
+        model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
+        model.addAttribute("taskType", taskService.getListOfTaskTypes());
+        model.addAttribute("listUsers", userService.getListOfAllUsers());
+        model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
+        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
+        model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
+        return "task-det";
     }
 
     @Operation(summary = "Получить страницу создания новой задачи")
