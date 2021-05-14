@@ -36,11 +36,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity projectEntity = projectRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Project with ID = '%s' not found", id)));
 
-        ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-
-        //todo ProjectResponseDto = mapFrom projectEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return projectResponseDto;
+        return projectMapper.projectEntityToDto(projectEntity);
     }
 
 
@@ -53,8 +49,10 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
 
         projectRepository.save(projectEntity);
+
+        ProjectResponseDto projectResponseDto = projectMapper.projectEntityToDto(projectEntity);
         logger.trace("{} project has been created", projectRequestDto.getName());
-        return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return projectResponseDto; //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Transactional
