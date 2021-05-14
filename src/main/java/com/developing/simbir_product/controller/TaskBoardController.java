@@ -59,11 +59,11 @@ public class TaskBoardController {
 //        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
 //        return "task-details";
 
-//        model.addAttribute("newTask", new TaskRequestDto());
-        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
+        model.addAttribute("newTask", new TaskRequestDto());
+//        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
-        model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
-        model.addAttribute("taskType", taskService.getListOfTaskTypes());
+        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
+        model.addAttribute("taskTypeList", taskService.getListOfTaskTypes());
         model.addAttribute("listUsers", userService.getListOfAllUsers());
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
@@ -73,7 +73,9 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу создания новой задачи")
     @GetMapping("/create")
-    public String getNewTaskPage(@RequestParam("projectName") String projectName, Model model, Principal principal) {
+    public String getNewTaskPage(@PathVariable("projectName") String projectName,
+                                 Model model,
+                                 Principal principal) {
         model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
@@ -87,9 +89,11 @@ public class TaskBoardController {
 
     @Operation(summary = "Создать новую задачу")
     @PostMapping("/create")
-    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask) {
+    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask,
+                                    @PathVariable("projectName") String projectName) {
         ModelAndView modelAndView = new ModelAndView("redirect:/board");
 //        modelAndView.addObject("newTask",taskService.addTask(newTask));
+        newTask.setProjectName(projectName);
         taskService.addTask(newTask);
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;

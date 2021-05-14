@@ -30,11 +30,6 @@
                 </div>
             </div>
             <form action="/board/create" method="post" id="editTaskForm" class="p-4" th:object="${task}">
-                <div>
-                <input type="hidden" name="projectName"
-                       th:value="${#httpServletRequest.getParameter('projectName')}"
-                />
-                </div>
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label">Title</label>
                     <input
@@ -52,20 +47,20 @@
                             <label for="inputStatus" class="col-3 col-form-label">Task status</label>
                             <div class="col-9">
                                 <select class="form-select" id="inputStatus" name="status">
-                                    <th:block th:each="statusItem : ${taskStatus}">
+                                    <th:block th:each="statusItem : ${taskStatusList}">
                                         <option th:text="${statusItem}"
-                                                th:selected="${statusItem == 'BACKLOG'}"></option>
+                                                th:selected="${statusItem == ${task.status}}"></option>
                                     </th:block>
                                 </select>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputType" class="col-3 col-form-label">Task status</label>
+                            <label for="inputType" class="col-3 col-form-label">Task type</label>
                             <div class="col-9">
                                 <select class="form-select" id="inputType" name="type">
-                                    <th:block th:each="typeItem : ${taskType}">
+                                    <th:block th:each="typeItem : ${taskTypeList}">
                                         <option th:text="${typeItem}"
-                                                th:selected="${typeItem == 'FEATURE'}"></option>
+                                                th:selected="${typeItem == ${task.type}}"></option>
                                     </th:block>
                                 </select>
                             </div>
@@ -89,7 +84,7 @@
                                         type="text"
                                         class="form-control"
                                         id="inputEstimated"
-                                        value="4"
+                                        th:value="${task.estCosts}"
                                         name="estCosts"
                                 />
                             </div>
@@ -101,7 +96,7 @@
                                         type="text"
                                         class="form-control"
                                         id="inputActual"
-                                        value="0"
+                                        th:value="${task.actualCosts}"
                                         name="actualCosts"
                                 />
                             </div>
@@ -147,6 +142,7 @@
                                         class="form-control"
                                         id="inputStartDate"
                                         name="createDate"
+                                        th:value="${task.createDate}"
                                 />
                             </div>
                         </div>
@@ -160,6 +156,7 @@
                                         class="form-control"
                                         id="inputEstimatedDate"
                                         name="dueDate"
+                                        th:value="${task.dueDate}"
                                 />
                             </div>
                         </div>
@@ -172,6 +169,7 @@
                                         type="datetime-local"
                                         class="form-control"
                                         id="inputActualDate"
+                                        name="finishDate"
                                         disabled
                                 />
                             </div>
@@ -184,7 +182,7 @@
                                 <select class="form-select" id="inputAssignee" name="assigneeName">
                                     <th:block th:each="userItem : ${listUsers}">
                                         <option th:text="${userItem.firstName} + ' '
-                                                    + ${userItem.lastName} + ' ' + ${userItem.userNumber}"
+                                                    + ${userItem.lastName} + ' № ' + ${userItem.userNumber}"
                                                 th:selected="${userItem.firstName == currentUser.firstName
                                                 and userItem.lastName == currentUser.lastName
                                                 and userItem.userNumber == currentUser.userNumber}">
