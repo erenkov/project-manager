@@ -49,15 +49,10 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Override
     public TaskResponseDto getById(UUID id) {
-
         TaskEntity taskEntity = taskRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Task with ID = '%s' not found", id)));
 
-        TaskResponseDto taskResponseDto = new TaskResponseDto();
-
-        //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return taskResponseDto;
+        return taskMapper.taskEntityToDto(taskEntity);
     }
 
 

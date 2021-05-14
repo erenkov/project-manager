@@ -21,7 +21,9 @@ import java.security.Principal;
 @RequestMapping(value = "/profile")
 @Controller
 public class UserProfileController {
+
     Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+
     @Autowired
     private UserService userService;
 
