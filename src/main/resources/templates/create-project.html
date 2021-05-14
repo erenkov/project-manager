@@ -85,8 +85,9 @@
                     >Team name</label
                   >
                   <select class="form-select" id="inputTeamName" name="teamName">
+                    <option selected value="">Select team</option>
                     <th:block th:each="team : ${teamList}">
-                      <option th:text="${team}"></option>
+                      <option th:selected="${team == newProject.teamName}" th:text="${team}"></option>
                     </th:block>
                   </select>
                 </div>

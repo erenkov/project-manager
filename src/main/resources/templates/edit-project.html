@@ -91,6 +91,7 @@
                             >Team name</label
                             >
                             <select class="form-select" id="inputTeamName" name="teamName">
+                                <option selected value="">No team</option>
                                 <th:block th:each="team : ${teamList}">
                                     <option th:text="${team}" th:selected="${team == project.teamName}"></option>
                                 </th:block>
