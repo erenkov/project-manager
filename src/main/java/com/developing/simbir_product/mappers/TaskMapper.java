@@ -66,4 +66,5 @@ public abstract class TaskMapper {
     public ProjectEntity projectByName(String projectName) {
         return projectService.getProjectEntity(projectName);
     }
+
 }
