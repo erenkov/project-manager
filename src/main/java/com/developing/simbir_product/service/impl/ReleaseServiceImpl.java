@@ -65,11 +65,21 @@ public class ReleaseServiceImpl implements ReleaseService {
 //            return false;                    // тем же именем, то не записываем релиз в БД
 //        }
 
+        if (countIntersectingReleases(releaseRequestDto) > 0) {
+            return false;
+        }
         releaseRepository.save(releaseMapper.releaseDtoToEntity(releaseRequestDto));
         logger.trace(releaseRequestDto.getName() + " release for " + releaseRequestDto.getProjectName() + " has been added");
         return true;
     }
 
+    private long countIntersectingReleases(ReleaseRequestDto releaseToCheck) {
+        ProjectEntity projectEntity = projectService.getProjectEntity(releaseToCheck.getProjectName());
+        return getAllReleasesByProject(projectEntity).stream()
+                .filter(existingRelease -> !(releaseToCheck.getStartDate().isAfter(existingRelease.getFinishDate()) ||
+                        releaseToCheck.getFinishDate().isBefore(existingRelease.getStartDate())))
+                .count();
+    }
 
     @Transactional
     @Override
@@ -77,7 +87,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         ReleaseEntity releaseEntity = releaseMapper.releaseDtoToEntity(releaseRequestDto);
         Optional<ReleaseEntity> tempReleaseFromDB = Optional.ofNullable(getEntityById(releaseEntity.getId()));
 
-        if (tempReleaseFromDB.isEmpty()) { // Если при редактировании текущий релиз в БД не найден,
+        if (tempReleaseFromDB.isEmpty() || countIntersectingReleases(releaseRequestDto) > 1) { // Если при редактировании текущий релиз в БД не найден,
             return false;                  // то не выполняем запись в БД
         }
 
@@ -146,7 +156,7 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Transactional
     @Override
     public List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity) {
-        return releaseRepository.findAllByProjectId(projectEntity).orElseThrow(
+        return releaseRepository.findAllByProjectIdOrderByStartDateDesc(projectEntity).orElseThrow(
                 () -> new NotFoundException(String.format("Project with name = '%s' not found", projectEntity.getName()))
         ).stream().map(releaseMapper::releaseEntityToDto).collect(Collectors.toList());
     }

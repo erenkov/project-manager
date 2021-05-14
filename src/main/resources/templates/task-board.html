@@ -77,7 +77,8 @@
                     <a href="/board/filters" class="btn btn-primary btn-sm px-3 ms-4"
                     ><i class="bi bi-filter"></i>Filters</a
                     >
-                    <a href="/releases" class="btn btn-primary btn-sm px-3 ms-4"
+                    <a class="btn btn-primary btn-sm px-3 ms-4"
+                       th:href="@{/releases(projectName=${currentProject.name})}"
                     ><i class="bi bi-releases"></i>Releases</a
                     >
                     <div class="ms-4 text-primary" th:text="${currentRelease.name != null} ? 'Current release: ' + ${currentRelease.name} : 'No releases'" />

@@ -34,13 +34,15 @@
                 <h2 class="mb-4">List of releases:</h2>
                 <ul class="border rounded-3 list-group p-4 bg-light text-dark mb-3">
                     <th:block th:each="release : ${releases}">
-                        <li class="border list-group-item d-flex justify-content-between align-items-center p-2 bg-white mb-2">
-                            <a
-                                    th:href="@{/releases/{releaseId}(releaseId=${release.id})}"
-                                    class="text-primary h4 mb-0"
+                        <li class="border list-group-item d-flex justify-content-between
+                        align-items-center p-2 bg-white mb-2">
+                            <div
+                                    class="h4 mb-0"
                                     style="text-decoration: none"
-                                    th:text="${release.id}"
-                            ></a>
+                                    th:text="${release.name} + ' (' +
+                                ${#temporals.format(release.startDate, 'dd.MM.yyyy')} + ' - ' +
+                                ${#temporals.format(release.finishDate, 'dd.MM.yyyy')} + ')'"
+                            ></div>
                             <a class="btn btn-success btn-sm px-3"
                                th:href="@{/releases/edit/{releaseId}(releaseId=${release.id})}">
                                 Edit
@@ -48,7 +50,8 @@
                         </li>
                     </th:block>
                 </ul>
-                <a class="btn btn-primary px-3" href="/releases/create">
+                <a class="btn btn-primary px-3"
+                   th:href="@{/releases/create(projectName=${#httpServletRequest.getParameter('projectName')})}">
                     <i class="bi bi-plus"></i>
                     Create a new release
                 </a>
