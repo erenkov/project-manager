@@ -2,7 +2,6 @@ package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.entity.TaskStatus;
-import com.developing.simbir_product.entity.UserTaskHistoryEntity;
 import com.developing.simbir_product.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -92,14 +91,10 @@ public class TaskBoardController {
 
     @Operation(summary = "Создать новую задачу")
     @PostMapping("/create")
-    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/board");
+    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask, @PathVariable("projectName") String projectName) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
 //        modelAndView.addObject("newTask",taskService.addTask(newTask));
-        UUID taskId = taskService.addTask(newTask);
-        UserTaskHistoryEntity userTaskHistoryEntity = new UserTaskHistoryEntity();
-        userTaskHistoryEntity.setUserId(userService.findByUserNumber(newTask.getAssigneeName().split(" ")[2]));
-        userTaskHistoryEntity.setTaskId(taskService.getTaskById(taskId));
-        userTaskHistoryService.addUserTaskHistory(userTaskHistoryEntity);
+        taskService.addTask(newTask);
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;
     }

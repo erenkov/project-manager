@@ -110,6 +110,7 @@
                                         <option th:text="${releaseItem.name} + ' ' + '('
                                                     + ${#temporals.format(releaseItem.startDate, 'dd.MM.yyyy')}
                                                     + ' - ' + ${#temporals.format(releaseItem.finishDate, 'dd.MM.yyyy')+')'}"
+                                                th:value="${releaseItem.id}"
                                                 th:selected="${releaseItem.name == currentRelease.name}"
                                         ></option>
                                     </th:block>
