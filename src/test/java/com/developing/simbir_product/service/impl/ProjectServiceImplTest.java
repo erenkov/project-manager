@@ -10,11 +10,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.parameters.P;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,9 +30,6 @@ public class ProjectServiceImplTest {
 
     @InjectMocks
     private ProjectServiceImpl projectService;
-
-    @Captor
-    ArgumentCaptor<ProjectResponseDto> projectResponseDtoArgumentCaptor;
 
     @Test
     @DisplayName("Should find project by ID")
@@ -62,23 +60,26 @@ public class ProjectServiceImplTest {
     void should_add_project() {
 
         ProjectRequestDto projectRequestDto = new ProjectRequestDto();
+        ProjectRequestDto spy = Mockito.spy(projectRequestDto);
+        spy.setStatus("BACKLOG");
+
         ProjectEntity projectEntity = new ProjectEntity();
-        ProjectResponseDto expectedProjectResponseDto = new ProjectResponseDto();
         projectEntity.setProjectStatus(ProjectStatus.BACKLOG);
-        projectRequestDto.setStatus("BACKLOG");
-        expectedProjectResponseDto.setStatus("BACKLOG");
+
+        ProjectResponseDto projectResponseDto = new ProjectResponseDto();
+        projectResponseDto.setStatus("BACKLOG");
 
         Mockito.doReturn(projectEntity)
                 .when(projectMapper)
                 .projectDtoToEntity(ArgumentMatchers.any(ProjectRequestDto.class));
 
-        Mockito.doReturn(expectedProjectResponseDto)
+        Mockito.doReturn(projectResponseDto)
                 .when(projectMapper)
                 .projectEntityToDto(projectEntity);
 
         ProjectResponseDto actualProjectResponseDto = projectService.addProject(projectRequestDto);
 
-        Assertions.assertThat(expectedProjectResponseDto.getStatus()).isEqualTo(actualProjectResponseDto.getStatus());
+        Assertions.assertThat(spy.getStatus()).isEqualTo(actualProjectResponseDto.getStatus());
 
         Mockito.verify(projectMapper, Mockito.times(1))
                 .projectEntityToDto(ArgumentMatchers.any(ProjectEntity.class));
@@ -86,5 +87,6 @@ public class ProjectServiceImplTest {
                 .projectDtoToEntity(ArgumentMatchers.any(ProjectRequestDto.class));
         Mockito.verify(projectRepository, Mockito.times(1))
                 .save(ArgumentMatchers.any(ProjectEntity.class));
+        Mockito.verify(spy, Mockito.times(1)).setStatus("BACKLOG");
     }
 }
