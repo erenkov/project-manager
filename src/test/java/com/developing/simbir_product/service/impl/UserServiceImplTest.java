@@ -6,12 +6,10 @@ import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.mappers.UserMapper;
 import com.developing.simbir_product.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -34,18 +32,27 @@ public class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+    @Captor
+    private ArgumentCaptor<UserEntity> captor;
+
     @Test
+    @DisplayName("Should add user and return true")
     void when_addUser_it_should_return_true() {
         UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setPassword("test");
 
-        Assertions.assertThat(userService.addUser(userRequestDto)).isTrue();
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
 
-        Mockito.verify(passwordEncoder, Mockito.times(1)).encode(userRequestDto.getPassword());
-        Mockito.verify(userRepository, Mockito.times(1)).save(userMapper.userDtoToEntity(userRequestDto));
+        boolean isUserAdded = userService.addUser(userRequestDto);
+        Assertions.assertThat(isUserAdded).isTrue();
+
+        Mockito.verify(passwordEncoder, Mockito.times(1)).encode("test");
+        Mockito.verify(userRepository, Mockito.times(1)).save(userEntity);
 
     }
 
     @Test
+    @DisplayName("Should return false if user exists")
     public void addUser_exists_should_return_false() {
         UserRequestDto userRequestDto = new UserRequestDto();
 
@@ -55,13 +62,17 @@ public class UserServiceImplTest {
                 .when(userRepository)
                 .findByLogin("test@mail.ru");
 
-        Assertions.assertThat(userService.addUser(userRequestDto)).isFalse();
+
+        boolean isUserAdded = userService.addUser(userRequestDto);
+        Assertions.assertThat(isUserAdded).isFalse();
 
         Mockito.verifyNoInteractions(passwordEncoder);
         Mockito.verify(userRepository, Mockito.times(1)).findByLogin(ArgumentMatchers.any(String.class));
+
     }
 
     @Test
+    @DisplayName("Should return user")
     public void find_user_should_return_correct(){
         UUID uuid = UUID.randomUUID();
         UserEntity userEntity = new UserEntity();
@@ -72,7 +83,7 @@ public class UserServiceImplTest {
 
         Mockito.doReturn(Optional.of(userEntity))
                 .when(userRepository)
-                .findByLogin(ArgumentMatchers.any(String.class));
+                .findByLogin("test@mail.ru");
 
         Mockito.doReturn(expectedUserResponseDto)
                 .when(userMapper)

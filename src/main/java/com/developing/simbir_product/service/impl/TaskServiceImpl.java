@@ -49,11 +49,7 @@ public class TaskServiceImpl implements TaskService {
         TaskEntity taskEntity = taskRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Task with ID = '%s' not found", id)));
 
-        TaskResponseDto taskResponseDto = new TaskResponseDto();
-
-        //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return taskResponseDto;
+        return taskMapper.taskEntityToDto(taskEntity);
     }
 
 
@@ -61,13 +57,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
 
-        TaskEntity taskEntity = new TaskEntity();
-
-        //todo taskEntity = mapFrom taskRequestDto ??????????????????????????
+        TaskEntity taskEntity = taskMapper.taskDtoToEntity(taskRequestDto);
 
         taskRepository.save(taskEntity);
+        TaskResponseDto taskResponseDto = taskMapper.taskEntityToDto(taskEntity);
         logger.trace("{} task has been created", taskRequestDto.getName() );
-        return new TaskResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return taskResponseDto; //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
