@@ -46,13 +46,14 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public boolean editTeam(TeamRequestDto teamRequestDto) {
         TeamEntity teamEntity = teamMapper.teamDtoToEntity(teamRequestDto);
-        Optional<TeamEntity> tempProjectFromDB = Optional.ofNullable(findByName(teamEntity.getName()));
+//        Optional<TeamEntity> tempProjectFromDB = Optional.ofNullable(findByName(teamEntity.getName()));
 
-        if (tempProjectFromDB.isEmpty()) { // Если при редактировании текущая команда в БД не найдена,
+        Optional<TeamEntity> teamEntity1 = teamRepository.findByName(teamEntity.getName());
+        if (teamEntity1.isEmpty()) { // Если при редактировании текущая команда в БД не найдена,
             return false;                  // то не выполняем запись в БД
         }
 
-        teamEntity.setId(tempProjectFromDB.get().getId());
+        teamEntity.setId(teamEntity1.get().getId());
         teamRepository.save(teamEntity);
         return true;
     }
