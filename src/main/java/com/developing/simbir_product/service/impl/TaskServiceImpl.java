@@ -2,17 +2,11 @@ package com.developing.simbir_product.service.impl;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
-import com.developing.simbir_product.entity.TaskEntity;
-import com.developing.simbir_product.entity.TaskStatus;
-import com.developing.simbir_product.entity.TaskType;
-import com.developing.simbir_product.entity.UserEntity;
+import com.developing.simbir_product.entity.*;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.TaskMapper;
 import com.developing.simbir_product.repository.TaskRepository;
-import com.developing.simbir_product.service.ProjectService;
-import com.developing.simbir_product.service.TaskService;
-import com.developing.simbir_product.service.UserService;
-import com.developing.simbir_product.service.UserTaskHistoryService;
+import com.developing.simbir_product.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +34,13 @@ public class TaskServiceImpl implements TaskService {
     private UserService userService;
 
     @Autowired
+    private ReleaseService releaseService;
+
+    @Autowired
     private UserTaskHistoryService userTaskHistoryService;
+
+    @Autowired
+    private TaskReleaseHistoryService taskReleaseHistoryService;
 
     @Autowired
     private TaskMapper taskMapper;
@@ -49,26 +49,28 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Override
     public TaskResponseDto getById(UUID id) {
-
         TaskEntity taskEntity = taskRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Task with ID = '%s' not found", id)));
 
-        TaskResponseDto taskResponseDto = new TaskResponseDto();
-
-        //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return taskResponseDto;
+        return taskMapper.taskEntityToDto(taskEntity);
     }
 
 
     @Transactional
     @Override
-    public void addTask(TaskRequestDto taskRequestDto) {
+    public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
 
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
-
+        UserTaskHistoryEntity userTaskHistoryEntity = new UserTaskHistoryEntity();
+        userTaskHistoryEntity.setUserId(userService.findByUserNumber(taskRequestDto.getAssigneeName().split(" ")[2]));
+        userTaskHistoryEntity.setTaskId(taskEntity);
+        userTaskHistoryService.addUserTaskHistory(userTaskHistoryEntity);
+        TaskReleaseHistoryEntity taskReleaseHistoryEntity = new TaskReleaseHistoryEntity();
+        taskReleaseHistoryEntity.setTaskId(taskEntity);
+        taskReleaseHistoryEntity.setReleaseId(releaseService.getEntityById(UUID.fromString(taskRequestDto.getRelease())));
+        taskReleaseHistoryService.addTaskRelease(taskReleaseHistoryEntity);
         logger.trace("{} task has been created", taskRequestDto.getName());
-//        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
@@ -150,9 +152,4 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
     }
 
-    public TaskEntity getTaskById(UUID id) {
-        return taskRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Task with id = '%s' not found", id))
-        );
-    }
 }

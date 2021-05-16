@@ -4,8 +4,6 @@ import com.developing.simbir_product.controller.Dto.TeamRequestDto;
 import com.developing.simbir_product.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -20,6 +18,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/teams")
 @Controller
 public class TeamsController {
+
     @Autowired
     private TeamService teamService;
 
@@ -85,6 +84,7 @@ public class TeamsController {
     //      в ParentErrorController
     @ExceptionHandler(BindException.class)
     private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
+        //todo имя view
         ModelAndView modelAndView = new ModelAndView("releaseViewName", HttpStatus.BAD_REQUEST);
         modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());

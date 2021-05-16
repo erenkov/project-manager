@@ -25,8 +25,7 @@ public class TaskReleaseHistoryEntity {
     public TaskReleaseHistoryEntity() {
     }
 
-    public TaskReleaseHistoryEntity(UUID id, boolean isCompleted) {
-        this.id = id;
+    public TaskReleaseHistoryEntity(boolean isCompleted) {
         this.isCompleted = isCompleted;
     }
 

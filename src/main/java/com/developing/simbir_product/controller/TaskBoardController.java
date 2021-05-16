@@ -17,7 +17,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 @Tag(name = "Управление задачами")
-@RequestMapping("/board")
+@RequestMapping("/board/{projectName}")
 @Controller
 public class TaskBoardController {
 
@@ -35,29 +35,45 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
-    public String getBoardPage(@RequestParam("projectName") String projectName, Model model) {
+    public String getBoardPage(@PathVariable("projectName") String projectName, Model model) {
         // Запрос страницы с доской проекта
         model.addAttribute("listBacklogTasks", taskService.findTasksByStatus(projectName, TaskStatus.BACKLOG));
         model.addAttribute("listInProgressTasks", taskService.findTasksByStatus(projectName, TaskStatus.IN_PROGRESS));
         model.addAttribute("listDoneTasks", taskService.findTasksByStatus(projectName, TaskStatus.DONE));
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
+        model.addAttribute("currentProject", projectService.findByName(projectName));
         return "task-board";
     }
 
     @Operation(summary = "Получить страницу с задачей")
     @GetMapping("/task/{id}")
-    public String getTaskPage(@PathVariable("id") String id, Model model) {
+    public String getTaskPage(@PathVariable("projectName") String projectName,
+                              @PathVariable("id") String id,
+                              Model model,
+                              Principal principal) {
         //if (id == -1) => создать пустую задачу и отобразить на редактирование
         // Получить страницу с запрашиваемой задачей
+//        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
+//        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(taskService.getTaskById(UUID.fromString(id)).getProjectId()));
+//        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
+//        return "task-details";
+
+//        model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("task", taskService.getById(UUID.fromString(id)));
-        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(taskService.getTaskById(UUID.fromString(id)).getProjectId()));
+        model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
+        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
+        model.addAttribute("taskTypeList", taskService.getListOfTaskTypes());
+        model.addAttribute("listUsers", userService.getListOfAllUsers());
+        model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
+        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
+        model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
         return "task-details";
     }
 
     @Operation(summary = "Получить страницу создания новой задачи")
     @GetMapping("/create")
-    public String getNewTaskPage(@RequestParam("projectName") String projectName, Model model, Principal principal) {
+    public String getNewTaskPage(@PathVariable("projectName") String projectName, Model model, Principal principal) {
         model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
@@ -66,23 +82,29 @@ public class TaskBoardController {
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
+        model.addAttribute("projectName", projectName);
         return "create-task";
     }
 
     @Operation(summary = "Создать новую задачу")
     @PostMapping("/create")
-    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/board");
+    public ModelAndView saveNewTask(@ModelAttribute("newTask") TaskRequestDto newTask,
+                                    @PathVariable("projectName") String projectName) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
 //        modelAndView.addObject("newTask",taskService.addTask(newTask));
+        newTask.setProjectName(projectName);
         taskService.addTask(newTask);
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;
     }
 
     @Operation(summary = "Редактирование задачи")
-    @PostMapping("/task")
-    public ModelAndView editTask(@ModelAttribute("task") TaskRequestDto editTask) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/board");
+    @PostMapping("/task/{id}")
+    public ModelAndView editTask(@ModelAttribute("task") TaskRequestDto editTask,
+                                 @PathVariable("projectName") String projectName,
+                                 @PathVariable("id") String id) {
+        editTask.setId(id);
+        ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
         modelAndView.addObject("editTask",taskService.editTask(editTask));
         modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
@@ -90,8 +112,9 @@ public class TaskBoardController {
 
     @Operation(summary = "Удаление задачи")
     @DeleteMapping("/task/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteTask(@PathVariable("id") String id,
+                                             @PathVariable("projectName") String projectName) {
         taskService.deleteById(UUID.fromString(id));
-        return ResponseEntity.ok("redirect:/board");
+        return ResponseEntity.ok("redirect:/board/{projectName}");
     }
 }

@@ -1,11 +1,15 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
+import com.developing.simbir_product.controller.Dto.UserResponseDto;
+import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TeamService;
+import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +27,20 @@ public class ProjectsController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    UserService userService;
+
     @Operation(summary = "Получить страницу с проектами")
     @GetMapping()
-    public String getProjectsPage(Model model, Principal principal) {
-        model.addAttribute("projectNames", projectService.getListOfAllProjectNames());
-        model.addAttribute("userName", principal.getName());
+    public String getProjectsPage(Model model, Principal principal, Authentication authentication) {
+        UserResponseDto user = userService.findByEmail(principal.getName());
+        model.addAttribute("userName", String.format("%s %s", user.getFirstName(),user.getLastName()));
+
+        if (authentication.getAuthorities().contains(Role.ROLE_ADMIN)) {
+            model.addAttribute("projectNames", projectService.getListOfAllProjectNames());
+        } else {
+            model.addAttribute("projectNames", projectService.getListOfAllProjectNamesByTeam(user.getTeam()));
+        }
         return "projects";
     }
 
@@ -35,7 +48,7 @@ public class ProjectsController {
     @GetMapping("/create")
     public String getNewProjectPage(Model model) {
         model.addAttribute("newProject", new ProjectRequestDto());
-        model.addAttribute("teamsList", teamService.findAllTeamNames());
+        model.addAttribute("teamList", teamService.findAllTeamNames());
         model.addAttribute("projectStatusList", projectService.getListOfAllProjectStatus());
             return "create-project";
     }

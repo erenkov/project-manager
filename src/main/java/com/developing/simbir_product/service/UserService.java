@@ -30,4 +30,6 @@ public interface UserService {
     List<String> getListOfAllRoles();
 
     List<UserResponseDto> getListOfAllUsers();
+
+    UserEntity findByUserNumber(String userNumber);
 }

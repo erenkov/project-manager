@@ -29,19 +29,14 @@
                     <a href="/profile">Profile</a>
                 </div>
             </div>
-            <form action="/board/create" method="post" id="newTaskForm" class="p-4" th:object="${newTask}">
-                <div>
-                <input type="hidden" name="projectName"
-                       th:value="${#httpServletRequest.getParameter('projectName')}"
-                />
-                </div>
+            <form th:action="@{/board/{prName}/create/(prName=${projectName})}" method="post" id="newTaskForm" class="p-4" th:object="${newTask}">
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label">Title</label>
                     <input
                             type="text"
                             class="form-control"
                             id="inputTitle"
-                            value="Title task"
+                            placeholder="Title task"
                             name="name"
                             required
                     />
@@ -60,7 +55,7 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputType" class="col-3 col-form-label">Task status</label>
+                            <label for="inputType" class="col-3 col-form-label">Task type</label>
                             <div class="col-9">
                                 <select class="form-select" id="inputType" name="type">
                                     <th:block th:each="typeItem : ${taskType}">
@@ -89,7 +84,6 @@
                                         type="text"
                                         class="form-control"
                                         id="inputEstimated"
-                                        value="4"
                                         name="estCosts"
                                 />
                             </div>
@@ -101,7 +95,6 @@
                                         type="text"
                                         class="form-control"
                                         id="inputActual"
-                                        value="0"
                                         name="actualCosts"
                                 />
                             </div>
@@ -114,25 +107,11 @@
                                         <option th:text="${releaseItem.name} + ' ' + '('
                                                     + ${#temporals.format(releaseItem.startDate, 'dd.MM.yyyy')}
                                                     + ' - ' + ${#temporals.format(releaseItem.finishDate, 'dd.MM.yyyy')+')'}"
+                                                th:value="${releaseItem.id}"
                                                 th:selected="${releaseItem.name == currentRelease.name}"
                                         ></option>
                                     </th:block>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="inputTeam" class="col-3 col-form-label"
-                            >Team</label
-                            >
-                            <div class="col-9">
-                                <input
-                                        type="text"
-                                        name="team"
-                                        class="form-control"
-                                        id="inputTeam"
-                                        th:value="${teamName}"
-                                        required
-                                />
                             </div>
                         </div>
                     </div>
@@ -172,7 +151,7 @@
                                         type="datetime-local"
                                         class="form-control"
                                         id="inputActualDate"
-                                        disabled
+                                        readonly
                                 />
                             </div>
                         </div>
@@ -196,11 +175,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="inputDescription" class="form-label">Task description</label>
-                        <textarea class="form-control" id="inputDescription" name="description" rows="3">Description...</textarea>
+                        <textarea class="form-control" id="inputDescription" name="description" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="inputComments" class="form-label">Comments</label>
-                        <textarea class="form-control" id="inputComments" name="comments" rows="3">Comments...</textarea>
+                        <textarea class="form-control" id="inputComments" name="comments" rows="3"></textarea>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div>

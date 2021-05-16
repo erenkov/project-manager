@@ -25,6 +25,11 @@ public interface ReleaseService {
 
     String getReleaseString(TaskEntity taskEntity);
 
+    List<ReleaseResponseDto> findAll();
+
     ReleaseResponseDto getCurrentRelease(String projectName);
+
     List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity);
+
+    ReleaseEntity getEntityById(UUID id);
 }
