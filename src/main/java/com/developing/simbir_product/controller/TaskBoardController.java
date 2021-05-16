@@ -59,8 +59,8 @@ public class TaskBoardController {
 //        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
 //        return "task-details";
 
-        model.addAttribute("newTask", new TaskRequestDto());
-//        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
+//        model.addAttribute("newTask", new TaskRequestDto());
+        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
         model.addAttribute("taskTypeList", taskService.getListOfTaskTypes());
@@ -68,7 +68,7 @@ public class TaskBoardController {
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
-        return "task-det";
+        return "task-details";
     }
 
     @Operation(summary = "Получить страницу создания новой задачи")
@@ -82,26 +82,29 @@ public class TaskBoardController {
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
-        model.addAttribute("projectName", projectName); //todo *****************
+        model.addAttribute("projectName", projectName);
         return "create-task";
     }
 
     @Operation(summary = "Создать новую задачу")
     @PostMapping("/create")
-    public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask,
+    public ModelAndView saveNewTask(@ModelAttribute("newTask") TaskRequestDto newTask,
                                     @PathVariable("projectName") String projectName) {
         ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
 //        modelAndView.addObject("newTask",taskService.addTask(newTask));
-        newTask.setProjectName(projectName); //todo ************************
+        newTask.setProjectName(projectName);
         taskService.addTask(newTask);
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;
     }
 
     @Operation(summary = "Редактирование задачи")
-    @PostMapping("/task")
-    public ModelAndView editTask(@ModelAttribute("task") TaskRequestDto editTask) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/board");
+    @PostMapping("/task/{id}")
+    public ModelAndView editTask(@ModelAttribute("task") TaskRequestDto editTask,
+                                 @PathVariable("projectName") String projectName,
+                                 @PathVariable("id") String id) {
+        editTask.setId(id);
+        ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
         modelAndView.addObject("editTask",taskService.editTask(editTask));
         modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
@@ -109,8 +112,9 @@ public class TaskBoardController {
 
     @Operation(summary = "Удаление задачи")
     @DeleteMapping("/task/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteTask(@PathVariable("id") String id,
+                                             @PathVariable("projectName") String projectName) {
         taskService.deleteById(UUID.fromString(id));
-        return ResponseEntity.ok("redirect:/board");
+        return ResponseEntity.ok("redirect:/board/{projectName}");
     }
 }

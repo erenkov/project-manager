@@ -74,12 +74,15 @@
                 </div>
                 <div class="d-flex align-items-center mb-4">
                     <h4 class="mb-0" th:text="${teamName != null} ? 'Team: ' + ${teamName} : 'Team not set'"/>
+                    <a class="btn btn-primary btn-sm ms-4" th:href="@{/board/{prName}/create/(prName=${currentProject.name})}">
+                        <i class="bi bi-plus"></i> Add card
+                    </a>
                     <a href="/board/filters" class="btn btn-primary btn-sm px-3 ms-4"
                     ><i class="bi bi-filter"></i>Filters</a
                     >
                     <a class="btn btn-primary btn-sm px-3 ms-4"
                        th:href="@{/releases(projectName=${currentProject.name})}"
-                    ><i class="bi bi-releases"></i>Releases</a
+                    >Releases</a
                     >
                     <div class="ms-4 text-primary" th:text="${currentRelease.name != null} ? 'Current release: ' + ${currentRelease.name} : 'No releases'" />
 
@@ -88,9 +91,6 @@
                     <div class="d-flex flex-column col-4">
                         <h4>Backlog</h4>
                         <div class="rounded-3 bg-info p-3 flex-grow-1">
-                            <a class="btn btn-primary btn-sm mt-2 mb-2" th:href="@{/board/{prName}/create/(prName=${currentProject.name})}">
-                                <i class="bi bi-plus"></i> Add card
-                            </a>
                             <th:block th:each="backlogTask : ${listBacklogTasks}">
                                 <div class="rounded-3 mb-2 bg-white">
                                     <div
@@ -127,8 +127,8 @@
                                             class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom"
                                     >
                                         <h6 class="text-truncate mb-0" th:text="${inProgressTask.name}"/>
-                                        <a th:href="@{/board/{prName}/task/{taskId}(taskId=${inProgressTask.id},prName=${currentProject.name})}" class="p-1 pt-0 ms-2"
-
+                                        <a th:href="@{/board/{prName}/task/{taskId}(prName=${currentProject.name},
+                                        taskId=${inProgressTask.id},)}" class="p-1 pt-0 ms-2"
                                         ><i class="bi bi-pencil-fill"></i
                                         ></a>
                                     </div>
