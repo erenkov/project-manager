@@ -17,5 +17,5 @@ public interface ReleaseRepository extends JpaRepository<ReleaseEntity, UUID> {
     @Query("SELECT r FROM ReleaseEntity r WHERE r.projectId.id = :projectId AND (CURRENT_DATE BETWEEN r.startDate AND r.finishDate)")
     Optional<ReleaseEntity> getCurrentRelease(UUID projectId);
 
-    Optional<List<ReleaseEntity>> findAllByProjectId(ProjectEntity projectEntity);
+    Optional<List<ReleaseEntity>> findAllByProjectIdOrderByStartDateDesc(ProjectEntity projectEntity);
 }

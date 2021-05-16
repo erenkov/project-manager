@@ -30,7 +30,7 @@
                 <h1 class="mb-5">Edit release page</h1>
                 <div class="shadow-sm border rounded-3">
                     <div class="p-4 border-bottom">
-                        <h4 class="mb-0">Edit project</h4>
+                        <h4 class="mb-0">Edit release</h4>
                     </div>
                     <form th:action="@{/releases/edit/{releaseId}(releaseId=${release.id})}" method="post" id="editReleaseForm" class="p-4"
                           th:object="${release}">
@@ -41,12 +41,7 @@
                                    readonly/>
                         </div>
                         <div class="mb-3">
-                            <label for="inputProject" class="form-label">Project</label>
-                            <select class="form-select" id="inputProject" name="projectName">
-                                <th:block th:each="projectNameItem : ${projectNameList}">
-                                    <option th:text="${projectNameItem}" th:selected="${projectNameItem == release.projectName}"></option>
-                                </th:block>
-                            </select>
+                            <input class="form-control" th:field="${release.projectName}" type="hidden"/>
                         </div>
                         <div class="row mb-3">
                             <div class="col-6">
@@ -78,7 +73,7 @@
                             <button type="submit" class="btn btn-primary me-3 px-4">
                                 Update release
                             </button>
-                            <button type="reset" class="btn btn-secondary px-4">
+                            <button class="btn btn-secondary px-4" onclick="history.back();" type="button">
                                 Cancel
                             </button>
                         </div>

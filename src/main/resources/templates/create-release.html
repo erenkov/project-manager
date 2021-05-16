@@ -38,12 +38,7 @@
                   <input type="text" class="form-control" id="inputName" name="name" />
                 </div>
                 <div class="mb-3">
-                  <label for="inputProject" class="form-label">Project</label>
-                  <select class="form-select" id="inputProject" name="projectName">
-                    <th:block th:each="projectNameItem : ${projectNameList}">
-                      <option th:text="${projectNameItem}"></option>
-                    </th:block>
-                  </select>
+                  <input class="form-control" th:field="*{projectName}" type="hidden"/>
                 </div>
                 <div class="row mb-3">
                   <div class="col-6">
@@ -73,7 +68,7 @@
                   <button type="submit" class="btn btn-primary me-3 px-4">
                     Create release
                   </button>
-                  <button type="reset" class="btn btn-secondary px-4">
+                  <button class="btn btn-secondary px-4" onclick="history.back();" type="button">
                     Cancel
                   </button>
                 </div>
