@@ -14,7 +14,7 @@ public interface TaskService {
 
     TaskResponseDto getById(UUID id);
 
-    void addTask(TaskRequestDto taskRequestDto);
+    TaskResponseDto addTask(TaskRequestDto taskRequestDto);
 
     TaskEntity addTaskEntity(TaskEntity taskEntity);
 
@@ -33,6 +33,4 @@ public interface TaskService {
     List<String> getListOfTaskTypes();
 
     List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal http);
-
-    TaskEntity getTaskById(UUID id);
 }

@@ -124,7 +124,6 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseRepository.save(releaseEntity);
     }
 
-    //данный метод думаю не акутален после того как мы ввели новое поле project_id
     public String getReleaseString(TaskEntity taskEntity) {
         ReleaseEntity release = null;
         try {
@@ -172,7 +171,9 @@ public class ReleaseServiceImpl implements ReleaseService {
                 .collect(Collectors.toList());
     }
 
-    private ReleaseEntity getEntityById(UUID id) {
+    @Transactional
+    @Override
+    public ReleaseEntity getEntityById(UUID id) {
         return releaseRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Release with ID = '%s' not found", id)));
     }

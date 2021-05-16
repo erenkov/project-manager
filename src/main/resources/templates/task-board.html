@@ -88,6 +88,9 @@
                     <div class="d-flex flex-column col-4">
                         <h4>Backlog</h4>
                         <div class="rounded-3 bg-info p-3 flex-grow-1">
+                            <a class="btn btn-primary btn-sm mt-2 mb-2" th:href="@{/board/{prName}/create/(prName=${currentProject.name})}">
+                                <i class="bi bi-plus"></i> Add card
+                            </a>
                             <th:block th:each="backlogTask : ${listBacklogTasks}">
                                 <div class="rounded-3 mb-2 bg-white">
                                     <div
@@ -111,9 +114,6 @@
                                     </div>
                                 </div>
                             </th:block>
-                            <a class="btn btn-primary btn-sm mt-2" th:href="@{/board/{prName}/create (prName=${currentProject.name})}">
-                                <i class="bi bi-plus"></i> Add card
-                            </a>
                         </div>
                     </div>
                     <div class="d-flex flex-column col-4">
@@ -145,9 +145,6 @@
                                     </div>
                                 </div>
                             </th:block>
-                            <a class="btn btn-primary btn-sm mt-2" th:href="@{/board/{prName}/create (prName=${currentProject.name})}">
-                                <i class="bi bi-plus"></i> Add card
-                            </a>
                         </div>
                     </div>
                     <div class="d-flex flex-column col-4">
@@ -176,9 +173,6 @@
                                     </div>
                                 </div>
                             </th:block>
-                            <a class="btn btn-primary btn-sm mt-2" th:href="@{/board/{prName}/create (prName=${currentProject.name})}">
-                                <i class="bi bi-plus"></i> Add card
-                            </a>
                         </div>
                     </div>
                 </div>

@@ -73,9 +73,7 @@ public class TaskBoardController {
 
     @Operation(summary = "Получить страницу создания новой задачи")
     @GetMapping("/create")
-    public String getNewTaskPage(@PathVariable("projectName") String projectName,
-                                 Model model,
-                                 Principal principal) {
+    public String getNewTaskPage(@PathVariable("projectName") String projectName, Model model, Principal principal) {
         model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
@@ -84,6 +82,7 @@ public class TaskBoardController {
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
+        model.addAttribute("projectName", projectName); //todo *****************
         return "create-task";
     }
 
@@ -91,9 +90,9 @@ public class TaskBoardController {
     @PostMapping("/create")
     public ModelAndView saveNewTask(@ModelAttribute("task") TaskRequestDto newTask,
                                     @PathVariable("projectName") String projectName) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/board");
+        ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
 //        modelAndView.addObject("newTask",taskService.addTask(newTask));
-        newTask.setProjectName(projectName);
+        newTask.setProjectName(projectName); //todo ************************
         taskService.addTask(newTask);
         modelAndView.setStatus(HttpStatus.CREATED);
         return modelAndView;

@@ -149,4 +149,11 @@ public class UserServiceImpl implements UserService {
     }
 
             //todo фильтрация списка юзеров по роли и выводить, как вариант, только роль - ROLE_USER
+    @Transactional
+    @Override
+    public UserEntity findByUserNumber(String userNumber) {
+        return userRepository.findByUserNumber(Integer.parseInt(userNumber)).orElseThrow(
+                () -> new NotFoundException(String.format("User with number = '%s' not found", userNumber))
+        );
+    }
 }
