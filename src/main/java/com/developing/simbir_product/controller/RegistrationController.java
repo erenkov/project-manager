@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,9 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
+
     Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+
     @Autowired
     private UserService userService;
 
@@ -31,35 +32,39 @@ public class RegistrationController {
 
     @Operation(summary = "Получить страницу регистрации")
     @GetMapping
-    public String getRegistrationPage(Model model) {
-        model.addAttribute("newUser", new UserRequestDto());
-        model.addAttribute("teamNames", teamService.getListOfAllTeamNames());
-        model.addAttribute("roles", userService.getListOfAllRoles());
-        return "registration";
+    public ModelAndView getRegistrationPage() {
+        return getRegistrationModel(new UserRequestDto());
     }
 
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping
     public ModelAndView registerUser(@Valid @ModelAttribute("newUser") UserRequestDto newUser) {
-        ModelAndView modelAndView = new ModelAndView();
-        if (!userService.addUser(newUser)) {
-            modelAndView.setViewName("registration");
+        ModelAndView modelAndView;
+        if (userService.addUser(newUser)) {
+            modelAndView = new ModelAndView("redirect:/login", HttpStatus.CREATED);
+            logger.debug("Created the user with credentials: {}", newUser);
+        } else {
+            modelAndView = getRegistrationModel(newUser);
             modelAndView.setStatus(HttpStatus.CONFLICT);
             modelAndView.addObject("userError", "User exists!");
-            logger.debug("User with email {} exists", newUser.getEmail());
-        } else {
-            modelAndView.setViewName("redirect:/login");
-            modelAndView.setStatus(HttpStatus.CREATED);
-            logger.debug("Created the user with credentials: {}", newUser.getEmail(), newUser.getFirstName(), newUser.getLastName(),
-                    newUser.getRole());
+            logger.debug("User with name {} exists", newUser.getFirstName());
         }
         return modelAndView;
+    }
 
+    private ModelAndView getRegistrationModel(UserRequestDto userRequestDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("registration");
+        modelAndView.addObject("newUser", userRequestDto);
+        modelAndView.addObject("teamNames", teamService.getListOfAllTeamNames());
+        modelAndView.addObject("roles", userService.getListOfAllRoles());
+        return modelAndView;
     }
 
     @ExceptionHandler(BindException.class)
     private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView("registration", HttpStatus.BAD_REQUEST);
+        ModelAndView modelAndView = getRegistrationModel((UserRequestDto) bindingResult.getModel().get("newUser"));
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
         modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());
         return modelAndView;

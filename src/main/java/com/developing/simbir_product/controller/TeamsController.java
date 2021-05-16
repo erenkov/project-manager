@@ -4,8 +4,6 @@ import com.developing.simbir_product.controller.Dto.TeamRequestDto;
 import com.developing.simbir_product.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,49 +14,67 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
-
 @Tag(name = "Управление командами")
 @RequestMapping(value = "/teams")
 @Controller
 public class TeamsController {
+
     @Autowired
     private TeamService teamService;
 
-
-    @Operation(summary = "Получить страницу c информацией о команде")
+    @Operation(summary = "Получить страницу c информацией о командах")
     @GetMapping
-    public ModelAndView getTeamPage(@RequestParam String teamName) {
-        ModelAndView modelAndView = new ModelAndView("teamViewName", HttpStatus.OK);
-        modelAndView.addObject("team", teamService.findByName(teamName));
+    public ModelAndView getTeamsPage() {
+        ModelAndView modelAndView = new ModelAndView("teams", HttpStatus.OK);
+        modelAndView.addObject("teamNames", teamService.getListOfAllTeamNames());
+        return modelAndView;
+    }
+
+    @Operation(summary = "Получить страницу создания новой команды")
+    @GetMapping("/create")
+    public ModelAndView getNewTeamPage() {
+        ModelAndView modelAndView = new ModelAndView("create-team", HttpStatus.OK);
+        modelAndView.addObject("newTeam", new TeamRequestDto());
         return modelAndView;
     }
 
     @Operation(summary = "Создать команду")
-    @PostMapping
+    @PostMapping("/create")
     public ModelAndView createTeam(@Valid @ModelAttribute("newTeam") TeamRequestDto teamRequestDto) {
         ModelAndView modelAndView = new ModelAndView();
-        if (!teamService.addTeamDto(teamRequestDto)) {
-            modelAndView.setViewName("teamViewName");
-            modelAndView.setStatus(HttpStatus.CONFLICT);
-            modelAndView.addObject("teamError", "Team already exist");
-        } else {
+        if (teamService.addTeamDto(teamRequestDto)) {
             modelAndView.setViewName("redirect:/teams");
             modelAndView.setStatus(HttpStatus.CREATED);
+        } else {
+            modelAndView.setViewName("create-team");
+            modelAndView.setStatus(HttpStatus.CONFLICT);
+            modelAndView.addObject("teamError", "Team already exist");
         }
         return modelAndView;
     }
 
+    @Operation(summary = "Получить страницу редактирования команды")
+    @GetMapping("/edit/{teamName}")
+    public ModelAndView getEditTeamPage(@PathVariable("teamName") String teamName) {
+        ModelAndView modelAndView = new ModelAndView("edit-team", HttpStatus.OK);
+        modelAndView.addObject("team", teamService.findDtoByName(teamName));
+        return modelAndView;
+    }
+
     @Operation(summary = "Редактировать информацию о команде")
-    @PatchMapping
-    public ModelAndView editTeam(@Valid @ModelAttribute("team") TeamRequestDto teamRequestDto) {
+    @PostMapping("/edit/{teamName}")
+    public ModelAndView editTeam(@PathVariable("teamName") String teamName,
+                                 @Valid @ModelAttribute("team") TeamRequestDto teamRequestDto) {
+        teamRequestDto.setName(teamName);
+
         ModelAndView modelAndView = new ModelAndView();
-        if (!teamService.editTeamDto(teamRequestDto)) {
-            modelAndView.setViewName("teamViewName");
-            modelAndView.setStatus(HttpStatus.CONFLICT);
-            modelAndView.addObject("teamError", "Failed to save new values");
-        } else {
+        if (teamService.editTeam(teamRequestDto)) {
             modelAndView.setViewName("redirect:/teams");
             modelAndView.setStatus(HttpStatus.OK);
+        } else {
+            modelAndView.setViewName("edit-team");
+            modelAndView.setStatus(HttpStatus.CONFLICT);
+            modelAndView.addObject("teamError", "Failed to save new values");
         }
         return modelAndView;
     }
@@ -68,6 +84,7 @@ public class TeamsController {
     //      в ParentErrorController
     @ExceptionHandler(BindException.class)
     private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
+        //todo имя view
         ModelAndView modelAndView = new ModelAndView("releaseViewName", HttpStatus.BAD_REQUEST);
         modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());

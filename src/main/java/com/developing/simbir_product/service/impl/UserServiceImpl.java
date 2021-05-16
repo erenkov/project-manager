@@ -2,7 +2,6 @@ package com.developing.simbir_product.service.impl;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
 import com.developing.simbir_product.controller.Dto.UserResponseDto;
-import com.developing.simbir_product.controller.RegistrationController;
 import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
@@ -57,16 +56,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-
-        Optional<UserEntity> userFromDb = userRepository.findByLogin(userRequestDto.getEmail());
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
+        Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
 
         if (userFromDb.isPresent()) {
             return false;
         }
 
-        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
+        userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(userEntity);
+        logger.trace("{} has been created", userRequestDto.getEmail());
         return true;
     }
 
@@ -141,5 +140,20 @@ public class UserServiceImpl implements UserService {
                 () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
 
         return userEntity;
+    }
+
+    @Transactional
+    @Override
+    public List<UserResponseDto> getListOfAllUsers() {
+        return userRepository.findAll().stream().map(userMapper::userEntityToDto).collect(Collectors.toList());
+    }
+
+            //todo фильтрация списка юзеров по роли и выводить, как вариант, только роль - ROLE_USER
+    @Transactional
+    @Override
+    public UserEntity findByUserNumber(String userNumber) {
+        return userRepository.findByUserNumber(Integer.parseInt(userNumber)).orElseThrow(
+                () -> new NotFoundException(String.format("User with number = '%s' not found", userNumber))
+        );
     }
 }

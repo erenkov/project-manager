@@ -11,9 +11,9 @@ import javax.validation.constraints.Size;
 public class UserRequestDto {
 
     @Schema(description = "E-mail")
-    @Email(regexp = "[-a-z0-9!#$%&'*+/=?^_`{|}~]+" +
-            "(?:\\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*" +
-            "@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|" +
+    @Email(regexp = "[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+" +
+            "(?:\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*" +
+            "@(?:[a-zA-Z0-9]([-a-zA-Z0-9]{0,61}[a-zA-Z0-9])?\\.)*(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|" +
             "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])")
     @NotNull
     @Size(min = 3, max = 320)

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -29,94 +29,89 @@
                     <a href="/profile">Profile</a>
                 </div>
             </div>
-            <form>
+            <form th:action="@{/board/{prName}/create/(prName=${projectName})}" method="post" id="newTaskForm" class="p-4" th:object="${newTask}">
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label">Title</label>
                     <input
                             type="text"
                             class="form-control"
                             id="inputTitle"
-                            value="Title task"
+                            placeholder="Title task"
+                            name="name"
+                            required
                     />
                 </div>
                 <div class="row">
                     <div class="col-6">
                         <div class="mb-3 row">
-                            <label for="inputStatus" class="col-3 col-form-label"
-                            >Task status</label
-                            >
+                            <label for="inputStatus" class="col-3 col-form-label">Task status</label>
                             <div class="col-9">
-                                <select class="form-select" id="inputStatus">
-                                    <option value="to_do">To do</option>
-                                    <option value="in_progress">In progress</option>
-                                    <option value="done">Done</option>
+                                <select class="form-select" id="inputStatus" name="status">
+                                    <th:block th:each="statusItem : ${taskStatus}">
+                                        <option th:text="${statusItem}"
+                                                th:selected="${statusItem == 'BACKLOG'}"></option>
+                                    </th:block>
                                 </select>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputPriority" class="col-3 col-form-label"
-                            >Priority</label
-                            >
+                            <label for="inputType" class="col-3 col-form-label">Task type</label>
                             <div class="col-9">
-                                <select class="form-select" id="inputPriority">
-                                    <option value="low">Low</option>
-                                    <option value="standart">Standart</option>
-                                    <option value="high">High</option>
+                                <select class="form-select" id="inputType" name="type">
+                                    <th:block th:each="typeItem : ${taskType}">
+                                        <option th:text="${typeItem}"
+                                                th:selected="${typeItem == 'FEATURE'}"></option>
+                                    </th:block>
                                 </select>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputEstimated" class="col-3 col-form-label"
-                            >Estimated Costs</label
-                            >
+                            <label for="inputPriority" class="col-3 col-form-label">Priority</label>
+                            <div class="col-9">
+                                <select type="text" class="form-select" id="inputPriority" name="priority">
+                                    <option th:each="i : ${#numbers.sequence(1, 5)}"
+                                            th:value="${i}"
+                                            th:text="${i}"
+                                            th:selected="${i == 3}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputEstimated" class="col-3 col-form-label">Estimated Costs</label>
                             <div class="col-9">
                                 <input
                                         type="text"
                                         class="form-control"
                                         id="inputEstimated"
-                                        value="4"
+                                        name="estCosts"
                                 />
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputActual" class="col-3 col-form-label"
-                            >Actual Costs</label
-                            >
+                            <label for="inputActual" class="col-3 col-form-label">Actual Costs</label>
                             <div class="col-9">
                                 <input
                                         type="text"
                                         class="form-control"
                                         id="inputActual"
-                                        value="5"
+                                        name="actualCosts"
                                 />
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputRelease" class="col-3 col-form-label"
-                            >Release</label
-                            >
+                            <label for="inputRelease" class="col-3 col-form-label">Release</label>
                             <div class="col-9">
-                                <select class="form-select" id="inputRelease">
-                                    <option value="1">
-                                        Release #1 (02.02.2021 - 16.02.2021)
-                                    </option>
-                                    <option value="2">
-                                        Release #2 (17.02.2021 - 02.03.2021)
-                                    </option>
+                                <select class="form-select" id="inputRelease" name="release">
+                                    <th:block th:each="releaseItem : ${releaseList}">
+                                        <option th:text="${releaseItem.name} + ' ' + '('
+                                                    + ${#temporals.format(releaseItem.startDate, 'dd.MM.yyyy')}
+                                                    + ' - ' + ${#temporals.format(releaseItem.finishDate, 'dd.MM.yyyy')+')'}"
+                                                th:value="${releaseItem.id}"
+                                                th:selected="${releaseItem.name == currentRelease.name}"
+                                        ></option>
+                                    </th:block>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="inputTeam" class="col-3 col-form-label"
-                            >Team</label
-                            >
-                            <div class="col-9">
-                                <input
-                                        type="text"
-                                        class="form-control"
-                                        id="inputTeam"
-                                        value="Team #1"
-                                />
                             </div>
                         </div>
                     </div>
@@ -127,10 +122,10 @@
                             >
                             <div class="col-9">
                                 <input
-                                        type="date"
+                                        type="datetime-local"
                                         class="form-control"
                                         id="inputStartDate"
-                                        value="2021-02-07"
+                                        name="createDate"
                                 />
                             </div>
                         </div>
@@ -140,10 +135,10 @@
                             >
                             <div class="col-9">
                                 <input
-                                        type="date"
+                                        type="datetime-local"
                                         class="form-control"
                                         id="inputEstimatedDate"
-                                        value="2021-02-20"
+                                        name="dueDate"
                                 />
                             </div>
                         </div>
@@ -153,9 +148,10 @@
                             >
                             <div class="col-9">
                                 <input
-                                        type="date"
+                                        type="datetime-local"
                                         class="form-control"
                                         id="inputActualDate"
+                                        readonly
                                 />
                             </div>
                         </div>
@@ -164,29 +160,31 @@
                             >Assignee</label
                             >
                             <div class="col-9">
-                                <select class="form-select" id="inputAssignee">
-                                    <option value="ivanov_i_i">
-                                        Иванов Иван Иванович
-                                    </option>
-                                    <option value="petrov_p_p">
-                                        Петров Петр Петрович
-                                    </option>
+                                <select class="form-select" id="inputAssignee" name="assigneeName">
+                                    <th:block th:each="userItem : ${listUsers}">
+                                        <option th:text="${userItem.firstName} + ' '
+                                                    + ${userItem.lastName} + ' ' + ${userItem.userNumber}"
+                                                th:selected="${userItem.firstName == currentUser.firstName
+                                                and userItem.lastName == currentUser.lastName
+                                                and userItem.userNumber == currentUser.userNumber}">
+                                        </option>
+                                    </th:block>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="inputDescription" class="form-label">Task description</label>
-                        <textarea class="form-control" id="inputDescription" rows="3">Description...</textarea>
+                        <textarea class="form-control" id="inputDescription" name="description" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="inputComments" class="form-label">Comments</label>
-                        <textarea class="form-control" id="inputComments" rows="3">Comments...</textarea>
+                        <textarea class="form-control" id="inputComments" name="comments" rows="3"></textarea>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button type="button" class="btn btn-primary">Save and close</button>
-                            <button type="button" class="btn btn-secondary ms-2">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save and close</button>
+                            <button type="reset" class="btn btn-secondary ms-2">Cancel</button>
                         </div>
                         <button type="button" class="btn btn-danger">Delete task</button>
                     </div>

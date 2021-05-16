@@ -10,7 +10,7 @@
       integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
       crossorigin="anonymous"
     />
-    <title>Create project</title>
+    <title>Create release</title>
     <style>
       html {
         font-size: 15px;
@@ -27,26 +27,18 @@
               <span>&nbsp;|&nbsp;</span>
               <a href="/profile">Profile</a>
             </div>
-            <h1 class="mb-5">New project page</h1>
+            <h1 class="mb-5">New release page</h1>
             <div class="shadow-sm border rounded-3">
               <div class="p-4 border-bottom">
-                <h4 class="mb-0">Create new project</h4>
+                <h4 class="mb-0">Create new release</h4>
               </div>
-              <form action="/projects/create" method="post" id="newProjectForm" class="p-4" th:object="${newPoject}">
+              <form action="/releases/create" method="post" id="newReleaseForm" class="p-4" th:object="${newRelease}">
                 <div class="mb-3">
                   <label for="inputName" class="form-label">Name</label>
                   <input type="text" class="form-control" id="inputName" name="name" />
                 </div>
                 <div class="mb-3">
-                  <label for="inputDescription" class="form-label"
-                    >Description</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputDescription"
-                    name="description"
-                  />
+                  <input class="form-control" th:field="*{projectName}" type="hidden"/>
                 </div>
                 <div class="row mb-3">
                   <div class="col-6">
@@ -68,34 +60,15 @@
                       type="datetime-local"
                       class="form-control"
                       id="inputFinishDate"
-                      name="estFinishDate"
+                      name="finishDate"
                     />
                   </div>
                 </div>
-                <div class="mb-3">
-                  <label for="inputStatus" class="form-label">Status</label>
-                    <select class="form-select" id="inputStatus" name="status" disabled>
-                      <th:block th:each="statusItem : ${projectStatusList}">
-                        <option th:text="${statusItem}"  th:selected="${statusItem == 'BACKLOG'}"></option>
-                      </th:block>
-                    </select>
-                </div>
-                <div class="mb-3">
-                  <label for="inputTeamName" class="col-3 col-form-label"
-                    >Team name</label
-                  >
-                  <select class="form-select" id="inputTeamName" name="teamName">
-                    <option selected value="">Select team</option>
-                    <th:block th:each="team : ${teamList}">
-                      <option th:selected="${team == newProject.teamName}" th:text="${team}"></option>
-                    </th:block>
-                  </select>
-                </div>
                 <div class="d-block text-center">
                   <button type="submit" class="btn btn-primary me-3 px-4">
-                    Create project
+                    Create release
                   </button>
-                  <button type="reset" class="btn btn-secondary px-4">
+                  <button class="btn btn-secondary px-4" onclick="history.back();" type="button">
                     Cancel
                   </button>
                 </div>

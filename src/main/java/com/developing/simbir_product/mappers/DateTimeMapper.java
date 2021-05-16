@@ -7,7 +7,6 @@ import org.mapstruct.NullValueCheckStrategy;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 
@@ -18,11 +17,11 @@ public abstract class DateTimeMapper {
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
 
-    public OffsetDateTime localToOffsetDateTime(LocalDateTime localDateTime) { // TODO: Получать ZoneOffset клиента
+    public OffsetDateTime localToOffsetDateTime(LocalDateTime localDateTime) {
         if (localDateTime == null) {
             return null;
         }
-        return OffsetDateTime.of(localDateTime, ZoneOffset.UTC);
+        return OffsetDateTime.of(localDateTime, OffsetDateTime.now().getOffset());
     }
 
     public LocalDateTime offsetToLocalDateTime(OffsetDateTime offsetDateTime) {
