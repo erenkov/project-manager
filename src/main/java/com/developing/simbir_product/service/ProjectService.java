@@ -11,7 +11,7 @@ public interface ProjectService {
 
     boolean addProject(ProjectRequestDto projectRequestDto);
 
-    ProjectResponseDto editProject(ProjectRequestDto projectRequestDto);
+    boolean editProject(ProjectRequestDto projectRequestDto);
 
     void deleteById(UUID id);
 
@@ -27,4 +27,4 @@ public interface ProjectService {
 
     List<String> getListOfAllProjectNamesByTeam(String teamName);
 
-    }
+}

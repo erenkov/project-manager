@@ -25,7 +25,7 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     @Transactional
     @Override
     public UserTaskHistoryEntity addUserTaskHistory(UserTaskHistoryEntity userTaskHistoryEntity) {
-        return userTaskHistoryRepository.save(userTaskHistoryEntity);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return userTaskHistoryRepository.save(userTaskHistoryEntity);
     }
 
     @Transactional

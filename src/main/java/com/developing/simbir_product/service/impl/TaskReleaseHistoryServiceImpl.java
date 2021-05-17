@@ -21,7 +21,7 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     @Transactional
     @Override
     public TaskReleaseHistoryEntity addTaskRelease(TaskReleaseHistoryEntity taskReleaseHistoryEntity) {
-        return taskReleaseHistoryRepository.save(taskReleaseHistoryEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return taskReleaseHistoryRepository.save(taskReleaseHistoryEntity);
     }
 
     @Transactional

@@ -39,12 +39,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public boolean addProject(ProjectRequestDto projectRequestDto) {
+        if (isProjectExist(projectRequestDto.getName())) {
+            return false;
+        }
+
         projectRequestDto.setStatus(ProjectStatus.BACKLOG.toString());
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
         projectRepository.save(projectEntity);
 
         logger.trace("{} project has been created", projectRequestDto.getName());
-        return true; //todo Сделать проверку - есть ли в бд с таким именем проект тогда false
+        return true;
     }
 
     @Transactional
@@ -55,15 +59,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public ProjectResponseDto editProject(ProjectRequestDto projectRequestDto) {
+    public boolean editProject(ProjectRequestDto projectRequestDto) {
+        if (!isProjectExist(projectRequestDto.getName())) {
+            return false;
+        }
 
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
         ProjectEntity tempProjectFromDB = getProjectEntity(projectEntity.getName());
         projectEntity.setId(tempProjectFromDB.getId());
         projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
         logger.trace(projectRequestDto.getName() + " has been edited");
-        //todo возвращать boolean? Сделать проверку - есть ли в бд проект с таким именем, если нет тогда false
-        return projectMapper.projectEntityToDto(projectRepository.save(projectEntity));
+        return true;
     }
 
     @Transactional
@@ -107,5 +113,14 @@ public class ProjectServiceImpl implements ProjectService {
                 .stream()
                 .map(ProjectEntity::getName)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isProjectExist(String name) {
+        try {
+            findByName(name);
+        } catch (NotFoundException e) {
+            return false;
+        }
+        return true;
     }
 }
