@@ -2,7 +2,10 @@ package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.entity.TaskStatus;
-import com.developing.simbir_product.service.*;
+import com.developing.simbir_product.service.ProjectService;
+import com.developing.simbir_product.service.ReleaseService;
+import com.developing.simbir_product.service.TaskService;
+import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,19 +55,10 @@ public class TaskBoardController {
                               @PathVariable("id") String id,
                               Model model,
                               Principal principal) {
-        //if (id == -1) => создать пустую задачу и отобразить на редактирование
-        // Получить страницу с запрашиваемой задачей
-//        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
-//        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(taskService.getTaskById(UUID.fromString(id)).getProjectId()));
-//        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
-//        return "task-details";
-
-//        model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("task", taskService.getById(UUID.fromString(id)));
-        model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
         model.addAttribute("taskTypeList", taskService.getListOfTaskTypes());
-        model.addAttribute("listUsers", userService.getListOfAllUsers());
+        model.addAttribute("listUsers", userService.getListOfUsersByTeamName(projectService.findByName(projectName).getTeamName()));
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
@@ -75,10 +69,9 @@ public class TaskBoardController {
     @GetMapping("/create")
     public String getNewTaskPage(@PathVariable("projectName") String projectName, Model model, Principal principal) {
         model.addAttribute("newTask", new TaskRequestDto());
-        model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
         model.addAttribute("taskType", taskService.getListOfTaskTypes());
-        model.addAttribute("listUsers", userService.getListOfAllUsers());
+        model.addAttribute("listUsers", userService.getListOfUsersByTeamName(projectService.findByName(projectName).getTeamName()));
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
@@ -91,7 +84,6 @@ public class TaskBoardController {
     public ModelAndView saveNewTask(@ModelAttribute("newTask") TaskRequestDto newTask,
                                     @PathVariable("projectName") String projectName) {
         ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
-//        modelAndView.addObject("newTask",taskService.addTask(newTask));
         newTask.setProjectName(projectName);
         taskService.addTask(newTask);
         modelAndView.setStatus(HttpStatus.CREATED);

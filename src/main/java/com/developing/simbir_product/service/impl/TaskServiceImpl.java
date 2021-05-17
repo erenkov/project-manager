@@ -13,16 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.Arrays;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 @Service
 public class TaskServiceImpl implements TaskService {
+
     Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     @Autowired
     private TaskRepository taskRepository;
@@ -45,7 +44,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskMapper taskMapper;
 
-
     @Transactional
     @Override
     public TaskResponseDto getById(UUID id) {
@@ -55,11 +53,9 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.taskEntityToDto(taskEntity);
     }
 
-
     @Transactional
     @Override
     public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
-
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
         UserTaskHistoryEntity userTaskHistoryEntity = new UserTaskHistoryEntity();
         userTaskHistoryEntity.setUserId(userService.findByUserNumber(taskRequestDto.getAssigneeName().split(" ")[2]));
@@ -70,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
         taskReleaseHistoryEntity.setReleaseId(releaseService.getEntityById(UUID.fromString(taskRequestDto.getRelease())));
         taskReleaseHistoryService.addTaskRelease(taskReleaseHistoryEntity);
         logger.trace("{} task has been created", taskRequestDto.getName());
-        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return taskMapper.taskEntityToDto(taskEntity);
     }
 
     @Override
@@ -78,36 +74,18 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(taskEntity);
     }
 
-
     @Transactional
     @Override
     public TaskResponseDto editTask(TaskRequestDto taskRequestDto) {
-
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
         logger.trace("{} has been edited", taskRequestDto.getName());
-        return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return taskMapper.taskEntityToDto(taskEntity);
     }
-
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        taskRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
-
-    @Transactional
-    @Override
-    public TaskResponseDto findByName(String name) {
-
-        TaskEntity taskEntity = taskRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Task with name = '%s' not found", name)));
-
-        TaskResponseDto taskResponseDto = new TaskResponseDto();
-
-        //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!
-
-        return taskResponseDto;
+        taskRepository.deleteById(id);
     }
 
     public List<TaskEntity> getTasksByProjectsName(String projectName) {
@@ -130,26 +108,10 @@ public class TaskServiceImpl implements TaskService {
         return Arrays.stream(TaskType.values()).map(TaskType::toString).collect(Collectors.toList());
     }
 
+    // TODO: реализация фильтров задач
     @Transactional(readOnly = true)
     @Override
     public List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal principal) {
-        TaskEntity example = taskMapper.taskDtoToEntity(taskRequestDto);
-        UserEntity userEntity = userService.findUserEntity(principal.getName());
-        List<TaskEntity> usersTasks = userTaskHistoryService.getTasksByUser(userEntity);
-        return usersTasks.stream()
-                .filter(task -> example.getName() == null || task.getName().equals(example.getName()))
-                .filter(task -> example.getTaskType() == null || task.getTaskType().equals(example.getTaskType()))
-                .filter(task -> example.getTaskStatus() == null || task.getTaskStatus().equals(example.getTaskStatus()))
-                .filter(task -> example.getDueDate() == null || task.getDueDate().equals(example.getDueDate()))
-                .filter(task -> example.getFinishDate() == null || task.getFinishDate().equals(example.getFinishDate()))
-                .filter(task -> example.getComments() == null || task.getComments().equals(example.getComments()))
-                .filter(task -> example.getCreateDate() == null || task.getCreateDate().equals(example.getCreateDate()))
-                .filter(task -> example.getProjectId() == null || task.getProjectId().equals(example.getProjectId()))
-                .filter(task -> example.getActualCosts() == 0 || task.getActualCosts() == example.getActualCosts())
-                .filter(task -> example.getEstCosts() == 0 || task.getEstCosts() == example.getEstCosts())
-                .filter(task -> example.getPriority() == 0 || task.getPriority() == example.getPriority())
-                .map(taskMapper::taskEntityToDto)
-                .collect(Collectors.toList());
+        return null;
     }
-
 }

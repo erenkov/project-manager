@@ -22,38 +22,16 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     @Autowired
     private UserTaskHistoryRepository userTaskHistoryRepository;
 
-//    @Transactional
-//    @Override
-//    public UserTaskHistoryEntity getByTaskIdAndReleaseId(UUID userId, UUID taskId) {
-//        return userTaskHistoryRepository.findByUserIdAndTaskId(userId, taskId).orElseThrow(
-//                () -> new NotFoundException("UserTaskHistory with ID = ' ' not found")
-//        );  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-//    }
-
-    @Transactional
-    @Override
-    public UserTaskHistoryEntity getById(UUID id) {
-        return userTaskHistoryRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("UserTaskHistory with ID = '%s' not found", id)));
-        //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
     @Transactional
     @Override
     public UserTaskHistoryEntity addUserTaskHistory(UserTaskHistoryEntity userTaskHistoryEntity) {
-        return userTaskHistoryRepository.save(userTaskHistoryEntity);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
-    @Transactional
-    @Override
-    public UserTaskHistoryEntity editUserTaskHistory(UserTaskHistoryEntity userTaskHistoryEntity) {
-        return userTaskHistoryRepository.save(userTaskHistoryEntity);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return userTaskHistoryRepository.save(userTaskHistoryEntity);
     }
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        userTaskHistoryRepository.deleteById(id);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        userTaskHistoryRepository.deleteById(id);
     }
 
     @Transactional
@@ -73,11 +51,4 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
                 .map(UserTaskHistoryEntity::getTaskId)
                 .collect(Collectors.toList());
     }
-
-//    @Transactional
-//    @Override
-//    public void deleteByUserIdAndTaskId(UUID userId, UUID taskId) {
-//        userTaskHistoryRepository.deleteByUserIdAndTaskId(userId, taskId);  //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-//    }
-
 }

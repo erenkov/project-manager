@@ -22,8 +22,6 @@ public interface TaskService {
 
     void deleteById(UUID id);
 
-    TaskResponseDto findByName(String name);
-
     List<TaskEntity> getTasksByProjectsName(String projectName);
 
     List<TaskResponseDto> findTasksByStatus(String projectName, TaskStatus taskStatus);

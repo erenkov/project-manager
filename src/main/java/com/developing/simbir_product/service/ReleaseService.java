@@ -19,13 +19,9 @@ public interface ReleaseService {
 
     void deleteById(UUID id);
 
-    ReleaseResponseDto findByName(String name);
-
     ReleaseEntity addReleaseEntity(ReleaseEntity releaseEntity);
 
     String getReleaseString(TaskEntity taskEntity);
-
-    List<ReleaseResponseDto> findAll();
 
     ReleaseResponseDto getCurrentRelease(String projectName);
 

@@ -8,6 +8,7 @@ import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.UserMapper;
 import com.developing.simbir_product.repository.UserRepository;
+import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.slf4j.Logger;
@@ -26,7 +27,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -39,19 +42,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-//    @Transactional
-//    @Override
-//    public UserResponseDto getById(UUID id) {
-//
-//        UserEntity userEntity = userRepository.findById(id).orElseThrow(
-//                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
-//
-//        UserResponseDto userResponseDto = new UserResponseDto();
-//
-//        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//        return userResponseDto;
-//    }
+    @Autowired
+    private TeamService teamService;
 
     @Transactional
     @Override
@@ -59,8 +51,8 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
         Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
 
-        if (userFromDb.isPresent()) {
-            return false;
+        if (userFromDb.isPresent()) { // Если пользователь уже есть в БД то не выполняем
+            return false;             // добавление пользователя
         }
 
         userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
@@ -90,7 +82,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        userRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        userRepository.deleteById(id);
     }
 
     @Transactional
@@ -107,13 +99,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userEntityToDto(userEntity);
     }
 
-    @Transactional
     @Override
-    public UserEntity findUserEntity(String login) {
-        return userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
-    }
-
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = null;
         try {
@@ -124,12 +110,32 @@ public class UserServiceImpl implements UserService {
         return String.format("%s %s %s", assignee.getFirstName(), assignee.getLastName(), assignee.getUserNumber());
     }
 
+    @Transactional
     @Override
     public List<String> getListOfAllRoles() {
         return Arrays.stream(Role.values()).map(Role::toString).collect(Collectors.toList());
     }
 
-       private UserEntity findEntityByEmail(String email) {
+    @Transactional
+    @Override
+    public List<UserResponseDto> getListOfUsersByTeamName(String teamName) {
+
+        return userRepository.findByTeamId(teamService.findByName(teamName))
+                .stream()
+                .map(userMapper::userEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public UserEntity findByUserNumber(String userNumber) {
+        return userRepository.findByUserNumber(Integer.parseInt(userNumber)).orElseThrow(
+                () -> new NotFoundException(String.format("User with number = '%s' not found", userNumber))
+        );
+    }
+
+
+    private UserEntity findEntityByEmail(String email) {
 
         String login = email;   // Т.К. логин и email в нашем случае одно и тоже
                                 // Front знает о email, DB знает о логине
@@ -139,20 +145,5 @@ public class UserServiceImpl implements UserService {
                 () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
 
         return userEntity;
-    }
-
-    @Transactional
-    @Override
-    public List<UserResponseDto> getListOfAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::userEntityToDto).collect(Collectors.toList());
-    }
-
-            //todo фильтрация списка юзеров по роли и выводить, как вариант, только роль - ROLE_USER
-    @Transactional
-    @Override
-    public UserEntity findByUserNumber(String userNumber) {
-        return userRepository.findByUserNumber(Integer.parseInt(userNumber)).orElseThrow(
-                () -> new NotFoundException(String.format("User with number = '%s' not found", userNumber))
-        );
     }
 }

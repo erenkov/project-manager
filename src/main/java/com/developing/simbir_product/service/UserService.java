@@ -11,11 +11,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-//    UserResponseDto getById(UUID id);
-//
     UserResponseDto findByEmail(String email);
-
-    UserEntity findUserEntity(String email);
 
     boolean addUser(UserRequestDto userRequestDto);
 
@@ -29,7 +25,7 @@ public interface UserService {
 
     List<String> getListOfAllRoles();
 
-    List<UserResponseDto> getListOfAllUsers();
-
     UserEntity findByUserNumber(String userNumber);
+
+    List<UserResponseDto> getListOfUsersByTeamName(String teamName);
 }
