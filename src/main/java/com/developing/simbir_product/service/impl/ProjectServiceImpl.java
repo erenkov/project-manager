@@ -38,30 +38,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public ProjectResponseDto getById(UUID id) {
-
-        ProjectEntity projectEntity = projectRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Project with ID = '%s' not found", id)));
-
-        ProjectResponseDto projectResponseDto = new ProjectResponseDto();
-
-        //todo ProjectResponseDto = mapFrom projectEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return projectResponseDto;
-    }
-
-
-    @Transactional
-    @Override
-    public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
-
+    public boolean addProject(ProjectRequestDto projectRequestDto) {
         projectRequestDto.setStatus(ProjectStatus.BACKLOG.toString());
-
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
-
         projectRepository.save(projectEntity);
+
         logger.trace("{} project has been created", projectRequestDto.getName());
-        return new ProjectResponseDto(); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return true; //todo Сделать проверку - есть ли в бд с таким именем проект тогда false
     }
 
     @Transactional
@@ -79,22 +62,19 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setId(tempProjectFromDB.getId());
         projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
         logger.trace(projectRequestDto.getName() + " has been edited");
+        //todo возвращать boolean? Сделать проверку - есть ли в бд проект с таким именем, если нет тогда false
         return projectMapper.projectEntityToDto(projectRepository.save(projectEntity));
     }
-
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
         projectRepository.deleteById(id);
-        //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
-
 
     @Transactional
     @Override
     public ProjectResponseDto findByName(String name) {
-
         return projectMapper.projectEntityToDto(getProjectEntity(name));
     }
 
@@ -103,16 +83,6 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectEntity getProjectEntity(String name) {
         return projectRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
-    }
-
-    @Transactional
-    @Override
-    public List<ProjectResponseDto> findAll() {
-        return projectRepository
-                .findAll()
-                .stream()
-                .map(pE -> projectMapper.projectEntityToDto(pE))
-                .collect(Collectors.toList());
     }
 
     @Transactional

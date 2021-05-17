@@ -39,28 +39,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-//    @Transactional
-//    @Override
-//    public UserResponseDto getById(UUID id) {
-//
-//        UserEntity userEntity = userRepository.findById(id).orElseThrow(
-//                () -> new NotFoundException(String.format("User with ID = '%s' not found", id)));
-//
-//        UserResponseDto userResponseDto = new UserResponseDto();
-//
-//        //todo UserResponseDto = mapFrom userEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//        return userResponseDto;
-//    }
-
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
         UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
         Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
 
-        if (userFromDb.isPresent()) {
-            return false;
+        if (userFromDb.isPresent()) { // Если пользователь уже есть в БД то не выполняем
+            return false;             // добавление пользователя
         }
 
         userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
@@ -90,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        userRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        userRepository.deleteById(id);
     }
 
     @Transactional
@@ -114,6 +100,7 @@ public class UserServiceImpl implements UserService {
                 () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
     }
 
+    @Override
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = null;
         try {
@@ -124,21 +111,10 @@ public class UserServiceImpl implements UserService {
         return String.format("%s %s %s", assignee.getFirstName(), assignee.getLastName(), assignee.getUserNumber());
     }
 
+    @Transactional
     @Override
     public List<String> getListOfAllRoles() {
         return Arrays.stream(Role.values()).map(Role::toString).collect(Collectors.toList());
-    }
-
-       private UserEntity findEntityByEmail(String email) {
-
-        String login = email;   // Т.К. логин и email в нашем случае одно и тоже
-                                // Front знает о email, DB знает о логине
-                                // Service знает что делать с этим
-
-        UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
-
-        return userEntity;
     }
 
     @Transactional
@@ -154,5 +130,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserNumber(Integer.parseInt(userNumber)).orElseThrow(
                 () -> new NotFoundException(String.format("User with number = '%s' not found", userNumber))
         );
+    }
+
+
+    private UserEntity findEntityByEmail(String email) {
+
+        String login = email;   // Т.К. логин и email в нашем случае одно и тоже
+        // Front знает о email, DB знает о логине
+        // Service знает что делать с этим
+
+        UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
+                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+
+        return userEntity;
     }
 }

@@ -30,14 +30,6 @@ public class TeamServiceImpl implements TeamService {
 
     @Transactional
     @Override
-    public TeamEntity getById(UUID id) {
-        return teamRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Team with ID = '%s' not found", id))
-        ); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
-    @Transactional
-    @Override
     public TeamEntity addTeam(TeamEntity teamEntity) {
         return teamRepository.save(teamEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
@@ -46,13 +38,13 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public boolean editTeam(TeamRequestDto teamRequestDto) {
         TeamEntity teamEntity = teamMapper.teamDtoToEntity(teamRequestDto);
-        Optional<TeamEntity> tempProjectFromDB = Optional.ofNullable(findByName(teamEntity.getName()));
+        Optional<TeamEntity> tempTeamFromDB = Optional.ofNullable(findByName(teamEntity.getName()));
 
-        if (tempProjectFromDB.isEmpty()) { // Если при редактировании текущая команда в БД не найдена,
+        if (tempTeamFromDB.isEmpty()) { // Если при редактировании текущая команда в БД не найдена,
             return false;                  // то не выполняем запись в БД
         }
 
-        teamEntity.setId(tempProjectFromDB.get().getId());
+        teamEntity.setId(tempTeamFromDB.get().getId());
         teamRepository.save(teamEntity);
         return true;
     }
@@ -60,7 +52,7 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        teamRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        teamRepository.deleteById(id);
     }
 
     @Transactional
@@ -68,7 +60,6 @@ public class TeamServiceImpl implements TeamService {
     public TeamEntity findByName(String name) {
         return teamRepository.findByName(name).orElseThrow(
                 () -> new NotFoundException(String.format("Team with name = '%s' not found", name)));
-        //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Override
@@ -80,6 +71,7 @@ public class TeamServiceImpl implements TeamService {
         return projectEntity.getTeamId().getName();
     }
 
+    @Override
     public List<String> getListOfAllTeamNames() {
         return teamRepository.findAll().stream().map(TeamEntity::getName).collect(Collectors.toList());
     }
@@ -117,5 +109,4 @@ public class TeamServiceImpl implements TeamService {
                 () -> new NotFoundException(String.format("Team with name = '%s' not found", name)));
         return teamMapper.teamEntityToDto(teamEntity);
     }
-
 }

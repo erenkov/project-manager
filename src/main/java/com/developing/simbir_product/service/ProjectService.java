@@ -9,9 +9,7 @@ import java.util.UUID;
 
 public interface ProjectService {
 
-    ProjectResponseDto getById(UUID id);
-
-    ProjectResponseDto addProject(ProjectRequestDto projectRequestDto);
+    boolean addProject(ProjectRequestDto projectRequestDto);
 
     ProjectResponseDto editProject(ProjectRequestDto projectRequestDto);
 
@@ -22,8 +20,6 @@ public interface ProjectService {
     ProjectEntity getProjectEntity(String name);
 
     ProjectEntity addProjectEntity(ProjectEntity projectEntity);
-
-    List<ProjectResponseDto> findAll();
 
     List<String> getListOfAllProjectNames();
 

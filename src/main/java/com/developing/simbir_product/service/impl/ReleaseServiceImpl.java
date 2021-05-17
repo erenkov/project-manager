@@ -59,12 +59,6 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Transactional
     @Override
     public boolean addRelease(ReleaseRequestDto releaseRequestDto) {
-//        Optional<ReleaseEntity> tempReleaseFromDb = releaseRepository.findById(Converter.getUuidFromString(releaseRequestDto.getId()));
-//
-//        if (tempReleaseFromDb.isPresent()) { // Если при добавлении релиза в БД уже найден релиз с
-//            return false;                    // тем же именем, то не записываем релиз в БД
-//        }
-
         if (countIntersectingReleases(releaseRequestDto) > 0) {
             return false;
         }
@@ -97,25 +91,10 @@ public class ReleaseServiceImpl implements ReleaseService {
         return true;
     }
 
-
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        releaseRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
-
-    @Transactional
-    @Override
-    public ReleaseResponseDto findByName(String name) {
-
-        ReleaseEntity releaseEntity = releaseRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Release with name = '%s' not found", name)));
-
-        ReleaseResponseDto releaseResponseDto = new ReleaseResponseDto();
-        //todo ReleaseResponseDto = mapFrom releaseEntity !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        return releaseResponseDto;
+        releaseRepository.deleteById(id);
     }
 
     @Transactional
@@ -158,17 +137,6 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseRepository.findAllByProjectIdOrderByStartDateDesc(projectEntity).orElseThrow(
                 () -> new NotFoundException(String.format("Project with name = '%s' not found", projectEntity.getName()))
         ).stream().map(releaseMapper::releaseEntityToDto).collect(Collectors.toList());
-    }
-
-
-    @Transactional
-    @Override
-    public List<ReleaseResponseDto> findAll() {
-        return releaseRepository
-                .findAll()
-                .stream()
-                .map(rE -> releaseMapper.releaseEntityToDto(rE))
-                .collect(Collectors.toList());
     }
 
     @Transactional

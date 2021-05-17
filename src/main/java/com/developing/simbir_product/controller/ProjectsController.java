@@ -76,7 +76,7 @@ public class ProjectsController {
     @PostMapping("/edit/{prName}")                  //TODO: Validation
     public String editProject(@PathVariable("prName") String prName,
                               @ModelAttribute("project") ProjectRequestDto projectRequestDto) {
-        projectRequestDto.setName(prName);              //todo: Плохое решение
+        projectRequestDto.setName(prName);              //todo: Обдумать решение
         projectService.editProject(projectRequestDto);  //todo: return dto?
         return "redirect:/projects";
     }

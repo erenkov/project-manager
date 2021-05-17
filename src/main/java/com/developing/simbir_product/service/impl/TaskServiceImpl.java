@@ -13,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.Arrays;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -45,7 +43,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskMapper taskMapper;
 
-
     @Transactional
     @Override
     public TaskResponseDto getById(UUID id) {
@@ -54,7 +51,6 @@ public class TaskServiceImpl implements TaskService {
 
         return taskMapper.taskEntityToDto(taskEntity);
     }
-
 
     @Transactional
     @Override
@@ -78,7 +74,6 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(taskEntity);
     }
 
-
     @Transactional
     @Override
     public TaskResponseDto editTask(TaskRequestDto taskRequestDto) {
@@ -88,26 +83,10 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.taskEntityToDto(taskEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
-
     @Transactional
     @Override
     public void deleteById(UUID id) {
-        taskRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
-
-    @Transactional
-    @Override
-    public TaskResponseDto findByName(String name) {
-
-        TaskEntity taskEntity = taskRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Task with name = '%s' not found", name)));
-
-        TaskResponseDto taskResponseDto = new TaskResponseDto();
-
-        //todo TaskResponseDto = mapFrom taskEntity !!!!!!!!!!!!!!!!!!!!!!!!
-
-        return taskResponseDto;
+        taskRepository.deleteById(id);
     }
 
     public List<TaskEntity> getTasksByProjectsName(String projectName) {
@@ -151,5 +130,4 @@ public class TaskServiceImpl implements TaskService {
                 .map(taskMapper::taskEntityToDto)
                 .collect(Collectors.toList());
     }
-
 }

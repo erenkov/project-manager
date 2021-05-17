@@ -20,28 +20,14 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
 
     @Transactional
     @Override
-    public TaskReleaseHistoryEntity getById(UUID id) {
-        return taskReleaseHistoryRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("TaskRelease with ID = '%s' not found", id))
-        ); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
-    @Transactional
-    @Override
     public TaskReleaseHistoryEntity addTaskRelease(TaskReleaseHistoryEntity taskReleaseHistoryEntity) {
         return taskReleaseHistoryRepository.save(taskReleaseHistoryEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
 
     @Transactional
     @Override
-    public TaskReleaseHistoryEntity editTaskRelease(TaskReleaseHistoryEntity taskReleaseHistoryEntity) {
-        return taskReleaseHistoryRepository.save(taskReleaseHistoryEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
-    }
-
-    @Transactional
-    @Override
     public void deleteById(UUID id) {
-        taskReleaseHistoryRepository.deleteById(id); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        taskReleaseHistoryRepository.deleteById(id);
     }
 
     @Transactional
