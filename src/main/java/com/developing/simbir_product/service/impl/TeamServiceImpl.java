@@ -31,7 +31,7 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     @Override
     public TeamEntity addTeam(TeamEntity teamEntity) {
-        return teamRepository.save(teamEntity); //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        return teamRepository.save(teamEntity);
     }
 
     @Transactional

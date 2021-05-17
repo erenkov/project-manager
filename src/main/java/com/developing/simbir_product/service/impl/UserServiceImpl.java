@@ -123,7 +123,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(userMapper::userEntityToDto).collect(Collectors.toList());
     }
 
-            //todo фильтрация списка юзеров по роли и выводить, как вариант, только роль - ROLE_USER
     @Transactional
     @Override
     public UserEntity findByUserNumber(String userNumber) {

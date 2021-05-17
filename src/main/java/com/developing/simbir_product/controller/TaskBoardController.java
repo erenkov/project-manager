@@ -2,7 +2,10 @@ package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.entity.TaskStatus;
-import com.developing.simbir_product.service.*;
+import com.developing.simbir_product.service.ProjectService;
+import com.developing.simbir_product.service.ReleaseService;
+import com.developing.simbir_product.service.TaskService;
+import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,14 +55,6 @@ public class TaskBoardController {
                               @PathVariable("id") String id,
                               Model model,
                               Principal principal) {
-        //if (id == -1) => создать пустую задачу и отобразить на редактирование
-        // Получить страницу с запрашиваемой задачей
-//        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
-//        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(taskService.getTaskById(UUID.fromString(id)).getProjectId()));
-//        model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
-//        return "task-details";
-
-//        model.addAttribute("newTask", new TaskRequestDto());
         model.addAttribute("task", taskService.getById(UUID.fromString(id)));
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
