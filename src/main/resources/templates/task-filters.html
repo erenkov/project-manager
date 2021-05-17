@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -18,16 +18,13 @@
     </style>
 </head>
 <body>
+<!-- Include _header.html -->
+<th:block th:include="/_header"></th:block>
 <main>
     <div class="container">
         <div class="col-12 py-4">
             <div class="d-flex justify-content-between mb-3">
                 <h2>Task filters</h2>
-                <div>
-                    <a href="/logout">Logout</a>
-                    <span>&nbsp;|&nbsp;</span>
-                    <a href="/profile">Profile</a>
-                </div>
             </div>
             <form action="/filters" method="post">
                 <div class="mb-3">

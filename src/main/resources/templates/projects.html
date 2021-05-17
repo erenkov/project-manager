@@ -22,15 +22,12 @@
     </style>
 </head>
 <body>
+<!-- Include _header.html -->
+<th:block th:include="/_header"></th:block>
 <main>
     <div class="container">
-        <div class="row py-5">
+        <div class="row py-2">
             <div class="col-7 py-4">
-                <div class="d-flex justify-content-end mb-2">
-                    <a href="/logout">Logout</a>
-                    <span>&nbsp;|&nbsp;</span>
-                    <a href="/profile">Profile</a>
-                </div>
                 <h1 class="mb-5" th:text="'Hello, ' + ${userName} + '!'"></h1>
                 <h2 class="mb-4">List of available Projects:</h2>
                 <ul class="border rounded-3 list-group p-4 bg-light text-dark mb-3">

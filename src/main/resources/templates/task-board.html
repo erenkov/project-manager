@@ -22,19 +22,16 @@
     </style>
 </head>
 <body>
+<!-- Include _header.html -->
+<th:block th:include="/_header"></th:block>
 <main>
     <div class="container">
         <div class="row min-vh-100">
-            <div class="col-12 py-4 d-flex flex-column">
-                <div class="d-flex justify-content-between">
-                    <h2>Task board</h2>
-                    <div>
-                        <a href="/logout">Logout</a>
-                        <span>&nbsp;|&nbsp;</span>
-                        <a href="/profile">Profile</a>
-                    </div>
+            <div class="col-12 pb-4 d-flex flex-column">
+                <div class="d-flex">
+                    <h3>Task board</h3>
+                    <h3 class="col-2 ms-4" th:text="${currentProject.name}"></h3>
                 </div>
-                <h3 class="col-2" th:text="${currentProject.name}"></h3>
                 <div class="row d-flex align-items-center justify-content-between mb-4">
                     <div class="col-4">
                         <label for="inputProjectEndDate" class="form-label" th:text="'Project end date:'"/>
@@ -85,7 +82,6 @@
                     >Releases</a
                     >
                     <div class="ms-4 text-primary" th:text="${currentRelease.name != null} ? 'Current release: ' + ${currentRelease.name} : 'No releases'" />
-
                 </div>
                 <div class="row flex-grow-1">
                     <div class="d-flex flex-column col-4">
