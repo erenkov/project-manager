@@ -8,6 +8,7 @@ import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.UserMapper;
 import com.developing.simbir_product.repository.UserRepository;
+import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.slf4j.Logger;
@@ -26,7 +27,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -38,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private TeamService teamService;
 
     @Transactional
     @Override
@@ -93,13 +99,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.userEntityToDto(userEntity);
     }
 
-    @Transactional
-    @Override
-    public UserEntity findUserEntity(String login) {
-        return userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
-    }
-
     @Override
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = null;
@@ -119,8 +118,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public List<UserResponseDto> getListOfAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::userEntityToDto).collect(Collectors.toList());
+    public List<UserResponseDto> getListOfUsersByTeamName(String teamName) {
+
+        return userRepository.findByTeamId(teamService.findByName(teamName))
+                .stream()
+                .map(userMapper::userEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -135,8 +138,8 @@ public class UserServiceImpl implements UserService {
     private UserEntity findEntityByEmail(String email) {
 
         String login = email;   // Т.К. логин и email в нашем случае одно и тоже
-        // Front знает о email, DB знает о логине
-        // Service знает что делать с этим
+                                // Front знает о email, DB знает о логине
+                                // Service знает что делать с этим
 
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
                 () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
