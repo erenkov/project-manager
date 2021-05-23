@@ -97,7 +97,7 @@ public class ProjectsController {
 
     private ModelAndView getProjectsModel() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("teamList", teamService.findAllTeamNames());
+        modelAndView.addObject("teamList", teamService.getListOfAllTeamNames());
         modelAndView.addObject("projectStatusList", projectService.getListOfAllProjectStatus());
         return modelAndView;
     }
@@ -113,7 +113,7 @@ public class ProjectsController {
         return modelAndView;
     }
 
-    @ResponseStatus(HttpStatus.PERMANENT_REDIRECT)
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     @ExceptionHandler(NotFoundException.class)
     private ModelAndView handleEditException(NotFoundException e) {
         ModelAndView modelAndView = new ModelAndView();
