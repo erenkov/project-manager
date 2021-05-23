@@ -1,9 +1,16 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 
 @Entity
 @Table(name = "team")
@@ -19,10 +26,10 @@ public class TeamEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany (mappedBy = "teamId")
+    @OneToMany(mappedBy = "teamId")
     private List<ProjectEntity> projects;
 
-    @OneToMany (mappedBy = "teamId")
+    @OneToMany(mappedBy = "teamId")
     private List<UserEntity> users;
 
     public TeamEntity() {
@@ -33,7 +40,7 @@ public class TeamEntity {
         this.description = description;
     }
 
-    public void assignProjectToTeam (ProjectEntity project) {
+    public void assignProjectToTeam(ProjectEntity project) {
         if (projects == null) {
             projects = new ArrayList<>();
         }
@@ -41,7 +48,7 @@ public class TeamEntity {
         project.setTeamId(this);
     }
 
-    public void assignUserToTeam (UserEntity user) {
+    public void assignUserToTeam(UserEntity user) {
         if (users == null) {
             users = new ArrayList<>();
         }

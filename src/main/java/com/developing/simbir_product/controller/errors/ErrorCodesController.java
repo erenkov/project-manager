@@ -1,6 +1,5 @@
 package com.developing.simbir_product.controller.errors;
 
-import com.developing.simbir_product.controller.RegistrationController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -11,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
+
 @Controller
 public class ErrorCodesController implements ErrorController {
-    Logger logger = LoggerFactory.getLogger(ErrorCodesController.class);
+
+    private final Logger logger = LoggerFactory.getLogger(ErrorCodesController.class);
 
     @Override
     public String getErrorPath() {
@@ -31,11 +32,11 @@ public class ErrorCodesController implements ErrorController {
                 return "error-404";
             }
 
-            if (statusCode == HttpStatus.FORBIDDEN.value()){
+            if (statusCode == HttpStatus.FORBIDDEN.value()) {
                 return "error-403";
             }
 
-            if (statusCode == HttpStatus.UNAUTHORIZED.value()){
+            if (statusCode == HttpStatus.UNAUTHORIZED.value()) {
                 return "error-403";
             }
         }

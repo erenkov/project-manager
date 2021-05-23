@@ -1,7 +1,15 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.util.UUID;
+
 
 @Entity
 @Table(name = "task_release_history")
@@ -25,8 +33,7 @@ public class TaskReleaseHistoryEntity {
     public TaskReleaseHistoryEntity() {
     }
 
-    public TaskReleaseHistoryEntity(UUID id, boolean isCompleted) {
-        this.id = id;
+    public TaskReleaseHistoryEntity(boolean isCompleted) {
         this.isCompleted = isCompleted;
     }
 

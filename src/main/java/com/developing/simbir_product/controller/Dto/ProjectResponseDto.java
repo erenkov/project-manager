@@ -1,6 +1,7 @@
 package com.developing.simbir_product.controller.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -21,9 +22,11 @@ public class ProjectResponseDto {
     private String status;
 
     @Schema(description = "Дата начала проекта")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startDate;
 
     @Schema(description = "Ориентировочная дата конца проекта")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime estFinishDate;
 
 

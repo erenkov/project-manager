@@ -1,10 +1,19 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 
 @Entity
 @Table(name = "project")
@@ -36,7 +45,7 @@ public class ProjectEntity {
     @Column(name = "finish_date")
     private OffsetDateTime finishDate;
 
-    @OneToMany (mappedBy = "projectId")
+    @OneToMany(mappedBy = "projectId")
     private List<TaskEntity> tasks;
 
     public ProjectEntity() {
@@ -54,7 +63,7 @@ public class ProjectEntity {
         this.finishDate = finishDate;
     }
 
-    public void assignTaskToProject (TaskEntity task) {
+    public void assignTaskToProject(TaskEntity task) {
         if (tasks == null) {
             tasks = new ArrayList<>();
         }

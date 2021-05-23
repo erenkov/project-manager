@@ -25,7 +25,8 @@ import java.security.Principal;
 @Controller
 public class UserProfileController {
 
-    Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+
     @Autowired
     private UserService userService;
 

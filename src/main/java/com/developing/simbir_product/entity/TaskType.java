@@ -5,9 +5,9 @@ public enum TaskType {
     BUGFIX("B"),
     HOTFIX("H");
 
-    private String shortName;
+    private final String shortName;
 
-    private TaskType(String shortName){
+    TaskType(String shortName) {
         this.shortName = shortName;
     }
 

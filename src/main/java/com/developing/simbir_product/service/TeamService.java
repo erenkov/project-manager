@@ -11,8 +11,6 @@ import java.util.UUID;
 
 public interface TeamService {
 
-    TeamEntity getById(UUID id);
-
     TeamEntity addTeam(TeamEntity teamRequestDto);
 
     boolean addTeamDto(TeamRequestDto teamRequestDto);

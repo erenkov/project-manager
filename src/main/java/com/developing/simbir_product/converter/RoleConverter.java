@@ -5,6 +5,7 @@ import com.developing.simbir_product.entity.Role;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+
 @Converter(autoApply = true)
 public class RoleConverter implements AttributeConverter<Role, String> {
 
@@ -26,8 +27,7 @@ public class RoleConverter implements AttributeConverter<Role, String> {
                 return Role.ROLE_USER;
 
             default:
-                throw new IllegalArgumentException("ShortName [" + shortName
-                        + "] not supported.");
+                throw new IllegalArgumentException(String.format("ShortName [%s] not supported.", shortName));
         }
     }
 }

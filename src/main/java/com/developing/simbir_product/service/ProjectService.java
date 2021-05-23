@@ -7,13 +7,12 @@ import com.developing.simbir_product.entity.ProjectEntity;
 import java.util.List;
 import java.util.UUID;
 
-public interface ProjectService {
 
-    ProjectResponseDto getById(UUID id);
+public interface ProjectService {
 
     boolean addProject(ProjectRequestDto projectRequestDto);
 
-    ProjectResponseDto editProject(ProjectRequestDto projectRequestDto);
+    boolean editProject(ProjectRequestDto projectRequestDto);
 
     void deleteById(UUID id);
 
@@ -23,10 +22,10 @@ public interface ProjectService {
 
     ProjectEntity addProjectEntity(ProjectEntity projectEntity);
 
-    List<ProjectResponseDto> findAll();
-
     List<String> getListOfAllProjectNames();
 
     List<String> getListOfAllProjectStatus();
 
-    }
+    List<String> getListOfAllProjectNamesByTeam(String teamName);
+
+}
