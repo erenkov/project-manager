@@ -70,7 +70,8 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center mb-4">
-                    <h4 class="mb-0" th:text="${teamName != null} ? 'Team: ' + ${teamName} : 'Team not set'"/>
+                    <h4 class="mb-0"
+                        th:text="${currentProject.teamName != null} ? 'Team: ' + ${currentProject.teamName} : 'Team not set'"/>
                     <a class="btn btn-primary btn-sm ms-4" th:href="@{/board/{prName}/create/(prName=${currentProject.name})}">
                         <i class="bi bi-plus"></i> Add card
                     </a>
@@ -87,13 +88,14 @@
                     <div class="d-flex flex-column col-4">
                         <h4>Backlog</h4>
                         <div class="rounded-3 bg-info p-3 flex-grow-1">
-                            <th:block th:each="backlogTask : ${listBacklogTasks}">
-                                <div class="rounded-3 mb-2 bg-white">
+                            <th:block th:each="backlogTask : ${listAllTasks}">
+                                <div class="rounded-3 mb-2 bg-white" th:if="${backlogTask.getStatus() == 'BACKLOG'}">
                                     <div
                                             class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom"
                                     >
                                         <h6 class="text-truncate mb-0" th:text="${backlogTask.name}"/>
-                                        <a th:href="@{/board/{prName}/task/{taskId}(taskId=${backlogTask.id},prName=${currentProject.name})}" class="p-1 pt-0 ms-2"
+                                        <a th:href="@{/board/{prName}/task/{taskId}(taskId=${backlogTask.id},prName=${currentProject.name})}"
+                                           class="p-1 pt-0 ms-2"
                                         ><i class="bi bi-pencil-fill"></i
                                         ></a>
                                     </div>
@@ -117,8 +119,9 @@
                         <div class="rounded-3 bg-info p-3 flex-grow-1">
 
 
-                            <th:block th:each="inProgressTask : ${listInProgressTasks}">
-                                <div class="rounded-3 mb-2 bg-white">
+                            <th:block th:each="inProgressTask : ${listAllTasks}">
+                                <div class="rounded-3 mb-2 bg-white"
+                                     th:if="${inProgressTask.getStatus() == 'IN_PROGRESS'}">
                                     <div
                                             class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom"
                                     >
@@ -146,13 +149,14 @@
                     <div class="d-flex flex-column col-4">
                         <h4>Done</h4>
                         <div class="rounded-3 bg-info p-3 flex-grow-1">
-                            <th:block th:each="doneTask : ${listDoneTasks}">
-                                <div class="rounded-3 mb-2 bg-white">
+                            <th:block th:each="doneTask : ${listAllTasks}">
+                                <div class="rounded-3 mb-2 bg-white" th:if="${doneTask.getStatus() == 'DONE'}">
                                     <div
                                             class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom"
                                     >
                                         <h6 class="text-truncate mb-0" th:text="${doneTask.name}"/>
-                                        <a th:href="@{/board/{prName}/task/{taskId}(taskId=${doneTask.id},prName=${currentProject.name})}" class="p-1 pt-0 ms-2"
+                                        <a th:href="@{/board/{prName}/task/{taskId}(taskId=${doneTask.id},prName=${currentProject.name})}"
+                                           class="p-1 pt-0 ms-2"
                                         ><i class="bi bi-pencil-fill"></i
                                         ></a>
                                     </div>

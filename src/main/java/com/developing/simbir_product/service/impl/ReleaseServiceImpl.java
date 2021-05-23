@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Service
 public class ReleaseServiceImpl implements ReleaseService {
 
-    Logger logger = LoggerFactory.getLogger(ReleaseServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ReleaseServiceImpl.class);
 
     @Autowired
     ReleaseMapper releaseMapper;
@@ -55,7 +55,6 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseMapper.releaseEntityToDto(releaseEntity);
     }
 
-
     @Transactional
     @Override
     public boolean addRelease(ReleaseRequestDto releaseRequestDto) {
@@ -63,7 +62,9 @@ public class ReleaseServiceImpl implements ReleaseService {
             return false;
         }
         releaseRepository.save(releaseMapper.releaseDtoToEntity(releaseRequestDto));
-        logger.trace(releaseRequestDto.getName() + " release for " + releaseRequestDto.getProjectName() + " has been added");
+        logger.trace(String.format("%s release for %s has been added",
+                releaseRequestDto.getName(),
+                releaseRequestDto.getProjectName()));
         return true;
     }
 
@@ -87,7 +88,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         releaseEntity.setId(tempReleaseFromDB.get().getId());
         releaseRepository.save(releaseEntity);
-        logger.trace(releaseRequestDto.getName() + " release for " + releaseRequestDto.getProjectName() + " has been edited");
+        logger.trace(String.format("%s release for %s has been edited",
+                releaseRequestDto.getName(),
+                releaseRequestDto.getProjectName()));
         return true;
     }
 
@@ -103,11 +106,10 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseRepository.save(releaseEntity);
     }
 
+    @Override
     public String getReleaseString(TaskEntity taskEntity) {
-        ReleaseEntity release = null;
-        try {
-            release = taskReleaseHistoryService.getCurrentReleaseByTask(taskEntity);
-        } catch (NotFoundException e) {
+        ReleaseEntity release = taskReleaseHistoryService.getCurrentReleaseByTask(taskEntity);
+        if (release == null) {
             return "";
         }
         return String.format("%s (%s - %s)",

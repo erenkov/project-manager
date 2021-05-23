@@ -5,9 +5,9 @@ public enum TaskStatus {
     IN_PROGRESS("IN_P"),
     DONE("D");
 
-    private String shortName;
+    private final String shortName;
 
-    private TaskStatus(String shortName){
+    TaskStatus(String shortName) {
         this.shortName = shortName;
     }
 

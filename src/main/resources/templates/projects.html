@@ -29,6 +29,8 @@
         <div class="row py-2">
             <div class="col-7 py-4">
                 <h1 class="mb-5" th:text="'Hello, ' + ${userName} + '!'"></h1>
+                <div class="col-7 py-4" th:if="${#httpServletRequest.getParameter('errorMessage') != null}"
+                     th:text="${#httpServletRequest.getParameter('errorMessage')}"></div>
                 <h2 class="mb-4">List of available Projects:</h2>
                 <ul class="border rounded-3 list-group p-4 bg-light text-dark mb-3">
                     <th:block th:each="projectName : ${projectNames}">

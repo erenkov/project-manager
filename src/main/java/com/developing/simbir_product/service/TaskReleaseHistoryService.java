@@ -1,11 +1,13 @@
 package com.developing.simbir_product.service;
 
 
+import com.developing.simbir_product.controller.Dto.ReleaseResponseDto;
 import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TaskReleaseHistoryEntity;
 
 import java.util.UUID;
+
 
 public interface TaskReleaseHistoryService {
 
@@ -14,4 +16,8 @@ public interface TaskReleaseHistoryService {
     void deleteById(UUID id);
 
     ReleaseEntity getCurrentReleaseByTask(TaskEntity taskEntity);
+
+    ReleaseResponseDto getCurrentReleaseDtoByTask(TaskEntity taskEntity);
+
+    TaskReleaseHistoryEntity findByTemplate(TaskReleaseHistoryEntity taskReleaseHistoryEntity);
 }

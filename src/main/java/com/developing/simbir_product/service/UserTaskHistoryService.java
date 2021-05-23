@@ -16,5 +16,9 @@ public interface UserTaskHistoryService {
 
     UserEntity getCurrentUserByTask(TaskEntity taskEntity);
 
+    UserTaskHistoryEntity getCurrentByTask(TaskEntity taskEntity);
+
     List<TaskEntity> getTasksByUser(UserEntity userEntity);
+
+    UserTaskHistoryEntity findByTemplate(UserTaskHistoryEntity userTaskHistoryEntity);
 }

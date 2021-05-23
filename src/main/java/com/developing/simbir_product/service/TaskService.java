@@ -14,6 +14,8 @@ public interface TaskService {
 
     TaskResponseDto getById(UUID id);
 
+    TaskEntity getTaskEntityById(String id);
+
     TaskResponseDto addTask(TaskRequestDto taskRequestDto);
 
     TaskEntity addTaskEntity(TaskEntity taskEntity);
@@ -21,6 +23,8 @@ public interface TaskService {
     TaskResponseDto editTask(TaskRequestDto taskRequestDto);
 
     void deleteById(UUID id);
+
+    List<TaskResponseDto> getAllProjectTasks(String projectName);
 
     List<TaskEntity> getTasksByProjectsName(String projectName);
 

@@ -9,6 +9,7 @@ import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.TeamMapper;
 import com.developing.simbir_product.repository.TeamRepository;
 import com.developing.simbir_product.service.TeamService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,7 +84,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamEntity mapTeamByName(String teamName) {
-        if (teamName.isEmpty()) {
+        if (StringUtils.isEmpty(teamName)) {
             return null;
         }
         return findByName(teamName);

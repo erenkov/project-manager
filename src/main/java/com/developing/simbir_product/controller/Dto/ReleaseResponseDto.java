@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+
 @Schema(description = "Релиз")
 public class ReleaseResponseDto {
 
@@ -32,6 +33,7 @@ public class ReleaseResponseDto {
     public void setId(String id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }

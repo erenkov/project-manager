@@ -13,6 +13,8 @@ public interface UserService {
 
     UserResponseDto findByEmail(String email);
 
+    UserResponseDto findByAssigneeName(String assigneeName);
+
     boolean addUser(UserRequestDto userRequestDto);
 
     UserEntity addUserEntity(UserEntity userEntity);

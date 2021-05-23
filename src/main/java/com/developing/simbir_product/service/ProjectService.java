@@ -7,6 +7,7 @@ import com.developing.simbir_product.entity.ProjectEntity;
 import java.util.List;
 import java.util.UUID;
 
+
 public interface ProjectService {
 
     boolean addProject(ProjectRequestDto projectRequestDto);

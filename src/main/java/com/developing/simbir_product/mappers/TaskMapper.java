@@ -9,7 +9,11 @@ import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.utils.Converter;
-import org.mapstruct.*;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.NullValueCheckStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
@@ -66,5 +70,4 @@ public abstract class TaskMapper {
     public ProjectEntity projectByName(String projectName) {
         return projectService.getProjectEntity(projectName);
     }
-
 }

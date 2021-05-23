@@ -1,9 +1,10 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
-import com.developing.simbir_product.entity.TaskStatus;
+import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
+import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import com.developing.simbir_product.service.TaskService;
 import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,11 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.UUID;
+
 
 @Tag(name = "Управление задачами")
 @RequestMapping("/board/{projectName}")
@@ -36,13 +43,14 @@ public class TaskBoardController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private TaskReleaseHistoryService taskReleaseHistoryService;
+
     @Operation(summary = "Получить страницу с доской проекта")
     @GetMapping
     public String getBoardPage(@PathVariable("projectName") String projectName, Model model) {
         // Запрос страницы с доской проекта
-        model.addAttribute("listBacklogTasks", taskService.findTasksByStatus(projectName, TaskStatus.BACKLOG));
-        model.addAttribute("listInProgressTasks", taskService.findTasksByStatus(projectName, TaskStatus.IN_PROGRESS));
-        model.addAttribute("listDoneTasks", taskService.findTasksByStatus(projectName, TaskStatus.DONE));
+        model.addAttribute("listAllTasks", taskService.getAllProjectTasks(projectName));
         model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
         model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
         model.addAttribute("currentProject", projectService.findByName(projectName));
@@ -55,13 +63,17 @@ public class TaskBoardController {
                               @PathVariable("id") String id,
                               Model model,
                               Principal principal) {
-        model.addAttribute("task", taskService.getById(UUID.fromString(id)));
+        TaskResponseDto task = taskService.getById(UUID.fromString(id));
+        model.addAttribute("task", task);
         model.addAttribute("taskStatusList", taskService.getListOfTaskStatus());
         model.addAttribute("taskTypeList", taskService.getListOfTaskTypes());
-        model.addAttribute("listUsers", userService.getListOfUsersByTeamName(projectService.findByName(projectName).getTeamName()));
-        model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
-        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
-        model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
+        model.addAttribute("listUsers",
+                userService.getListOfUsersByTeamName(projectService.findByName(projectName).getTeamName()));
+        model.addAttribute("currentRelease",
+                taskReleaseHistoryService.getCurrentReleaseDtoByTask(taskService.getTaskEntityById(id)));
+        model.addAttribute("releaseList",
+                releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
+        model.addAttribute("currentUser", userService.findByAssigneeName(task.getAssigneeName()));
         return "task-details";
     }
 
@@ -97,7 +109,7 @@ public class TaskBoardController {
                                  @PathVariable("id") String id) {
         editTask.setId(id);
         ModelAndView modelAndView = new ModelAndView("redirect:/board/{projectName}");
-        modelAndView.addObject("editTask",taskService.editTask(editTask));
+        modelAndView.addObject("editTask", taskService.editTask(editTask));
         modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
     }

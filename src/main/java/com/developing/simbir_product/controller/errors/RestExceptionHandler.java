@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletResponse;
 
+
 // Экспешн хендлер для реста (когда приступим к нему)
 @RestControllerAdvice
 public class RestExceptionHandler {
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public String RestController(HttpServletResponse responseCode){
-    return "404 error happened";
+    public String RestController(HttpServletResponse responseCode) {
+        return "404 error happened";
     }
 }
