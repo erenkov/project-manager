@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class ProjectAlreadyExistException extends RuntimeException {
 
-    private final Logger logger = LoggerFactory.getLogger(NotFoundException.class);
+    private final Logger logger = LoggerFactory.getLogger(ProjectAlreadyExistException.class);
     private final ProjectRequestDto project;
 
     public ProjectAlreadyExistException(String message, ProjectRequestDto project) {

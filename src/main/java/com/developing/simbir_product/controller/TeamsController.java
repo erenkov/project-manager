@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 
-
 @Tag(name = "Управление командами")
 @RequestMapping(value = "/teams")
 @Controller

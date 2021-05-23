@@ -13,14 +13,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -66,44 +63,51 @@ public class ProjectsController {
 
     @Operation(summary = "Получить страницу создания нового проекта")
     @GetMapping("/create")
-    public String getNewProjectPage(Model model) {
-        model.addAttribute("newProject", new ProjectRequestDto());
-        model.addAttribute("teamList", teamService.findAllTeamNames());
-        model.addAttribute("projectStatusList", projectService.getListOfAllProjectStatus());
-        return "create-project";
+    public ModelAndView getNewProjectPage() {
+        ModelAndView modelAndView = getProjectsModel();
+        modelAndView.setViewName("create-project");
+        modelAndView.addObject("newProject", new ProjectRequestDto());
+        return modelAndView;
     }
 
     @Operation(summary = "Создать новый проект")
-    @PostMapping("/create")                                 //TODO: Validation
-    public String createProject(@ModelAttribute("newProject") ProjectRequestDto projectRequestDto) {
+    @PostMapping("/create")
+    public ModelAndView createProject(@Valid @ModelAttribute("newProject") ProjectRequestDto projectRequestDto) {
         projectService.addProject(projectRequestDto);
-        return "redirect:/projects";
+        return new ModelAndView("redirect:/projects", HttpStatus.CREATED);
     }
 
     @Operation(summary = "Получить страницу редактирования проекта")
     @GetMapping("/edit/{prName}")
-    public String getEditProjectPage(@PathVariable("prName") String prName, Model model) {
-        model.addAttribute("project", projectService.findByName(prName));
-        model.addAttribute("teamList", teamService.findAllTeamNames());
-        model.addAttribute("projectStatusList", projectService.getListOfAllProjectStatus());
-        return "edit-project";
+    public ModelAndView getEditProjectPage(@PathVariable("prName") String prName) {
+        ModelAndView modelAndView = getProjectsModel();
+        modelAndView.setViewName("edit-project");
+        modelAndView.addObject("project", projectService.findByName(prName));
+        return modelAndView;
     }
 
     @Operation(summary = "Редактировать проект")
     @PostMapping("/edit/{prName}")
-    public String editProject(@PathVariable("prName") String prName,
-                              @ModelAttribute("project") ProjectRequestDto projectRequestDto) {
-        projectRequestDto.setName(prName);              //todo: Обдумать решение
-        projectService.editProject(projectRequestDto);  //todo: return dto?
-        return "redirect:/projects";
+    public ModelAndView editProject(@PathVariable("prName") String prName,
+                                    @Valid @ModelAttribute("project") ProjectRequestDto projectRequestDto) {
+        projectRequestDto.setName(prName);
+        projectService.editProject(projectRequestDto);
+        return new ModelAndView("redirect:/projects");
     }
+
+    private ModelAndView getProjectsModel() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("teamList", teamService.findAllTeamNames());
+        modelAndView.addObject("projectStatusList", projectService.getListOfAllProjectStatus());
+        return modelAndView;
+    }
+
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ProjectAlreadyExistException.class)
     private ModelAndView handleCreateException(ProjectAlreadyExistException e) {
-        ModelAndView modelAndView = new ModelAndView("create-project");
-        modelAndView.addObject("teamList", teamService.findAllTeamNames());
-        modelAndView.addObject("projectStatusList", projectService.getListOfAllProjectStatus());
+        ModelAndView modelAndView = getProjectsModel();
+        modelAndView.setViewName("create-project");
         modelAndView.addObject("newProject", e.getProject());
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());
         return modelAndView;
@@ -118,17 +122,10 @@ public class ProjectsController {
         return modelAndView;
     }
 
-    private ModelAndView getProjectsModel() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("teamList", teamService.findAllTeamNames());
-        modelAndView.addObject("projectStatusList", projectService.getListOfAllProjectStatus());
-        return modelAndView;
-    }
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
         ModelAndView modelAndView = getProjectsModel();
-        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
         modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
         modelAndView.addObject("GlobalErrors", bindingResult.getGlobalErrors());
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());
