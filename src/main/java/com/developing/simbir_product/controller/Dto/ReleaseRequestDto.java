@@ -1,30 +1,35 @@
 package com.developing.simbir_product.controller.Dto;
 
+import com.developing.simbir_product.validators.ReleaseWithDates;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 
 @Schema(description = "Релиз")
+@ReleaseWithDates
 public class ReleaseRequestDto {
 
     @Schema(description = "Идентификатор релиза")
     private String id;
 
     @Schema(description = "Название релиза")
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "Name must not be empty")
+    @Size(max = 50, message = "Name must not be greater than 50 characters")
     private String name;
 
     @Schema(description = "Дата начала релиза")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull(message = "Start date must not be empty")
     private LocalDateTime startDate;
 
     @Schema(description = "Дата конца релиза")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull(message = "Finish date must not be empty")
     private LocalDateTime finishDate;
 
     @Schema(description = "Название проекта")

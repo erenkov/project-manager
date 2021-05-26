@@ -6,12 +6,14 @@ import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.exception.ReleaseDatesException;
 import com.developing.simbir_product.mappers.DateTimeMapper;
 import com.developing.simbir_product.mappers.ReleaseMapper;
 import com.developing.simbir_product.repository.ReleaseRepository;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
+import com.developing.simbir_product.utils.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class ReleaseServiceImpl implements ReleaseService {
     private final Logger logger = LoggerFactory.getLogger(ReleaseServiceImpl.class);
 
     @Autowired
-    ReleaseMapper releaseMapper;
+    private ReleaseMapper releaseMapper;
 
     @Autowired
     private ReleaseRepository releaseRepository;
@@ -59,13 +60,25 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Override
     public boolean addRelease(ReleaseRequestDto releaseRequestDto) {
         if (countIntersectingReleases(releaseRequestDto) > 0) {
-            return false;
+            throw new ReleaseDatesException(String.format("Release \"%s\" dates intersects with another" +
+                    " existing release", releaseRequestDto.getName()), releaseRequestDto);
         }
+        checkReleaseDates(releaseRequestDto);
         releaseRepository.save(releaseMapper.releaseDtoToEntity(releaseRequestDto));
-        logger.trace(String.format("%s release for %s has been added",
+        logger.trace(String.format("Release \"%s\" for project \"%s\" has been added",
                 releaseRequestDto.getName(),
                 releaseRequestDto.getProjectName()));
         return true;
+    }
+
+    private void checkReleaseDates(ReleaseRequestDto releaseRequestDto) {
+        ProjectEntity project = projectService.getProjectEntity(releaseRequestDto.getProjectName());
+        if (project.getStartDate() != null && project.getEstFinishDate() != null &&
+                (releaseRequestDto.getStartDate().isBefore(project.getStartDate().toLocalDateTime()) ||
+                        releaseRequestDto.getFinishDate().isAfter(project.getEstFinishDate().toLocalDateTime()))) {
+            throw new ReleaseDatesException(String.format("Release \"%s\" dates are outside project dates",
+                    releaseRequestDto.getName()), releaseRequestDto);
+        }
     }
 
     private long countIntersectingReleases(ReleaseRequestDto releaseToCheck) {
@@ -79,16 +92,18 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Transactional
     @Override
     public boolean editRelease(ReleaseRequestDto releaseRequestDto) {
-        ReleaseEntity releaseEntity = releaseMapper.releaseDtoToEntity(releaseRequestDto);
-        Optional<ReleaseEntity> tempReleaseFromDB = Optional.ofNullable(getEntityById(releaseEntity.getId()));
-
-        if (tempReleaseFromDB.isEmpty() || countIntersectingReleases(releaseRequestDto) > 1) { // Если при редактировании текущий релиз в БД не найден,
-            return false;                  // то не выполняем запись в БД
+        UUID uuid = Converter.getUuidFromString(releaseRequestDto.getId());
+        if (uuid == null || !releaseRepository.existsById(uuid)) {
+            throw new NotFoundException(String.format("Release \"%s\" not found", releaseRequestDto.getName()));
         }
-
-        releaseEntity.setId(tempReleaseFromDB.get().getId());
+        if (countIntersectingReleases(releaseRequestDto) > 1) {
+            throw new ReleaseDatesException(String.format("Release \"%s\" dates intersects with another" +
+                    " existing release", releaseRequestDto.getName()), releaseRequestDto);
+        }
+        checkReleaseDates(releaseRequestDto);
+        ReleaseEntity releaseEntity = releaseMapper.releaseDtoToEntity(releaseRequestDto);
         releaseRepository.save(releaseEntity);
-        logger.trace(String.format("%s release for %s has been edited",
+        logger.trace(String.format("Release \"%s\" for project \"%s\" has been edited",
                 releaseRequestDto.getName(),
                 releaseRequestDto.getProjectName()));
         return true;
