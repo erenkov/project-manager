@@ -47,10 +47,10 @@ public class ProjectServiceImpl implements ProjectService {
                     String.format("Project with name \"%s\" already exist", projectName),
                     projectRequestDto);
         }
-        projectRequestDto.setStatus(ProjectStatus.BACKLOG.toString());
+        projectRequestDto.setStatus(ProjectStatus.BACKLOG.name());
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
         projectRepository.save(projectEntity);
-        logger.trace("{} project has been created", projectName);
+        logger.info("{} project has been created", projectName);
         return true;
     }
 
@@ -72,7 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setId(tempProjectFromDB.getId());
         projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
         projectRepository.save(projectEntity);
-        logger.trace(projectName + " has been edited");
+        logger.info(projectName + " has been edited");
         return true;
     }
 

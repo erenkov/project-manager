@@ -62,7 +62,7 @@ public class ReleaseServiceImpl implements ReleaseService {
             return false;
         }
         releaseRepository.save(releaseMapper.releaseDtoToEntity(releaseRequestDto));
-        logger.trace(String.format("%s release for %s has been added",
+        logger.info(String.format("%s release for %s has been added",
                 releaseRequestDto.getName(),
                 releaseRequestDto.getProjectName()));
         return true;
@@ -88,7 +88,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         releaseEntity.setId(tempReleaseFromDB.get().getId());
         releaseRepository.save(releaseEntity);
-        logger.trace(String.format("%s release for %s has been edited",
+        logger.info(String.format("%s release for %s has been edited",
                 releaseRequestDto.getName(),
                 releaseRequestDto.getProjectName()));
         return true;

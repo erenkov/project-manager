@@ -80,6 +80,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Override
     public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
+        if (taskRequestDto == null) {
+            throw new IllegalArgumentException("Can't add empty task");
+        }
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
         if (taskRequestDto.getRelease() != null) {
             ReleaseEntity releaseEntity = releaseService.getEntityById(UUID.fromString(taskRequestDto.getRelease()));
@@ -94,7 +97,7 @@ public class TaskServiceImpl implements TaskService {
             userTaskHistoryEntity.setTaskId(taskEntity);
             userTaskHistoryService.addUserTaskHistory(userTaskHistoryEntity);
         }
-        logger.trace("{} task has been created", taskRequestDto.getName());
+        logger.info("{} task has been created", taskRequestDto.getName());
         return taskMapper.taskEntityToDto(taskEntity);
     }
 
@@ -136,7 +139,7 @@ public class TaskServiceImpl implements TaskService {
                 taskReleaseHistoryService.addTaskRelease(taskReleaseHistoryEntity);
             }
         }
-        logger.trace("{} has been edited", taskRequestDto.getName());
+        logger.info("{} has been edited", taskRequestDto.getName());
         return taskMapper.taskEntityToDto(taskEntity);
     }
 

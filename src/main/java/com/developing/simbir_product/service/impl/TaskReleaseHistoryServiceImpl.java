@@ -55,7 +55,7 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     @Override
     public ReleaseResponseDto getCurrentReleaseDtoByTask(TaskEntity taskEntity) {
         ReleaseEntity currentRelease = getCurrentReleaseByTask(taskEntity);
-        return currentRelease == null ? null : releaseMapper.releaseEntityToDto(currentRelease);
+        return (currentRelease == null) ? null : releaseMapper.releaseEntityToDto(currentRelease);
     }
 
     @Transactional
