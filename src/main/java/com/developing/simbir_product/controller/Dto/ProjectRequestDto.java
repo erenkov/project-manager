@@ -14,15 +14,15 @@ import java.time.LocalDateTime;
 public class ProjectRequestDto {
 
     @Schema(description = "Навзвание проекта")
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "Name must not be empty")
+    @Size(max = 50, message = "Name must not be greater than 50 characters")
     private String name;
 
     @Schema(description = "Описание проекта")
     private String description;
 
     @Schema(description = "Команда")
-    @Size(max = 50)
+    @Size(max = 50, message = "Team name must not be greater than 50 characters")
     private String teamName;
 
     @Schema(description = "Статус")

@@ -40,12 +40,12 @@
                      th:text="${error}"
                 ></div>
               </th:block>
-              <th:block th:each="error : ${GlobalErrors}" th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
+              <th:block th:each="error : ${GlobalErrors}"
+                        th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
                 <div class="d-block text-center"
                      th:text="${error}"
                 ></div>
               </th:block>
-
 
               <form class="p-4" id="newReleaseForm" method="post" th:action="@{${#request.requestURI}}"
                     th:object="${release}">

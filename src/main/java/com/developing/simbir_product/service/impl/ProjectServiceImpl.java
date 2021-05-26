@@ -98,7 +98,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public List<String> getListOfAllProjectNames() {
-        return projectRepository.findAll().stream().map(ProjectEntity::getName).collect(Collectors.toList());
+        return projectRepository.findAllByOrderByNameAsc()
+                .stream()
+                .map(ProjectEntity::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -116,6 +119,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .findAllByTeamId(teamService.findByName(teamName))
                 .stream()
                 .map(ProjectEntity::getName)
+                .sorted()
                 .collect(Collectors.toList());
     }
 

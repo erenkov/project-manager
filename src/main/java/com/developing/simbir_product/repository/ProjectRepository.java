@@ -16,4 +16,6 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
     Optional<ProjectEntity> findByName(String name);
 
     List<ProjectEntity> findAllByTeamId(TeamEntity team);
+
+    List<ProjectEntity> findAllByOrderByNameAsc();
 }
