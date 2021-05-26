@@ -39,7 +39,7 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     public UserEntity getCurrentUserByTask(TaskEntity taskEntity) {
         UserTaskHistoryEntity current = userTaskHistoryRepository.
                 findByTaskIdAndValidToDateIsAfter(taskEntity, OffsetDateTime.now()).orElse(null);
-        return current != null ? current.getUserId() : null;
+        return (current != null) ? current.getUserId() : null;
     }
 
     @Override

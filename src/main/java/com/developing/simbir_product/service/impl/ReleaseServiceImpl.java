@@ -65,7 +65,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         }
         checkReleaseDates(releaseRequestDto);
         releaseRepository.save(releaseMapper.releaseDtoToEntity(releaseRequestDto));
-        logger.trace(String.format("Release \"%s\" for project \"%s\" has been added",
+        logger.info(String.format("Release \"%s\" for project \"%s\" has been added",
                 releaseRequestDto.getName(),
                 releaseRequestDto.getProjectName()));
         return true;
@@ -103,7 +103,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         checkReleaseDates(releaseRequestDto);
         ReleaseEntity releaseEntity = releaseMapper.releaseDtoToEntity(releaseRequestDto);
         releaseRepository.save(releaseEntity);
-        logger.trace(String.format("Release \"%s\" for project \"%s\" has been edited",
+        logger.info(String.format("Release \"%s\" for project \"%s\" has been edited",
                 releaseRequestDto.getName(),
                 releaseRequestDto.getProjectName()));
         return true;

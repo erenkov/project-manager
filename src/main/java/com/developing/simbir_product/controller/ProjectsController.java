@@ -52,6 +52,9 @@ public class ProjectsController {
                                   @RequestParam(value = "errorMessage", required = false) Optional<String> errorMessage) {
         errorMessage.ifPresent(model::addAttribute);
         UserResponseDto user = userService.findByEmail(principal.getName());
+        if (user == null) {
+            return "redirect:/logout";
+        }
         model.addAttribute("userName", String.format("%s %s", user.getFirstName(), user.getLastName()));
         if (authentication.getAuthorities().contains(Role.ROLE_ADMIN)) {
             model.addAttribute("projectNames", projectService.getListOfAllProjectNames());

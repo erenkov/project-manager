@@ -42,7 +42,7 @@ public class UserProfileController {
     public ModelAndView getProfile(Principal principal) {
         ModelAndView modelAndView = getUserProfileModel();
         modelAndView.addObject("currentUser", userService.findByEmail(principal.getName()));
-        logger.trace("{} has accessed the profile page", principal.getName());
+        logger.info("{} has accessed the profile page", principal.getName());
         return modelAndView;
     }
 

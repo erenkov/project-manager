@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(tempUserFromDB.getPassword());
         userEntity.setUserNumber(tempUserFromDB.getUserNumber());
         userEntity = userRepository.save(userEntity);
-        logger.trace(userEntity.getLogin() + " has been edited");
+        logger.info(userEntity.getLogin() + " has been edited");
         return userMapper.userEntityToDto(userEntity);
     }
 
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto findByAssigneeName(String assigneeName) {
         UserEntity userEntity = userRepository.findByUserNumber(Integer.valueOf(assigneeName.split(" ")[2]))
                 .orElse(null);
-        return userEntity == null ? null : userMapper.userEntityToDto(userEntity);
+        return (userEntity == null) ? null : userMapper.userEntityToDto(userEntity);
     }
 
     @Override
