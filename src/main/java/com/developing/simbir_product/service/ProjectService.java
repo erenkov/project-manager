@@ -4,15 +4,15 @@ import com.developing.simbir_product.controller.Dto.ProjectRequestDto;
 import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
 
+import java.util.List;
 import java.util.UUID;
+
 
 public interface ProjectService {
 
-    ProjectResponseDto getById(UUID id);
+    boolean addProject(ProjectRequestDto projectRequestDto);
 
-    ProjectResponseDto addProject(ProjectRequestDto projectRequestDto);
-
-    ProjectResponseDto editProject(ProjectRequestDto projectRequestDto);
+    boolean editProject(ProjectRequestDto projectRequestDto);
 
     void deleteById(UUID id);
 
@@ -21,4 +21,11 @@ public interface ProjectService {
     ProjectEntity getProjectEntity(String name);
 
     ProjectEntity addProjectEntity(ProjectEntity projectEntity);
+
+    List<String> getListOfAllProjectNames();
+
+    List<String> getListOfAllProjectStatus();
+
+    List<String> getListOfAllProjectNamesByTeam(String teamName);
+
 }

@@ -1,47 +1,77 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
-import com.developing.simbir_product.service.impl.UserServiceImpl;
+import com.developing.simbir_product.service.TeamService;
+import com.developing.simbir_product.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 
-@Tag(name = "Авторизация")
+@Tag(name = "Регистрация")
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
 
+    private final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
+
+    @Autowired
+    private TeamService teamService;
 
     @Operation(summary = "Получить страницу регистрации")
     @GetMapping
-    public String getRegistrationPage() {
-        return "registration";
+    public ModelAndView getRegistrationPage() {
+        return getRegistrationModel(new UserRequestDto());
     }
 
     @Operation(summary = "Зарегистрировать пользователя")
     @PostMapping
-    public String registerUser(UserRequestDto user, Model model) {
-        if (user.getEmail().isEmpty()               //TODO: Проверять все поля
-                || user.getPassword().isEmpty()
-                || user.getFirstName().isEmpty()
-                || user.getLastName().isEmpty()) {
-
-                model.addAttribute("regError", "er");
-            return "registration";
+    public ModelAndView registerUser(@Valid @ModelAttribute("newUser") UserRequestDto newUser) {
+        ModelAndView modelAndView;
+        if (userService.addUser(newUser)) {
+            modelAndView = new ModelAndView("redirect:/login", HttpStatus.CREATED);
+            logger.debug("Created the user with credentials: {}", newUser);
+        } else {
+            modelAndView = getRegistrationModel(newUser);
+            modelAndView.setStatus(HttpStatus.CONFLICT);
+            modelAndView.addObject("userError", "User exists!");
+            logger.debug("User with name {} exists", newUser.getFirstName());
         }
-        if (!userService.addUser(user)) {
-            model.addAttribute("userError", "User exists!");
-            return "registration";
-        }
+        return modelAndView;
+    }
 
-        return "redirect:/login";
+    private ModelAndView getRegistrationModel(UserRequestDto userRequestDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("registration");
+        modelAndView.addObject("newUser", userRequestDto);
+        modelAndView.addObject("teamNames", teamService.getListOfAllTeamNames());
+        modelAndView.addObject("roles", userService.getListOfAllRoles());
+        return modelAndView;
+    }
+
+    @ExceptionHandler(BindException.class)
+    private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
+        ModelAndView modelAndView = getRegistrationModel((UserRequestDto) bindingResult.getModel().get("newUser"));
+        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
+        modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
+        modelAndView.addObject("errorMessage", e.getLocalizedMessage());
+        return modelAndView;
     }
 }

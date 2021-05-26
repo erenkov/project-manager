@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,33 +18,32 @@
     </style>
   </head>
   <body>
+  <!-- Include _header.html -->
+  <th:block th:include="/_header"></th:block>
     <main>
       <div class="container">
         <div class="row min-vh-100 align-items-center">
           <div class="col-6 py-4">
-            <div class="d-flex justify-content-end mb-2">
-              <a href="/logout">Logout</a>
-              <span>&nbsp;|&nbsp;</span>
-              <a href="/profile">Profile</a>
-            </div>
             <h1 class="mb-5">New project page</h1>
             <div class="shadow-sm border rounded-3">
               <div class="p-4 border-bottom">
                 <h4 class="mb-0">Create new project</h4>
               </div>
-              <form action="#" class="p-4">
+              <form action="/projects/create" class="p-4" id="newProjectForm" method="post" th:object="${newProject}">
                 <div class="mb-3">
                   <label for="inputName" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="inputName" />
+                  <input class="form-control" id="inputName" name="name" th:value="${newProject.name}" type="text"/>
                 </div>
                 <div class="mb-3">
                   <label for="inputDescription" class="form-label"
-                    >Description</label
+                  >Description</label
                   >
                   <input
-                    type="text"
-                    class="form-control"
-                    id="inputDescription"
+                          type="text"
+                          class="form-control"
+                          id="inputDescription"
+                          name="description"
+                          th:value="${newProject.description}"
                   />
                 </div>
                 <div class="row mb-3">
@@ -53,9 +52,11 @@
                       >Start date</label
                     >
                     <input
-                      type="date"
-                      class="form-control"
-                      id="inputStartDate"
+                            type="datetime-local"
+                            class="form-control"
+                            id="inputStartDate"
+                            name="startDate"
+                            th:value="${newProject.startDate}"
                     />
                   </div>
                   <div class="col-6">
@@ -63,29 +64,32 @@
                       >Finish date</label
                     >
                     <input
-                      type="date"
-                      class="form-control"
-                      id="inputFinishDate"
+                            type="datetime-local"
+                            class="form-control"
+                            id="inputFinishDate"
+                            name="estFinishDate"
+                            th:value="${newProject.estFinishDate}"
                     />
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="inputStatus" class="form-label">Status</label>
-                  <select class="form-select" id="inputStatus">
-                    <option value="1">In progress</option>
-                    <option value="2">Done</option>
-                  </select>
+                    <select class="form-select" id="inputStatus" name="status" disabled>
+                      <th:block th:each="statusItem : ${projectStatusList}">
+                        <option th:text="${statusItem}"  th:selected="${statusItem == 'BACKLOG'}"></option>
+                      </th:block>
+                    </select>
                 </div>
                 <div class="mb-3">
                   <label for="inputTeamName" class="col-3 col-form-label"
                     >Team name</label
                   >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputTeamName"
-                    required
-                  />
+                  <select class="form-select" id="inputTeamName" name="teamName">
+                    <option selected value="">Select team</option>
+                    <th:block th:each="team : ${teamList}">
+                      <option th:selected="${team == newProject.teamName}" th:text="${team}"></option>
+                    </th:block>
+                  </select>
                 </div>
                 <div class="d-block text-center">
                   <button type="submit" class="btn btn-primary me-3 px-4">

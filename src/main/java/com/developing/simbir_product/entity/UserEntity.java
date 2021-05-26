@@ -1,6 +1,16 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.util.UUID;
 
 
@@ -24,8 +34,9 @@ public class UserEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "user_number", nullable = false)
-    private int userNumber;
+    @Generated(GenerationTime.INSERT)
+    @Column(name = "user_number", insertable = false, updatable = false)
+    private Integer userNumber;
 
     @Column(name = "role_type")
     private Role role;
@@ -86,11 +97,11 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    public int getUserNumber() {
+    public Integer getUserNumber() {
         return userNumber;
     }
 
-    public void setUserNumber(int userNumber) {
+    public void setUserNumber(Integer userNumber) {
         this.userNumber = userNumber;
     }
 

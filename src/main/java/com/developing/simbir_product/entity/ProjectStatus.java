@@ -6,9 +6,9 @@ public enum ProjectStatus {
     DONE("D"),
     CLOSED("C");
 
-    private String shortName;
+    private final String shortName;
 
-    private ProjectStatus(String shortName){
+    ProjectStatus(String shortName) {
         this.shortName = shortName;
     }
 

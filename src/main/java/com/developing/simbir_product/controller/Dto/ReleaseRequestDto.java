@@ -1,6 +1,7 @@
 package com.developing.simbir_product.controller.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -10,17 +11,33 @@ import java.time.LocalDateTime;
 @Schema(description = "Релиз")
 public class ReleaseRequestDto {
 
+    @Schema(description = "Идентификатор релиза")
+    private String id;
+
     @Schema(description = "Название релиза")
     @NotBlank
     @Size(max = 50)
     private String name;
 
     @Schema(description = "Дата начала релиза")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startDate;
 
     @Schema(description = "Дата конца релиза")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime finishDate;
 
+    @Schema(description = "Название проекта")
+    @Size(max = 50)
+    private String projectName;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -44,5 +61,13 @@ public class ReleaseRequestDto {
 
     public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

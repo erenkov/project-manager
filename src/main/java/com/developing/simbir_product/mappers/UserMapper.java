@@ -19,7 +19,7 @@ public interface UserMapper {
     UserResponseDto userEntityToDto(UserEntity userEntity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "login", source = "email")
+    @Mapping(target = "login", expression = "java(userRequestDto.getEmail().toLowerCase())")
     @Mapping(target = "teamId", source = "team")
     UserEntity userDtoToEntity(UserRequestDto userRequestDto);
 }
