@@ -4,6 +4,7 @@ import com.developing.simbir_product.controller.Dto.TeamRequestDto;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.exception.TeamAlreadyExistException;
 import com.developing.simbir_product.service.TeamService;
+import com.developing.simbir_product.utils.BindingUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ import java.util.Optional;
 @Controller
 public class TeamsController {
 
+    @Autowired
+    BindingUtils bindingUtils;
     @Autowired
     private TeamService teamService;
 
@@ -97,10 +100,9 @@ public class TeamsController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
+    private ModelAndView handleValidationException(BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
-        modelAndView.addObject("errorMessage", e.getLocalizedMessage());
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
         List<String> pathSegments = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPathSegments();
         if ("create".equals(pathSegments.get(1))) {
             modelAndView.setViewName("create-team");

@@ -10,8 +10,8 @@ import javax.validation.constraints.Size;
 public class TeamRequestDto {
 
     @Schema(description = "Название команды")
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "Name must not be empty")
+    @Size(max = 50, message = "Name must not be greater than 50 characters")
     private String name;
 
     @Schema(description = "Описание команды")

@@ -29,6 +29,24 @@
               <div class="p-4 border-bottom">
                 <h4 class="mb-0">Create new team</h4>
               </div>
+
+              <div class="d-block text-center"
+                   style="margin: 5px"
+                   th:if="${errorMessage != null}"
+                   th:text="${errorMessage}"
+              ></div>
+              <th:block th:each="error : ${FieldErrors}" th:if="${FieldErrors != null}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+              </th:block>
+              <th:block th:each="error : ${GlobalErrors}"
+                        th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+              </th:block>
+
               <form action="/teams/create" method="post" id="newTeamForm" class="p-4" th:object="${newTeam}">
                 <div class="mb-3">
                   <label for="inputName" class="form-label">Name</label>
@@ -52,9 +70,11 @@
                   <button type="submit" class="btn btn-primary me-3 px-4">
                     Create team
                   </button>
-                  <button type="reset" class="btn btn-secondary px-4">
-                    Cancel
-                  </button>
+                  <a href="./">
+                    <button class="btn btn-secondary px-4" type="button">
+                      Cancel
+                    </button>
+                  </a>
                 </div>
               </form>
             </div>
