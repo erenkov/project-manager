@@ -1,8 +1,10 @@
 package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.UserRequestDto;
+import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
+import com.developing.simbir_product.utils.BindingUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -30,6 +33,9 @@ import java.security.Principal;
 public class UserProfileController {
 
     private final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+
+    @Autowired
+    private BindingUtils bindingUtils;
 
     @Autowired
     private UserService userService;
@@ -63,13 +69,21 @@ public class UserProfileController {
         return modelAndView;
     }
 
-    @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
-        ModelAndView modelAndView = getUserProfileModel();
-        modelAndView.setStatus(HttpStatus.BAD_REQUEST);
-        modelAndView.addObject("currentUser", bindingResult.getModel().get("currentUser"));
-        modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
+
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+    @ExceptionHandler(NotFoundException.class)
+    private ModelAndView handleEditException(NotFoundException e) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/logout");
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());
+        return modelAndView;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    private ModelAndView handleValidationException(BindingResult bindingResult) {
+        ModelAndView modelAndView = getUserProfileModel();
+        modelAndView.addObject("currentUser", bindingResult.getModel().get("currentUser"));
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
         return modelAndView;
     }
 }

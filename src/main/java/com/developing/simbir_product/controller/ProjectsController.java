@@ -8,10 +8,10 @@ import com.developing.simbir_product.exception.ProjectAlreadyExistException;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
+import com.developing.simbir_product.utils.BindingUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -32,9 +32,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Tag(name = "Управление проектами")
@@ -43,7 +41,7 @@ import java.util.stream.Collectors;
 public class ProjectsController {
 
     @Autowired
-    private MessageSource messageSource;
+    BindingUtils bindingUtils;
     @Autowired
     private UserService userService;
     @Autowired
@@ -132,16 +130,8 @@ public class ProjectsController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
+    private ModelAndView handleValidationException(BindingResult bindingResult) {
         ModelAndView modelAndView = getProjectsModel();
-        modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors().stream()
-                .map(error -> messageSource.getMessage(error, Locale.ROOT))
-                .sorted()
-                .collect(Collectors.toList()));
-        modelAndView.addObject("GlobalErrors", bindingResult.getGlobalErrors().stream()
-                .map(error -> messageSource.getMessage(error, Locale.ROOT))
-                .sorted()
-                .collect(Collectors.toList()));
         List<String> pathSegments = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPathSegments();
         if ("create".equals(pathSegments.get(1))) {
             modelAndView.setViewName("create-project");
@@ -150,6 +140,7 @@ public class ProjectsController {
             modelAndView.setViewName("edit-project");
             modelAndView.addObject("project", bindingResult.getModel().get("project"));
         }
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
         return modelAndView;
     }
 }

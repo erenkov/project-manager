@@ -6,11 +6,11 @@ import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.exception.ReleaseDatesException;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
+import com.developing.simbir_product.utils.BindingUtils;
 import com.developing.simbir_product.utils.Converter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
@@ -30,9 +30,7 @@ import org.springframework.web.util.UriUtils;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Tag(name = "Управление релизами")
@@ -41,7 +39,7 @@ import java.util.stream.Collectors;
 public class ReleasesController {
 
     @Autowired
-    private MessageSource messageSource;
+    BindingUtils bindingUtils;
 
     @Autowired
     private ReleaseService releaseService;
@@ -131,14 +129,7 @@ public class ReleasesController {
     private ModelAndView handleValidationException(BindingResult bindingResult) {
         ModelAndView modelAndView = getCurrentView();
         modelAndView.addObject("release", bindingResult.getModel().get("release"));
-        modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors().stream()
-                .map(error -> messageSource.getMessage(error, Locale.ROOT))
-                .sorted()
-                .collect(Collectors.toList()));
-        modelAndView.addObject("GlobalErrors", bindingResult.getGlobalErrors().stream()
-                .map(error -> messageSource.getMessage(error, Locale.ROOT))
-                .sorted()
-                .collect(Collectors.toList()));
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
         return modelAndView;
     }
 }

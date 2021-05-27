@@ -3,7 +3,7 @@ package com.developing.simbir_product.controller.Dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 
@@ -14,30 +14,34 @@ public class UserRequestDto {
     @Email(regexp = "[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+" +
             "(?:\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*" +
             "@(?:[a-zA-Z0-9]([-a-zA-Z0-9]{0,61}[a-zA-Z0-9])?\\.)*(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|" +
-            "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])")
-    @NotNull
+            "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])",
+            message = "E-mail must be in valid format")
+    @NotBlank(message = "E-mail must not be empty")
     @Size(min = 3, max = 320)
     private String email;
 
     @Schema(description = "Пароль")
-    @NotNull
-    @Size(min = 8, max = 50)
+    @NotBlank(message = "Password must not be empty")
+    @Size(min = 8, max = 50, message = "Password must be at least 8 and not greater than 50 characters")
     private String password;
 
     @Schema(description = "Имя")
-    @Size(max = 50)
+    @NotBlank(message = "First name must not be empty")
+    @Size(max = 50, message = "First name must not be greater than 50 characters")
     private String firstName;
 
     @Schema(description = "Фамилия")
-    @Size(max = 50)
+    @NotBlank(message = "Last name must not be empty")
+    @Size(max = 50, message = "Last name must not be greater than 50 characters")
     private String lastName;
 
     @Schema(description = "Роль")
-    @Size(max = 50)
+    @NotBlank(message = "Role name must not be empty")
+    @Size(max = 50, message = "Role name must not be greater than 50 characters")
     private String role;
 
     @Schema(description = "Команда")
-    @Size(max = 50)
+    @Size(max = 50, message = "Team name must not be greater than 50 characters")
     private String team;
 
     @Schema(description = "Табельный номер")

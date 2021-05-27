@@ -13,7 +13,7 @@ public class ProjectAlreadyExistException extends RuntimeException {
     public ProjectAlreadyExistException(String message, ProjectRequestDto project) {
         super(message);
         this.project = project;
-        logger.error(message);
+        logger.info(message);
     }
 
     public ProjectRequestDto getProject() {

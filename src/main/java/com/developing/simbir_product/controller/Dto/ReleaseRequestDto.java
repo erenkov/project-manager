@@ -33,7 +33,7 @@ public class ReleaseRequestDto {
     private LocalDateTime finishDate;
 
     @Schema(description = "Название проекта")
-    @Size(max = 50)
+    @Size(max = 50, message = "Project name must not be greater than 50 characters")
     private String projectName;
 
     public String getId() {

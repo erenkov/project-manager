@@ -13,7 +13,7 @@ public class ReleaseDatesException extends RuntimeException {
     public ReleaseDatesException(String message, ReleaseRequestDto release) {
         super(message);
         this.release = release;
-        logger.error(message);
+        logger.info(message);
     }
 
     public ReleaseRequestDto getRelease() {

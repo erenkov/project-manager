@@ -41,6 +41,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public boolean addProject(ProjectRequestDto projectRequestDto) {
+        if (projectRequestDto == null) {
+            throw new IllegalArgumentException("Can't create empty project");
+        }
         String projectName = projectRequestDto.getName();
         if (isProjectExist(projectName)) {
             throw new ProjectAlreadyExistException(

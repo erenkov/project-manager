@@ -50,6 +50,9 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Transactional
     @Override
     public ReleaseResponseDto getById(UUID id) {
+        if (id == null) {
+            throw new NotFoundException("Release not found");
+        }
         ReleaseEntity releaseEntity = releaseRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Release with ID = '%s' not found", id)));
 

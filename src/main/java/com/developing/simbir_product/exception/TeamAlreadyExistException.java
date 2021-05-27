@@ -13,7 +13,7 @@ public class TeamAlreadyExistException extends RuntimeException {
     public TeamAlreadyExistException(String message, TeamRequestDto team) {
         super(message);
         this.team = team;
-        logger.error(message);
+        logger.info(message);
     }
 
     public TeamRequestDto getTeam() {
