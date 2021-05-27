@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -73,7 +75,7 @@ public class ReleasesController {
     public ModelAndView createRelease(@PathVariable String projectName,
                                       @Valid @ModelAttribute("release") ReleaseRequestDto releaseRequestDto) {
         releaseService.addRelease(releaseRequestDto);
-        return new ModelAndView("redirect:/releases/" + projectName, HttpStatus.CREATED);
+        return new ModelAndView("redirect:/releases/" + UriUtils.encode(projectName, StandardCharsets.UTF_8));
     }
 
     @Operation(summary = "Получить страницу редактирования релиза")
@@ -92,7 +94,7 @@ public class ReleasesController {
                                     @Valid @ModelAttribute("release") ReleaseRequestDto releaseRequestDto) {
         releaseRequestDto.setId(releaseId);
         releaseService.editRelease(releaseRequestDto);
-        return new ModelAndView("redirect:/releases/" + projectName);
+        return new ModelAndView("redirect:/releases/" + UriUtils.encode(projectName, StandardCharsets.UTF_8));
     }
 
 
