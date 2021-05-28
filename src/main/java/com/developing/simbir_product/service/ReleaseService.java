@@ -14,6 +14,8 @@ public interface ReleaseService {
 
     ReleaseResponseDto getById(UUID id);
 
+    ReleaseResponseDto getByStringId(String id);
+
     boolean addRelease(ReleaseRequestDto releaseRequestDto);
 
     boolean editRelease(ReleaseRequestDto releaseRequestDto);

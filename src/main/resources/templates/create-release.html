@@ -84,7 +84,7 @@
                   <button type="submit" class="btn btn-primary me-3 px-4">
                     Create release
                   </button>
-                  <a href="./">
+                  <a th:href="@{/releases/{prName}(prName=${projectName})}">
                     <button class="btn btn-secondary px-4" type="button">
                       Cancel
                     </button>

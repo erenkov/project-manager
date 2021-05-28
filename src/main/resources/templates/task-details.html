@@ -26,7 +26,25 @@
             <div class="d-flex justify-content-between mb-3">
                 <h2>Task details</h2>
             </div>
-            <form th:action="@{/board/{prName}/task/{taskId} (prName=${projectName}, taskId=${task.id})}"
+
+            <div class="d-block text-center"
+                 style="margin: 5px"
+                 th:if="${errorMessage != null}"
+                 th:text="${errorMessage}"
+            ></div>
+            <th:block th:each="error : ${FieldErrors}" th:if="${FieldErrors != null}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+            </th:block>
+            <th:block th:each="error : ${GlobalErrors}"
+                      th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+            </th:block>
+
+            <form th:action="@{/board/{prName}/task/{taskId} (prName=${task.projectName}, taskId=${task.id})}"
                   method="post" id="editTaskForm" class="p-4" th:object="${task}">
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label">Title</label>
@@ -70,7 +88,7 @@
                                     <option th:each="i : ${#numbers.sequence(1, 5)}"
                                             th:value="${i}"
                                             th:text="${i}"
-                                            th:selected="${i == 3}">
+                                            th:selected="${i == task.priority}">
                                     </option>
                                 </select>
                             </div>
@@ -168,9 +186,9 @@
                                     <th:block th:each="userItem : ${listUsers}">
                                         <option th:text="${userItem.firstName} + ' '
                                                     + ${userItem.lastName} + ' ' + ${userItem.userNumber}"
-                                                th:selected="${userItem.firstName == currentUser.firstName
+                                                th:selected="${(currentUser != null) ? userItem.firstName == currentUser.firstName
                                                 and userItem.lastName == currentUser.lastName
-                                                and userItem.userNumber == currentUser.userNumber}">
+                                                and userItem.userNumber == currentUser.userNumber : false}">
                                         </option>
                                     </th:block>
                                 </select>
@@ -191,7 +209,11 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <button type="submit" class="btn btn-primary">Save and close</button>
-                            <button type="reset" class="btn btn-secondary ms-2">Cancel</button>
+                            <a th:href="@{/board/{prName}(prName=${task.projectName})}">
+                                <button class="btn btn-secondary px-4" type="button">
+                                    Cancel
+                                </button>
+                            </a>
                         </div>
                         <button type="button" class="btn btn-danger">Delete task</button>
                     </div>

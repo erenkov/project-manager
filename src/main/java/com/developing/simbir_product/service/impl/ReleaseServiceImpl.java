@@ -61,6 +61,15 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Transactional
     @Override
+    public ReleaseResponseDto getByStringId(String id) {
+        if (!Converter.isValidUuid(id)) {
+            throw new NotFoundException(String.format("Release with ID '%s' not found", id));
+        }
+        return getById(Converter.getUuidFromString(id));
+    }
+
+    @Transactional
+    @Override
     public boolean addRelease(ReleaseRequestDto releaseRequestDto) {
         if (countIntersectingReleases(releaseRequestDto) > 0) {
             throw new ReleaseDatesException(String.format("Release \"%s\" dates intersects with another" +
@@ -72,24 +81,6 @@ public class ReleaseServiceImpl implements ReleaseService {
                 releaseRequestDto.getName(),
                 releaseRequestDto.getProjectName()));
         return true;
-    }
-
-    private void checkReleaseDates(ReleaseRequestDto releaseRequestDto) {
-        ProjectEntity project = projectService.getProjectEntity(releaseRequestDto.getProjectName());
-        if (project.getStartDate() != null && project.getEstFinishDate() != null &&
-                (releaseRequestDto.getStartDate().isBefore(project.getStartDate().toLocalDateTime()) ||
-                        releaseRequestDto.getFinishDate().isAfter(project.getEstFinishDate().toLocalDateTime()))) {
-            throw new ReleaseDatesException(String.format("Release \"%s\" dates are outside project dates",
-                    releaseRequestDto.getName()), releaseRequestDto);
-        }
-    }
-
-    private long countIntersectingReleases(ReleaseRequestDto releaseToCheck) {
-        ProjectEntity projectEntity = projectService.getProjectEntity(releaseToCheck.getProjectName());
-        return getAllReleasesByProject(projectEntity).stream()
-                .filter(existingRelease -> !(releaseToCheck.getStartDate().isAfter(existingRelease.getFinishDate()) ||
-                        releaseToCheck.getFinishDate().isBefore(existingRelease.getStartDate())))
-                .count();
     }
 
     @Transactional
@@ -164,5 +155,23 @@ public class ReleaseServiceImpl implements ReleaseService {
     public ReleaseEntity getEntityById(UUID id) {
         return releaseRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Release with ID = '%s' not found", id)));
+    }
+
+    private void checkReleaseDates(ReleaseRequestDto releaseRequestDto) {
+        ProjectEntity project = projectService.getProjectEntity(releaseRequestDto.getProjectName());
+        if (project.getStartDate() != null && project.getEstFinishDate() != null &&
+                (releaseRequestDto.getStartDate().isBefore(project.getStartDate().toLocalDateTime()) ||
+                        releaseRequestDto.getFinishDate().isAfter(project.getEstFinishDate().toLocalDateTime()))) {
+            throw new ReleaseDatesException(String.format("Release \"%s\" dates are outside project dates",
+                    releaseRequestDto.getName()), releaseRequestDto);
+        }
+    }
+
+    private long countIntersectingReleases(ReleaseRequestDto releaseToCheck) {
+        ProjectEntity projectEntity = projectService.getProjectEntity(releaseToCheck.getProjectName());
+        return getAllReleasesByProject(projectEntity).stream()
+                .filter(existingRelease -> !(releaseToCheck.getStartDate().isAfter(existingRelease.getFinishDate()) ||
+                        releaseToCheck.getFinishDate().isBefore(existingRelease.getStartDate())))
+                .count();
     }
 }

@@ -32,6 +32,9 @@
                     <h3>Task board</h3>
                     <h3 class="col-2 ms-4" th:text="${currentProject.name}"></h3>
                 </div>
+                <div class="col py-4" th:if="${#httpServletRequest.getParameter('errorMessage') != null}"
+                     th:text="${#httpServletRequest.getParameter('errorMessage')}"></div>
+
                 <div class="row d-flex align-items-center justify-content-between mb-4">
                     <div class="col-4">
                         <label for="inputProjectEndDate" class="form-label" th:text="'Project end date:'"/>
@@ -72,8 +75,9 @@
                 <div class="d-flex align-items-center mb-4">
                     <h4 class="mb-0"
                         th:text="${currentProject.teamName != null} ? 'Team: ' + ${currentProject.teamName} : 'Team not set'"/>
-                    <a class="btn btn-primary btn-sm ms-4" th:href="@{/board/{prName}/create/(prName=${currentProject.name})}">
-                        <i class="bi bi-plus"></i> Add card
+                    <a class="btn btn-primary btn-sm ms-4"
+                       th:href="@{/board/{prName}/create(prName=${currentProject.name})}">
+                        <i class="bi bi-plus"></i> Add task
                     </a>
                     <a href="/board/filters" class="btn btn-primary btn-sm px-3 ms-4"
                     ><i class="bi bi-filter"></i>Filters</a
@@ -82,7 +86,8 @@
                        th:href="@{/releases/{projectName}(projectName=${currentProject.name})}"
                     >Releases</a
                     >
-                    <div class="ms-4 text-primary" th:text="${currentRelease.name != null} ? 'Current release: ' + ${currentRelease.name} : 'No releases'" />
+                    <div class="ms-4 text-primary" th:text="${currentRelease.name != null} ?
+                    'Current release: ' + ${currentRelease.name} : 'Current release: Not set'"/>
                 </div>
                 <div class="row flex-grow-1">
                     <div class="d-flex flex-column col-4">

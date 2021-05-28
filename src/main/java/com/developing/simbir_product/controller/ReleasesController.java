@@ -39,7 +39,7 @@ import java.util.Optional;
 public class ReleasesController {
 
     @Autowired
-    BindingUtils bindingUtils;
+    private BindingUtils bindingUtils;
 
     @Autowired
     private ReleaseService releaseService;

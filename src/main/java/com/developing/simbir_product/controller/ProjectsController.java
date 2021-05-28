@@ -41,7 +41,7 @@ import java.util.Optional;
 public class ProjectsController {
 
     @Autowired
-    BindingUtils bindingUtils;
+    private BindingUtils bindingUtils;
     @Autowired
     private UserService userService;
     @Autowired

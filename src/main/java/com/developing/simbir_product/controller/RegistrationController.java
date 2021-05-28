@@ -33,7 +33,7 @@ public class RegistrationController {
     private final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
     @Autowired
-    BindingUtils bindingUtils;
+    private BindingUtils bindingUtils;
 
     @Autowired
     private UserService userService;

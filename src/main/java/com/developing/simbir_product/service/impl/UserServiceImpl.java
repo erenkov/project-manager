@@ -12,6 +12,7 @@ import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.developing.simbir_product.utils.Converter.getUserNumberFromAssignee;
 
 
 @Service
@@ -105,11 +108,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponseDto findByAssigneeName(String assigneeName) {
-        UserEntity userEntity = userRepository.findByUserNumber(Integer.valueOf(assigneeName.split(" ")[2]))
+        if (StringUtils.isEmpty(assigneeName)) {
+            return null;
+        }
+        UserEntity userEntity = userRepository.findByUserNumber(getUserNumberFromAssignee(assigneeName))
                 .orElse(null);
         return (userEntity == null) ? null : userMapper.userEntityToDto(userEntity);
     }
 
+    @Transactional
     @Override
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = userTaskHistoryService.getCurrentUserByTask(taskEntity);

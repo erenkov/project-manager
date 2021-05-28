@@ -34,7 +34,7 @@ import java.util.Optional;
 public class TeamsController {
 
     @Autowired
-    BindingUtils bindingUtils;
+    private BindingUtils bindingUtils;
     @Autowired
     private TeamService teamService;
 
