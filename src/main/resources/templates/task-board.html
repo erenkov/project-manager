@@ -30,7 +30,7 @@
             <div class="col-12 pb-4 d-flex flex-column">
                 <div class="d-flex">
                     <h3>Task board</h3>
-                    <h3 class="col-2 ms-4" th:text="${currentProject.name}"></h3>
+                    <h3 class="col-sm-10" style="margin-left: 10px" th:text="${currentProject.name}"></h3>
                 </div>
                 <div class="col py-4" th:if="${#httpServletRequest.getParameter('errorMessage') != null}"
                      th:text="${#httpServletRequest.getParameter('errorMessage')}"></div>
@@ -105,7 +105,7 @@
                                         ></a>
                                     </div>
                                     <div class="p-3 d-flex flex-column">
-                                        <p th:text="${backlogTask.description}"/>
+                                        <p th:text="${#strings.abbreviate(backlogTask.description, 300)}"/>
                                         <div
                                                 class="d-flex justify-content-between align-items-center"
                                         >
@@ -137,7 +137,7 @@
                                         ></a>
                                     </div>
                                     <div class="p-3 d-flex flex-column">
-                                        <p th:text="${inProgressTask.description}"/>
+                                        <p th:text="${#strings.abbreviate(inProgressTask.description, 300)}"/>
                                         <div
                                                 class="d-flex justify-content-between align-items-center"
                                         >
@@ -166,7 +166,7 @@
                                         ></a>
                                     </div>
                                     <div class="p-3 d-flex flex-column">
-                                        <p th:text="${doneTask.description}"/>
+                                        <p th:text="${#strings.abbreviate(doneTask.description, 300)}"/>
                                         <div
                                                 class="d-flex justify-content-between align-items-center"
                                         >

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -15,6 +16,9 @@ public class ProjectRequestDto {
 
     @Schema(description = "Навзвание проекта")
     @NotBlank(message = "Name must not be empty")
+    @Pattern(regexp = "(?U)[\\w&&[^_]]+[-\\w$.+!*'() ]*",
+            message = "Name must not contain any characters except letters, numbers, spaces or $-_.+!*'().\n" +
+                    "First character must be letter or digit.")
     @Size(max = 50, message = "Name must not be greater than 50 characters")
     private String name;
 
