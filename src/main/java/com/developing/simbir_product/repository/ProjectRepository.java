@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Repository
-public interface ProjectRepository extends  JpaRepository<ProjectEntity, UUID>{
+public interface ProjectRepository extends JpaRepository<ProjectEntity, UUID> {
+
     Optional<ProjectEntity> findByName(String name);
+
     List<ProjectEntity> findAllByTeamId(TeamEntity team);
 }

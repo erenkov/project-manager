@@ -18,34 +18,32 @@
     </style>
   </head>
   <body>
+  <!-- Include _header.html -->
+  <th:block th:include="/_header"></th:block>
     <main>
       <div class="container">
         <div class="row min-vh-100 align-items-center">
           <div class="col-6 py-4">
-            <div class="d-flex justify-content-end mb-2">
-              <a href="/logout">Logout</a>
-              <span>&nbsp;|&nbsp;</span>
-              <a href="/profile">Profile</a>
-            </div>
             <h1 class="mb-5">New project page</h1>
             <div class="shadow-sm border rounded-3">
               <div class="p-4 border-bottom">
                 <h4 class="mb-0">Create new project</h4>
               </div>
-              <form action="/projects/create" method="post" id="newProjectForm" class="p-4" th:object="${newPoject}">
+              <form action="/projects/create" class="p-4" id="newProjectForm" method="post" th:object="${newProject}">
                 <div class="mb-3">
                   <label for="inputName" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="inputName" name="name" />
+                  <input class="form-control" id="inputName" name="name" th:value="${newProject.name}" type="text"/>
                 </div>
                 <div class="mb-3">
                   <label for="inputDescription" class="form-label"
-                    >Description</label
+                  >Description</label
                   >
                   <input
-                    type="text"
-                    class="form-control"
-                    id="inputDescription"
-                    name="description"
+                          type="text"
+                          class="form-control"
+                          id="inputDescription"
+                          name="description"
+                          th:value="${newProject.description}"
                   />
                 </div>
                 <div class="row mb-3">
@@ -54,10 +52,11 @@
                       >Start date</label
                     >
                     <input
-                      type="datetime-local"
-                      class="form-control"
-                      id="inputStartDate"
-                      name="startDate"
+                            type="datetime-local"
+                            class="form-control"
+                            id="inputStartDate"
+                            name="startDate"
+                            th:value="${newProject.startDate}"
                     />
                   </div>
                   <div class="col-6">
@@ -65,10 +64,11 @@
                       >Finish date</label
                     >
                     <input
-                      type="datetime-local"
-                      class="form-control"
-                      id="inputFinishDate"
-                      name="estFinishDate"
+                            type="datetime-local"
+                            class="form-control"
+                            id="inputFinishDate"
+                            name="estFinishDate"
+                            th:value="${newProject.estFinishDate}"
                     />
                   </div>
                 </div>

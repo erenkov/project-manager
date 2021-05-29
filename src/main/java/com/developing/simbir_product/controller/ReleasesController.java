@@ -12,11 +12,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 
 @Tag(name = "Управление релизами")
 @RequestMapping(value = "/releases")
@@ -52,14 +58,14 @@ public class ReleasesController {
     @PostMapping("/create")
     public ModelAndView createRelease(@Valid @ModelAttribute("newRelease") ReleaseRequestDto releaseRequestDto) {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("projectName", releaseRequestDto.getProjectName());
         if (releaseService.addRelease(releaseRequestDto)) {
-            modelAndView.setViewName("redirect:/releases?projectName=" + releaseRequestDto.getProjectName());
+            modelAndView.setViewName("redirect:/releases");
             modelAndView.setStatus(HttpStatus.CREATED);
         } else {
-            modelAndView.setViewName("create-release");
+            modelAndView.setViewName("redirect:/releases/create");
             modelAndView.setStatus(HttpStatus.CONFLICT);
             modelAndView.addObject("newRelease", releaseRequestDto);
-            modelAndView.addObject("releaseError", "Release already exist");
         }
         return modelAndView;
     }
@@ -75,26 +81,24 @@ public class ReleasesController {
     @Operation(summary = "Редактировать информацию о релизе")
     @PostMapping("/edit/{releaseId}")
     public ModelAndView editRelease(@PathVariable("releaseId") String releaseId,
-                                    @Valid @ModelAttribute("release") ReleaseRequestDto releaseRequestDto,
-                                    HttpServletRequest httpServletRequest) {
+                                    @Valid @ModelAttribute("release") ReleaseRequestDto releaseRequestDto) {
         releaseRequestDto.setId(releaseId);
 
         ModelAndView modelAndView = new ModelAndView();
         if (releaseService.editRelease(releaseRequestDto)) {
-            modelAndView.setViewName("redirect:/releases?projectName=" + releaseRequestDto.getProjectName());
+            modelAndView.addObject("projectName", releaseRequestDto.getProjectName());
+            modelAndView.setViewName("redirect:/releases");
             modelAndView.setStatus(HttpStatus.OK);
         } else {
-            modelAndView.setViewName("redirect:/create-release?projectName=" + releaseRequestDto.getProjectName());
+            modelAndView.setViewName("redirect:/releases/edit/" + releaseId);
             modelAndView.setStatus(HttpStatus.CONFLICT);
-            modelAndView.addObject("releaseError", "Failed to save new values");
         }
         return modelAndView;
     }
 
     @ExceptionHandler(BindException.class)
     private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
-        //todo имя view
-        ModelAndView modelAndView = new ModelAndView("releaseViewName", HttpStatus.BAD_REQUEST);
+        ModelAndView modelAndView = new ModelAndView("create-release", HttpStatus.BAD_REQUEST);
         modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());
         return modelAndView;

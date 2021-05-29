@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
+
 @Tag(name = "Управление профилем")
 @RequestMapping(value = "/profile")
 @Controller
 public class UserProfileController {
 
-    Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
     @Autowired
     private UserService userService;
@@ -36,7 +37,7 @@ public class UserProfileController {
         model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
         model.addAttribute("teamNames", teamService.getListOfAllTeamNames());
         model.addAttribute("roles", userService.getListOfAllRoles());
-        logger.trace("{} has accessed the profile page", principal.getName());
+        logger.info("{} has accessed the profile page", principal.getName());
         return "profile";
     }
 

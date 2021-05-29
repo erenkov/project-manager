@@ -5,6 +5,7 @@ import com.developing.simbir_product.entity.TaskType;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+
 @Converter(autoApply = true)
 public class TaskTypeConverter implements AttributeConverter<TaskType, String> {
 
@@ -26,8 +27,7 @@ public class TaskTypeConverter implements AttributeConverter<TaskType, String> {
                 return TaskType.HOTFIX;
 
             default:
-                throw new IllegalArgumentException("ShortName [" + shortName
-                        + "] not supported.");
+                throw new IllegalArgumentException(String.format("ShortName [%s] not supported.", shortName));
         }
     }
 }

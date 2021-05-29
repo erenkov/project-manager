@@ -9,6 +9,7 @@ import com.developing.simbir_product.entity.TaskEntity;
 import java.util.List;
 import java.util.UUID;
 
+
 public interface ReleaseService {
 
     ReleaseResponseDto getById(UUID id);
@@ -19,13 +20,9 @@ public interface ReleaseService {
 
     void deleteById(UUID id);
 
-    ReleaseResponseDto findByName(String name);
-
     ReleaseEntity addReleaseEntity(ReleaseEntity releaseEntity);
 
     String getReleaseString(TaskEntity taskEntity);
-
-    List<ReleaseResponseDto> findAll();
 
     ReleaseResponseDto getCurrentRelease(String projectName);
 

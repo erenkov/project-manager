@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -32,11 +33,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                    .antMatchers("/favicon.ico").permitAll()
+                    .antMatchers( "/board/create").hasAnyRole("MANAGER", "ADMIN")
+                    .antMatchers("/", "/projects", "/board/**", "/profile/**").fullyAuthenticated()
                     .antMatchers("/registration").not().fullyAuthenticated()
-                    .antMatchers("/login", "/", "/board", "/board/filter", "/profile/**", "/projects", "/task/{id}")
-                        .fullyAuthenticated()
-                    .antMatchers("/board/create", "/task/create", "/teams").hasAnyRole("MANAGER", "ADMIN")
-                    .antMatchers("/projects/**", "/releases/**").hasRole("ADMIN")
+                    .antMatchers("/**").hasRole("ADMIN")
+                //todo Далее правки от Данила, вместо того что выше, но у нас поменялся функционал,
+                // теперь не много другие права доступа у пользователей, нужно разобраться
+//                .antMatchers("/registration").not().fullyAuthenticated()
+//                .antMatchers("/login", "/", "/board", "/board/filter", "/profile/**", "/projects", "/task/{id}")
+//                .fullyAuthenticated()
+//                .antMatchers("/board/create", "/task/create", "/teams").hasAnyRole("MANAGER", "ADMIN")
+//                .antMatchers("/projects/**", "/releases/**").hasRole("ADMIN")
                 .and()
                     .formLogin()
                     .loginProcessingUrl("/login")

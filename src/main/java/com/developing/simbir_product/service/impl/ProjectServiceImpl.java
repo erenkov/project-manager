@@ -5,10 +5,12 @@ import com.developing.simbir_product.controller.Dto.ProjectResponseDto;
 import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.ProjectStatus;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.exception.ProjectAlreadyExistException;
 import com.developing.simbir_product.mappers.ProjectMapper;
 import com.developing.simbir_product.repository.ProjectRepository;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.TeamService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,10 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-    Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     @Autowired
-    ProjectMapper projectMapper;
+    private ProjectMapper projectMapper;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -37,29 +39,18 @@ public class ProjectServiceImpl implements ProjectService {
     private TeamService teamService;
 
     @Transactional
-    @Override
-    public ProjectResponseDto getById(UUID id) {
-
-        ProjectEntity projectEntity = projectRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Project with ID = '%s' not found", id)));
-
-        return projectMapper.projectEntityToDto(projectEntity);
-    }
-
-
-    @Transactional
-    @Override
-    public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
-
-        projectRequestDto.setStatus(ProjectStatus.BACKLOG.toString());
-
+    public boolean addProject(ProjectRequestDto projectRequestDto) {
+        String projectName = projectRequestDto.getName();
+        if (isProjectExist(projectName)) {
+            throw new ProjectAlreadyExistException(
+                    String.format("Project with name \"%s\" already exist", projectName),
+                    projectRequestDto);
+        }
+        projectRequestDto.setStatus(ProjectStatus.BACKLOG.name());
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
-
         projectRepository.save(projectEntity);
-
-        ProjectResponseDto projectResponseDto = projectMapper.projectEntityToDto(projectEntity);
-        logger.trace("{} project has been created", projectRequestDto.getName());
-        return projectResponseDto; //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
+        logger.info("{} project has been created", projectName);
+        return true;
     }
 
     @Transactional
@@ -70,29 +61,29 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public ProjectResponseDto editProject(ProjectRequestDto projectRequestDto) {
-
+    public boolean editProject(ProjectRequestDto projectRequestDto) {
+        String projectName = projectRequestDto.getName();
+        if (!isProjectExist(projectName)) {
+            throw new NotFoundException(String.format("Project with name \"%s\" not found", projectName));
+        }
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
         ProjectEntity tempProjectFromDB = getProjectEntity(projectEntity.getName());
         projectEntity.setId(tempProjectFromDB.getId());
         projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
-        logger.trace(projectRequestDto.getName() + " has been edited");
-        return projectMapper.projectEntityToDto(projectRepository.save(projectEntity));
+        projectRepository.save(projectEntity);
+        logger.info(projectName + " has been edited");
+        return true;
     }
-
 
     @Transactional
     @Override
     public void deleteById(UUID id) {
         projectRepository.deleteById(id);
-        //todo Подумать : ЧТО ЛУЧШЕ ВОЗВРАЩАТЬ?
     }
-
 
     @Transactional
     @Override
     public ProjectResponseDto findByName(String name) {
-
         return projectMapper.projectEntityToDto(getProjectEntity(name));
     }
 
@@ -105,29 +96,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public List<ProjectResponseDto> findAll() {
-        return projectRepository
-                .findAll()
-                .stream()
-                .map(pE -> projectMapper.projectEntityToDto(pE))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @Override
     public List<String> getListOfAllProjectNames() {
         return projectRepository.findAll().stream().map(ProjectEntity::getName).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getListOfAllProjectStatus() {
-        return Arrays.stream(ProjectStatus.values()).map(ProjectStatus::toString).collect(Collectors.toList());
+        return Arrays.stream(ProjectStatus.values()).map(ProjectStatus::name).collect(Collectors.toList());
     }
 
     @Transactional
     @Override
     public List<String> getListOfAllProjectNamesByTeam(String teamName) {
-        if (teamName == null || teamName.isBlank()) {
+        if (StringUtils.isEmpty(teamName)) {
             return Collections.emptyList();
         }
         return projectRepository
@@ -135,5 +116,9 @@ public class ProjectServiceImpl implements ProjectService {
                 .stream()
                 .map(ProjectEntity::getName)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isProjectExist(String name) {
+        return projectRepository.findByName(name).isPresent();
     }
 }

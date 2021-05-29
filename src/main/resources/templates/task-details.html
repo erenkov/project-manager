@@ -18,16 +18,13 @@
     </style>
 </head>
 <body>
+<!-- Include _header.html -->
+<th:block th:include="/_header"></th:block>
 <main>
     <div class="container">
         <div class="col-12 py-4">
             <div class="d-flex justify-content-between mb-3">
                 <h2>Task details</h2>
-                <div>
-                    <a href="/logout">Logout</a>
-                    <span>&nbsp;|&nbsp;</span>
-                    <a href="/profile">Profile</a>
-                </div>
             </div>
             <form th:action="@{/board/{prName}/task/{taskId} (prName=${projectName}, taskId=${task.id})}"
                   method="post" id="editTaskForm" class="p-4" th:object="${task}">
@@ -110,25 +107,11 @@
                                         <option th:text="${releaseItem.name} + ' ' + '('
                                                     + ${#temporals.format(releaseItem.startDate, 'dd.MM.yyyy')}
                                                     + ' - ' + ${#temporals.format(releaseItem.finishDate, 'dd.MM.yyyy')+')'}"
-                                                th:selected="${releaseItem.name == currentRelease.name}"
+                                                th:selected="${currentRelease == null ? false : releaseItem.name == currentRelease.name}"
+                                                th:value="${releaseItem.id}"
                                         ></option>
                                     </th:block>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="inputTeam" class="col-3 col-form-label"
-                            >Team</label
-                            >
-                            <div class="col-9">
-                                <input
-                                        type="text"
-                                        name="team"
-                                        class="form-control"
-                                        id="inputTeam"
-                                        th:value="${teamName}"
-                                        required
-                                />
                             </div>
                         </div>
                     </div>
@@ -162,16 +145,17 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="inputActualDate" class="col-3 col-form-label"
+                            <label class="col-3 col-form-label" for="inputFinishDate"
                             >Actual end date</label
                             >
                             <div class="col-9">
                                 <input
                                         type="datetime-local"
                                         class="form-control"
-                                        id="inputActualDate"
+                                        id="inputFinishDate"
                                         name="finishDate"
-                                        disabled
+                                        readonly
+                                        th:value="${task.finishDate}"
                                 />
                             </div>
                         </div>
@@ -183,7 +167,7 @@
                                 <select class="form-select" id="inputAssignee" name="assigneeName">
                                     <th:block th:each="userItem : ${listUsers}">
                                         <option th:text="${userItem.firstName} + ' '
-                                                    + ${userItem.lastName} + ' № ' + ${userItem.userNumber}"
+                                                    + ${userItem.lastName} + ' ' + ${userItem.userNumber}"
                                                 th:selected="${userItem.firstName == currentUser.firstName
                                                 and userItem.lastName == currentUser.lastName
                                                 and userItem.userNumber == currentUser.userNumber}">
@@ -195,11 +179,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="inputDescription" class="form-label">Task description</label>
-                        <textarea class="form-control" id="inputDescription" name="description" rows="3">Description...</textarea>
+                        <textarea class="form-control" id="inputDescription" name="description"
+                                  placeholder="Description..."
+                                  rows="3" th:text="${task.description}"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="inputComments" class="form-label">Comments</label>
-                        <textarea class="form-control" id="inputComments" name="comments" rows="3">Comments...</textarea>
+                        <textarea class="form-control" id="inputComments" name="comments" placeholder="Comments..."
+                                  rows="3" th:text="${task.comments}"></textarea>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div>

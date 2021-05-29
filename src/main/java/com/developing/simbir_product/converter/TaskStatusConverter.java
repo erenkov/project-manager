@@ -5,6 +5,7 @@ import com.developing.simbir_product.entity.TaskStatus;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+
 @Converter(autoApply = true)
 public class TaskStatusConverter implements AttributeConverter<TaskStatus, String> {
 
@@ -26,8 +27,7 @@ public class TaskStatusConverter implements AttributeConverter<TaskStatus, Strin
                 return TaskStatus.DONE;
 
             default:
-                throw new IllegalArgumentException("ShortName [" + shortName
-                        + "] not supported.");
+                throw new IllegalArgumentException(String.format("ShortName [%s] not supported.", shortName));
         }
     }
 }
