@@ -38,7 +38,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private TeamService teamService;
 
-    @Override
     @Transactional
     public boolean addProject(ProjectRequestDto projectRequestDto) {
         String projectName = projectRequestDto.getName();
