@@ -1,26 +1,32 @@
 package com.developing.simbir_product.controller.Dto;
 
+import com.developing.simbir_product.validators.ProjectWithDates;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 
 @Schema(description = "Проект")
+@ProjectWithDates
 public class ProjectRequestDto {
 
     @Schema(description = "Навзвание проекта")
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "Name must not be empty")
+    @Pattern(regexp = "(?U)[\\w&&[^_]]+[-\\w$.+!*'() ]*",
+            message = "Name must not contain any characters except letters, numbers, spaces or $-_.+!*'().\n" +
+                    "First character must be letter or digit.")
+    @Size(max = 50, message = "Name must not be greater than 50 characters")
     private String name;
 
     @Schema(description = "Описание проекта")
     private String description;
 
     @Schema(description = "Команда")
-    @Size(max = 50)
+    @Size(max = 50, message = "Team name must not be greater than 50 characters")
     private String teamName;
 
     @Schema(description = "Статус")

@@ -6,6 +6,7 @@ import com.developing.simbir_product.entity.ProjectEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TeamEntity;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.exception.TeamAlreadyExistException;
 import com.developing.simbir_product.mappers.TeamMapper;
 import com.developing.simbir_product.repository.TeamRepository;
 import com.developing.simbir_product.service.TeamService;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,14 +38,12 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     @Override
     public boolean editTeam(TeamRequestDto teamRequestDto) {
-        TeamEntity teamEntity = teamMapper.teamDtoToEntity(teamRequestDto);
-        Optional<TeamEntity> tempTeamFromDB = Optional.ofNullable(findByName(teamEntity.getName()));
-
-        if (tempTeamFromDB.isEmpty()) { // Если при редактировании текущая команда в БД не найдена,
-            return false;                  // то не выполняем запись в БД
+        String teamName = teamRequestDto.getName();
+        if (!isTeamExist(teamName)) {
+            throw new NotFoundException(String.format("Team with name \"%s\" not found", teamName));
         }
-
-        teamEntity.setId(tempTeamFromDB.get().getId());
+        TeamEntity teamEntity = teamMapper.teamDtoToEntity(teamRequestDto);
+        teamEntity.setId(findByName(teamName).getId());
         teamRepository.save(teamEntity);
         return true;
     }
@@ -60,7 +58,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamEntity findByName(String name) {
         return teamRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Team with name = '%s' not found", name)));
+                () -> new NotFoundException(String.format("Team with name \"%s\" not found", name)));
     }
 
     @Override
@@ -74,12 +72,10 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<String> getListOfAllTeamNames() {
-        return teamRepository.findAll().stream().map(TeamEntity::getName).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<String> findAllTeamNames() {
-        return teamRepository.findAll().stream().map(TeamEntity::getName).collect(Collectors.toList());
+        return teamRepository.findAllByOrderByNameAsc()
+                .stream()
+                .map(TeamEntity::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -93,12 +89,11 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     @Override
     public boolean addTeamDto(TeamRequestDto teamRequestDto) {
-        Optional<TeamEntity> teamFromDb = teamRepository.findByName(teamRequestDto.getName());
-
-        if (teamFromDb.isPresent()) { // Если при добавлении команды в БД уже найдена команда с
-            return false;             // тем же именем, то не записываем команду в БД
+        String teamName = teamRequestDto.getName();
+        if (isTeamExist(teamName)) {
+            throw new TeamAlreadyExistException(String.format("Team with name \"%s\" already exist", teamName),
+                    teamRequestDto);
         }
-
         teamRepository.save(teamMapper.teamDtoToEntity(teamRequestDto));
         return true;
     }
@@ -106,8 +101,10 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     @Override
     public TeamResponseDto findDtoByName(String name) {
-        TeamEntity teamEntity = teamRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Team with name = '%s' not found", name)));
-        return teamMapper.teamEntityToDto(teamEntity);
+        return teamMapper.teamEntityToDto(findByName(name));
+    }
+
+    private boolean isTeamExist(String teamName) {
+        return teamRepository.existsByName(teamName);
     }
 }

@@ -26,10 +26,30 @@
             <div class="d-flex justify-content-between mb-3">
                 <h2>Create task</h2>
             </div>
-            <form th:action="@{/board/{prName}/create/(prName=${projectName})}" method="post" id="newTaskForm" class="p-4" th:object="${newTask}">
+
+            <div class="d-block text-center"
+                 style="margin: 5px"
+                 th:if="${errorMessage != null}"
+                 th:text="${errorMessage}"
+            ></div>
+            <th:block th:each="error : ${FieldErrors}" th:if="${FieldErrors != null}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+            </th:block>
+            <th:block th:each="error : ${GlobalErrors}"
+                      th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+            </th:block>
+
+            <form class="p-4" id="newTaskForm" method="post" th:action="@{/board/{prName}/create/(prName=${(projectName != null) ? projectName :
+            task.projectName})}" th:object="${task}">
                 <div class="mb-3">
                     <label for="inputTitle" class="form-label">Title</label>
                     <input
+                            th:value="${task.name}"
                             type="text"
                             class="form-control"
                             id="inputTitle"
@@ -44,7 +64,7 @@
                             <label for="inputStatus" class="col-3 col-form-label">Task status</label>
                             <div class="col-9">
                                 <select class="form-select" id="inputStatus" name="status">
-                                    <th:block th:each="statusItem : ${taskStatus}">
+                                    <th:block th:each="statusItem : ${taskStatusList}">
                                         <option th:text="${statusItem}"
                                                 th:selected="${statusItem == 'BACKLOG'}"></option>
                                     </th:block>
@@ -55,9 +75,10 @@
                             <label for="inputType" class="col-3 col-form-label">Task type</label>
                             <div class="col-9">
                                 <select class="form-select" id="inputType" name="type">
-                                    <th:block th:each="typeItem : ${taskType}">
+                                    <th:block th:each="typeItem : ${taskTypeList}">
                                         <option th:text="${typeItem}"
-                                                th:selected="${typeItem == 'FEATURE'}"></option>
+                                                th:selected="${(task.type == null) ? typeItem == 'FEATURE' :
+                                                typeItem == task.type}"></option>
                                     </th:block>
                                 </select>
                             </div>
@@ -69,7 +90,7 @@
                                     <option th:each="i : ${#numbers.sequence(1, 5)}"
                                             th:value="${i}"
                                             th:text="${i}"
-                                            th:selected="${i == 3}">
+                                            th:selected="${(task.priority == null) ? i == 3 : i == task.priority}">
                                     </option>
                                 </select>
                             </div>
@@ -78,6 +99,7 @@
                             <label for="inputEstimated" class="col-3 col-form-label">Estimated Costs</label>
                             <div class="col-9">
                                 <input
+                                        th:value="${task.estCosts}"
                                         type="text"
                                         class="form-control"
                                         id="inputEstimated"
@@ -89,6 +111,7 @@
                             <label for="inputActual" class="col-3 col-form-label">Actual Costs</label>
                             <div class="col-9">
                                 <input
+                                        th:value="${task.actualCosts}"
                                         type="text"
                                         class="form-control"
                                         id="inputActual"
@@ -105,7 +128,7 @@
                                                     + ${#temporals.format(releaseItem.startDate, 'dd.MM.yyyy')}
                                                     + ' - ' + ${#temporals.format(releaseItem.finishDate, 'dd.MM.yyyy')+')'}"
                                                 th:value="${releaseItem.id}"
-                                                th:selected="${releaseItem.name == currentRelease.name}"
+                                                th:selected="${(currentRelease != null) ? releaseItem.name == currentRelease.name : false}"
                                         ></option>
                                     </th:block>
                                 </select>
@@ -119,6 +142,7 @@
                             >
                             <div class="col-9">
                                 <input
+                                        th:value="${task.createDate}"
                                         type="datetime-local"
                                         class="form-control"
                                         id="inputStartDate"
@@ -132,6 +156,7 @@
                             >
                             <div class="col-9">
                                 <input
+                                        th:value="${task.dueDate}"
                                         type="datetime-local"
                                         class="form-control"
                                         id="inputEstimatedDate"
@@ -161,9 +186,12 @@
                                     <th:block th:each="userItem : ${listUsers}">
                                         <option th:text="${userItem.firstName} + ' '
                                                     + ${userItem.lastName} + ' ' + ${userItem.userNumber}"
-                                                th:selected="${userItem.firstName == currentUser.firstName
+                                                th:selected="${task.assigneeName == null ?
+                                                (userItem.firstName == currentUser.firstName
                                                 and userItem.lastName == currentUser.lastName
-                                                and userItem.userNumber == currentUser.userNumber}">
+                                                and userItem.userNumber == currentUser.userNumber) :
+                                                (userItem.firstName + ' ' + userItem.lastName + ' ' +
+                                                userItem.userNumber) == task.assigneeName}">
                                         </option>
                                     </th:block>
                                 </select>
@@ -172,16 +200,22 @@
                     </div>
                     <div class="mb-3">
                         <label for="inputDescription" class="form-label">Task description</label>
-                        <textarea class="form-control" id="inputDescription" name="description" rows="3"></textarea>
+                        <textarea class="form-control" id="inputDescription" name="description"
+                                  rows="3" th:text="${task.description}"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="inputComments" class="form-label">Comments</label>
-                        <textarea class="form-control" id="inputComments" name="comments" rows="3"></textarea>
+                        <textarea class="form-control" id="inputComments" name="comments"
+                                  rows="3" th:text="${task.comments}"></textarea>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div>
                             <button type="submit" class="btn btn-primary">Save and close</button>
-                            <button type="reset" class="btn btn-secondary ms-2">Cancel</button>
+                            <a th:href="@{/board/{prName}(prName=${projectName})}">
+                                <button class="btn btn-secondary px-4" type="button">
+                                    Cancel
+                                </button>
+                            </a>
                         </div>
                         <button type="button" class="btn btn-danger">Delete task</button>
                     </div>

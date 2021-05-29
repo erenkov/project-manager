@@ -1,22 +1,26 @@
 package com.developing.simbir_product.controller.Dto;
 
+import com.developing.simbir_product.validators.TaskWithDates;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 
 @Schema(description = "Задача")
+@TaskWithDates
 public class TaskRequestDto {
 
     @Schema(description = "ID задачи")
     private String id;
 
     @Schema(description = "Название задачи")
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "Name must not be empty")
+    @Size(max = 50, message = "Name must not be greater than 50 characters")
     private String name;
 
     @Schema(description = "Статус задачи")
@@ -30,10 +34,12 @@ public class TaskRequestDto {
 
     @Schema(description = "Дата создания")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull(message = "Start date must not be empty")
     private LocalDateTime createDate;
 
     @Schema(description = "Ориентировочная дата завершения")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull(message = "Estimated end date must not be empty")
     private LocalDateTime dueDate;
 
     @Schema(description = "Дата завершения")
@@ -41,31 +47,33 @@ public class TaskRequestDto {
     private LocalDateTime finishDate;
 
     @Schema(description = "Ориентировочные затраты")
-    private int estCosts;
+    @NumberFormat
+    private Integer estCosts;
 
     @Schema(description = "Реальные затраты")
-    private int actualCosts;
+    @NumberFormat
+    private Integer actualCosts;
 
     @Schema(description = "Комментарии")
     private String comments;
 
     @Schema(description = "Приоритет")
-    private int priority;
+    private Integer priority;
 
     @Schema(description = "Исполнитель")
-    @Size(max = 50)
+    @Size(max = 150, message = "Assignee name must not be greater than 150 characters")
     private String assigneeName;
 
     @Schema(description = "Команда")
-    @Size(max = 50)
+    @Size(max = 50, message = "Team name must not be greater than 50 characters")
     private String team;
 
     @Schema(description = "Релиз")
-    @Size(max = 50)
+    @Size(max = 50, message = "Release name must not be greater than 50 characters")
     private String release;
 
     @Schema(description = "Название проекта")
-    @Size(max = 50)
+    @Size(max = 50, message = "Project name must not be greater than 50 characters")
     private String projectName;
 
 
@@ -141,19 +149,19 @@ public class TaskRequestDto {
         this.finishDate = finishDate;
     }
 
-    public int getEstCosts() {
+    public Integer getEstCosts() {
         return estCosts;
     }
 
-    public void setEstCosts(int estCosts) {
+    public void setEstCosts(Integer estCosts) {
         this.estCosts = estCosts;
     }
 
-    public int getActualCosts() {
+    public Integer getActualCosts() {
         return actualCosts;
     }
 
-    public void setActualCosts(int actualCosts) {
+    public void setActualCosts(Integer actualCosts) {
         this.actualCosts = actualCosts;
     }
 
@@ -165,11 +173,11 @@ public class TaskRequestDto {
         this.comments = comments;
     }
 
-    public int getPriority() {
+    public Integer getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 

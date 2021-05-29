@@ -37,16 +37,16 @@ public class TaskResponseDto {
     private LocalDateTime finishDate;
 
     @Schema(description = "Ориентировочные затраты")
-    private int estCosts;
+    private Integer estCosts;
 
     @Schema(description = "Реальные затраты")
-    private int actualCosts;
+    private Integer actualCosts;
 
     @Schema(description = "Комментарии")
     private String comments;
 
     @Schema(description = "Приоритет")
-    private int priority;
+    private Integer priority;
 
     @Schema(description = "Исполнитель")
     private String assigneeName;
@@ -133,19 +133,19 @@ public class TaskResponseDto {
         this.finishDate = finishDate;
     }
 
-    public int getEstCosts() {
+    public Integer getEstCosts() {
         return estCosts;
     }
 
-    public void setEstCosts(int estCosts) {
+    public void setEstCosts(Integer estCosts) {
         this.estCosts = estCosts;
     }
 
-    public int getActualCosts() {
+    public Integer getActualCosts() {
         return actualCosts;
     }
 
-    public void setActualCosts(int actualCosts) {
+    public void setActualCosts(Integer actualCosts) {
         this.actualCosts = actualCosts;
     }
 
@@ -157,11 +157,11 @@ public class TaskResponseDto {
         this.comments = comments;
     }
 
-    public int getPriority() {
+    public Integer getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 

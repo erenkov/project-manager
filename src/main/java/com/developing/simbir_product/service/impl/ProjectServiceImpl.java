@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,6 +42,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public boolean addProject(ProjectRequestDto projectRequestDto) {
+        if (projectRequestDto == null) {
+            throw new IllegalArgumentException("Can't create empty project");
+        }
         String projectName = projectRequestDto.getName();
         if (isProjectExist(projectName)) {
             throw new ProjectAlreadyExistException(
@@ -98,7 +102,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public List<String> getListOfAllProjectNames() {
-        return projectRepository.findAll().stream().map(ProjectEntity::getName).collect(Collectors.toList());
+        return projectRepository.findAllByOrderByNameAsc()
+                .stream()
+                .sorted(Comparator.comparing(ProjectEntity::getProjectStatus))
+                .map(ProjectEntity::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -113,9 +121,11 @@ public class ProjectServiceImpl implements ProjectService {
             return Collections.emptyList();
         }
         return projectRepository
-                .findAllByTeamId(teamService.findByName(teamName))
+                .findAllByTeamIdOrderByNameAsc(teamService.findByName(teamName))
                 .stream()
+                .sorted(Comparator.comparing(ProjectEntity::getProjectStatus))
                 .map(ProjectEntity::getName)
+                .sorted()
                 .collect(Collectors.toList());
     }
 

@@ -61,4 +61,12 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
         List<UserTaskHistoryEntity> entities = userTaskHistoryRepository.findAll(Example.of(userTaskHistoryEntity));
         return entities.isEmpty() ? null : entities.get(0);
     }
+
+    @Override
+    public void deleteAllByTask(TaskEntity taskEntity) {
+        if (taskEntity == null) {
+            throw new IllegalArgumentException("Can't delete empty task");
+        }
+        userTaskHistoryRepository.deleteAllByTaskId(taskEntity);
+    }
 }

@@ -18,4 +18,6 @@ public interface UserTaskHistoryRepository extends JpaRepository<UserTaskHistory
     Optional<UserTaskHistoryEntity> findByTaskIdAndValidToDateIsAfter(TaskEntity taskId, OffsetDateTime validToDate);
 
     List<UserTaskHistoryEntity> findAllByUserId(UserEntity userEntity);
+
+    void deleteAllByTaskId(TaskEntity taskEntity);
 }

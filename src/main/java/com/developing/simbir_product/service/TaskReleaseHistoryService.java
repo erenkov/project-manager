@@ -20,4 +20,6 @@ public interface TaskReleaseHistoryService {
     ReleaseResponseDto getCurrentReleaseDtoByTask(TaskEntity taskEntity);
 
     TaskReleaseHistoryEntity findByTemplate(TaskReleaseHistoryEntity taskReleaseHistoryEntity);
+
+    void deleteAllByTask(TaskEntity id);
 }

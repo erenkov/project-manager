@@ -6,11 +6,13 @@ import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.exception.UserAlreadyExistException;
 import com.developing.simbir_product.mappers.UserMapper;
 import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.developing.simbir_product.utils.Converter.getUserNumberFromAssignee;
 
 
 @Service
@@ -49,13 +52,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
-        Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
-
-        if (userFromDb.isPresent()) { // Если пользователь уже есть в БД то не выполняем
-            return false;             // добавление пользователя
+        if (userRequestDto == null || userRequestDto.getEmail().isBlank()) {
+            throw new IllegalArgumentException("Can't create empty user");
         }
-
+        String login = userRequestDto.getEmail();
+        if (userRepository.existsByLogin(login)) {
+            throw new UserAlreadyExistException(String.format("User with E-mail \"%s\" already exist", login),
+                    userRequestDto);
+        }
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
         userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(userEntity);
         return true;
@@ -103,11 +108,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponseDto findByAssigneeName(String assigneeName) {
-        UserEntity userEntity = userRepository.findByUserNumber(Integer.valueOf(assigneeName.split(" ")[2]))
+        if (StringUtils.isEmpty(assigneeName)) {
+            return null;
+        }
+        UserEntity userEntity = userRepository.findByUserNumber(getUserNumberFromAssignee(assigneeName))
                 .orElse(null);
         return (userEntity == null) ? null : userMapper.userEntityToDto(userEntity);
     }
 
+    @Transactional
     @Override
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = userTaskHistoryService.getCurrentUserByTask(taskEntity);
