@@ -173,7 +173,14 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Override
     public void deleteById(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Can't delete empty task");
+        }
+        TaskEntity taskEntity = getTaskEntityById(id.toString());
+        taskReleaseHistoryService.deleteAllByTask(taskEntity);
+        userTaskHistoryService.deleteAllByTask(taskEntity);
         taskRepository.deleteById(id);
+        logger.info("{} has been deleted", taskEntity.getName());
     }
 
     @Override

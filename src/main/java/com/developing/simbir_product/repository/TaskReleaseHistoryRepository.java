@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface TaskReleaseHistoryRepository extends JpaRepository<TaskReleaseHistoryEntity, UUID> {
 
     List<TaskReleaseHistoryEntity> findByTaskId(TaskEntity taskEntity);
+
+    void deleteAllByTaskId(TaskEntity taskEntity);
 }

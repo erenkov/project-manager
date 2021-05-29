@@ -215,7 +215,12 @@
                                 </button>
                             </a>
                         </div>
-                        <button type="button" class="btn btn-danger">Delete task</button>
+                        <button class="btn btn-danger"
+                                th:formaction="@{/board/{prName}/task/delete/{taskId} (prName=${task.projectName},
+                        taskId=${task.id})}"
+                                type="submit">
+                            Delete task
+                        </button>
                     </div>
                 </div>
             </form>

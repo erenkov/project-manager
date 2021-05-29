@@ -11,15 +11,14 @@ import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import com.developing.simbir_product.service.TaskService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.utils.BindingUtils;
+import com.developing.simbir_product.utils.Converter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,7 +36,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Tag(name = "Управление задачами")
@@ -118,11 +116,10 @@ public class TaskBoardController {
     }
 
     @Operation(summary = "Удаление задачи")
-    @DeleteMapping("/task/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable("id") String id,
-                                             @PathVariable("projectName") String projectName) {
-        taskService.deleteById(UUID.fromString(id));
-        return ResponseEntity.ok("redirect:/board/{projectName}");
+    @PostMapping("/task/delete/{id}")
+    public ModelAndView deleteTask(@PathVariable("id") String id, @PathVariable("projectName") String projectName) {
+        taskService.deleteById(Converter.getUuidFromString(id));
+        return new ModelAndView("redirect:/board/" + UriUtils.encode(projectName, StandardCharsets.UTF_8));
     }
 
     private ModelAndView getTaskModel(String projectName) {

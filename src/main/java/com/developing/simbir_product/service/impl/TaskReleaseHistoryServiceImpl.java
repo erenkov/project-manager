@@ -64,4 +64,12 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
         List<TaskReleaseHistoryEntity> entities = taskReleaseHistoryRepository.findAll(Example.of(taskReleaseHistoryEntity));
         return entities.isEmpty() ? null : entities.get(0);
     }
+
+    @Override
+    public void deleteAllByTask(TaskEntity taskEntity) {
+        if (taskEntity == null) {
+            throw new IllegalArgumentException("Can't delete empty task");
+        }
+        taskReleaseHistoryRepository.deleteAllByTaskId(taskEntity);
+    }
 }
