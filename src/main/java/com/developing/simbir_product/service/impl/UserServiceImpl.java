@@ -16,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,16 +52,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
         if (userRequestDto == null || userRequestDto.getEmail().isBlank()) {
-            throw new IllegalArgumentException("Can't create empty user");
+            throw new IllegalArgumentException(messageSource.getMessage("userService.IllegalArgument.message",
+                    null, LocaleContextHolder.getLocale()));
         }
         String login = userRequestDto.getEmail();
         if (userRepository.existsByLogin(login)) {
-            throw new UserAlreadyExistException(String.format("User with E-mail \"%s\" already exist", login),
-                    userRequestDto);
+            throw new UserAlreadyExistException("userService.alreadyExist.message", userRequestDto, messageSource);
         }
         UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
         userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
@@ -81,7 +87,8 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(tempUserFromDB.getPassword());
         userEntity.setUserNumber(tempUserFromDB.getUserNumber());
         userEntity = userRepository.save(userEntity);
-        logger.info(userEntity.getLogin() + " has been edited");
+        logger.info(messageSource.getMessage("userService.editUser.logger",
+                new String[]{userRequestDto.getEmail()}, Locale.getDefault()));
         return userMapper.userEntityToDto(userEntity);
     }
 
@@ -100,7 +107,8 @@ public class UserServiceImpl implements UserService {
         // Service знает что делать с этим
 
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+                () -> new NotFoundException(messageSource.getMessage("userService.notFoundLogin.message",
+                        new String[]{login}, LocaleContextHolder.getLocale())));
 
         return userMapper.userEntityToDto(userEntity);
     }
@@ -148,8 +156,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findByUserNumber(String userNumber) {
         return userRepository.findByUserNumber(Integer.parseInt(userNumber)).orElseThrow(
-                () -> new NotFoundException(String.format("User with number = '%s' not found", userNumber))
-        );
+                () -> new NotFoundException(messageSource.getMessage("userService.notFoundUserNumber.message",
+                        new String[]{userNumber}, LocaleContextHolder.getLocale())));
     }
 
 
@@ -160,7 +168,8 @@ public class UserServiceImpl implements UserService {
         // Service знает что делать с этим
 
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+                () -> new NotFoundException(messageSource.getMessage("userService.notFoundLogin.message",
+                        new String[]{login}, LocaleContextHolder.getLocale())));
 
         return userEntity;
     }

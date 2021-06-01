@@ -1,18 +1,30 @@
-    <header xmlns:th="http://www.thymeleaf.org" class="container">
-        <nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 border-bottom">
-            <a href="#" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-                Simbirsoft-Java-2-2
-            </a>
+<header class="container" xmlns:th="http://www.thymeleaf.org">
+    <nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-3 border-bottom">
+        <a class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none" href="#">
+            Simbirsoft-Java-2-2
+        </a>
 
-            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/projects" class="nav-link px-2 link-dark">Projects</a></li>
-                <li class="ms-4"><a href="/teams" class="nav-link px-2 link-dark">Teams</a></li>
-                <li class="ms-4"><a href="#" class="nav-link px-2 link-dark">About</a></li>
-            </ul>
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a class="nav-link px-2 link-dark" href="/projects">Projects</a></li>
+            <li class="ms-4"><a class="nav-link px-2 link-dark" href="/teams">Teams</a></li>
+            <li class="ms-4"><a class="nav-link px-2 link-dark" href="#">About</a></li>
+        </ul>
 
-            <div class="col-md-3 text-end">
-                <a href="/logout" class="btn btn-outline-primary me-2">Logout</a>
-                <a href="/profile" class="btn btn-primary">Profile</a>
-            </div>
-        </nav>
-    </header>
+        <div class="col-lg text-end me-2">
+            <a class="btn btn-outline-primary me-2" href="/logout">Logout</a>
+            <a class="btn btn-primary me-2" href="/profile">Profile</a>
+        </div>
+        <div class="col-auto text-end">
+            <form action="" method="get">
+                <select class="form-select"
+                        id="inputLang"
+                        name="lang"
+                        onchange="this.form.submit()">
+                    <option th:selected="${#locale.language.contains('en')}" value="en">English</option>
+                    <option th:selected="${#locale.language.contains('ru')}" value="ru">Русский</option>
+                </select>
+            </form>
+        </div>
+    </nav>
+</header>
+

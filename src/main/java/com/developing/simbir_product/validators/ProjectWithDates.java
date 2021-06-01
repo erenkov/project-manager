@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {ProjectWithDatesValidator.class})
 public @interface ProjectWithDates {
 
-    String message() default "Start date is after finish date.";
+    String message() default "{projectWithDates.message}";
 
     Class<?>[] groups() default {};
 

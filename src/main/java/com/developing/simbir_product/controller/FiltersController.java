@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.security.Principal;
 
 
-@Tag(name = "Управление задачами")
+@Tag(name = "{filterController.tag}")
 @RequestMapping("/board/filters")
 @Controller
 public class FiltersController {
@@ -23,13 +23,13 @@ public class FiltersController {
     @Autowired
     private TaskService taskService;
 
-    @Operation(summary = "Получить страницу с фильтрами")
+    @Operation(summary = "{filterController.getFilterPage.operation}")
     @GetMapping
     public ModelAndView getFilterPage() {
         return new ModelAndView("task-filters", HttpStatus.OK);
     }
 
-    @Operation(summary = "Преминить фильтр")
+    @Operation(summary = "{filterController.applyFilter.operation}")
     @PostMapping
     public ModelAndView applyFilter(TaskRequestDto taskRequestDto, Principal principal) {
         ModelAndView modelAndView = new ModelAndView("task-filters", HttpStatus.OK);

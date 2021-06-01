@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {TaskWithDatesValidator.class})
 public @interface TaskWithDates {
 
-    String message() default "Start date is after finish date.";
+    String message() default "{taskWithDates.message}";
 
     Class<?>[] groups() default {};
 

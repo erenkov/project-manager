@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {ReleaseWithDatesValidator.class})
 public @interface ReleaseWithDates {
 
-    String message() default "Start date is after finish date.";
+    String message() default "{releaseWithDates.message}";
 
     Class<?>[] groups() default {};
 

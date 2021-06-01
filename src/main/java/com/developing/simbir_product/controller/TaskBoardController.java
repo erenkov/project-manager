@@ -35,10 +35,11 @@ import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 
-@Tag(name = "Управление задачами")
+@Tag(name = "{taskBoardController.tag}")
 @RequestMapping("/board/{projectName}")
 @Controller
 public class TaskBoardController {
@@ -56,7 +57,7 @@ public class TaskBoardController {
     @Autowired
     private TaskReleaseHistoryService taskReleaseHistoryService;
 
-    @Operation(summary = "Получить страницу с доской проекта")
+    @Operation(summary = "{taskBoardController.getBoardPage.operation}")
     @GetMapping
     public ModelAndView getBoardPage(@PathVariable("projectName") String projectName,
                                      @RequestParam(value = "errorMessage", required = false) Optional<String> errorMessage) {
@@ -69,7 +70,7 @@ public class TaskBoardController {
         return modelAndView;
     }
 
-    @Operation(summary = "Получить страницу с задачей")
+    @Operation(summary = "{taskBoardController.getTaskPage.operation}")
     @GetMapping("/task/{id}")
     public ModelAndView getTaskPage(@PathVariable("projectName") String projectName,
                                     @PathVariable("id") String id) {
@@ -82,7 +83,7 @@ public class TaskBoardController {
         return modelAndView;
     }
 
-    @Operation(summary = "Получить страницу создания новой задачи")
+    @Operation(summary = "{taskBoardController.getNewTaskPage.operation}")
     @GetMapping("/create")
     public ModelAndView getNewTaskPage(@PathVariable("projectName") String projectName, Principal principal) {
         ModelAndView modelAndView = getTaskModel(projectName);
@@ -93,7 +94,7 @@ public class TaskBoardController {
         return modelAndView;
     }
 
-    @Operation(summary = "Создать новую задачу")
+    @Operation(summary = "{taskBoardController.saveNewTask.operation}")
     @PostMapping("/create")
     public ModelAndView saveNewTask(@Valid @ModelAttribute("task") TaskRequestDto task,
                                     @PathVariable("projectName") String projectName) {
@@ -104,7 +105,7 @@ public class TaskBoardController {
         return modelAndView;
     }
 
-    @Operation(summary = "Редактирование задачи")
+    @Operation(summary = "{taskBoardController.editTask.operation}")
     @PostMapping("/task/{id}")
     public ModelAndView editTask(@Valid @ModelAttribute("task") TaskRequestDto editTask,
                                  @PathVariable("projectName") String projectName,
@@ -115,7 +116,7 @@ public class TaskBoardController {
         return modelAndView;
     }
 
-    @Operation(summary = "Удаление задачи")
+    @Operation(summary = "{taskBoardController.deleteTask.operation}")
     @PostMapping("/task/delete/{id}")
     public ModelAndView deleteTask(@PathVariable("id") String id, @PathVariable("projectName") String projectName) {
         taskService.deleteById(Converter.getUuidFromString(id));
@@ -177,11 +178,11 @@ public class TaskBoardController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(BindingResult bindingResult, Principal principal) {
+    private ModelAndView handleValidationException(BindingResult bindingResult, Principal principal, Locale locale) {
         TaskRequestDto taskRequestDto = (TaskRequestDto) bindingResult.getModel().get("task");
         ModelAndView modelAndView = getTaskModel(taskRequestDto.getProjectName());
         modelAndView.addObject("task", taskRequestDto);
-        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView, locale);
         return getCurrentView(principal, taskRequestDto, modelAndView);
     }
 }

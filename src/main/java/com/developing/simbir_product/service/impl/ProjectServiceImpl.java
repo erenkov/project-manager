@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,22 +42,25 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     @Transactional
     public boolean addProject(ProjectRequestDto projectRequestDto) {
         if (projectRequestDto == null) {
-            throw new IllegalArgumentException("Can't create empty project");
+            throw new IllegalArgumentException(messageSource.getMessage("projectService.addProject.illegalArgument",
+                    null, Locale.getDefault()));
         }
         String projectName = projectRequestDto.getName();
         if (isProjectExist(projectName)) {
-            throw new ProjectAlreadyExistException(
-                    String.format("Project with name \"%s\" already exist", projectName),
-                    projectRequestDto);
+            throw new ProjectAlreadyExistException("projectAlreadyExist.message", projectRequestDto, messageSource);
         }
         projectRequestDto.setStatus(ProjectStatus.BACKLOG.name());
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
         projectRepository.save(projectEntity);
-        logger.info("{} project has been created", projectName);
+        logger.info(messageSource.getMessage("projectService.addProject.logger", null, Locale.getDefault()),
+                projectName);
         return true;
     }
 
@@ -69,14 +75,16 @@ public class ProjectServiceImpl implements ProjectService {
     public boolean editProject(ProjectRequestDto projectRequestDto) {
         String projectName = projectRequestDto.getName();
         if (!isProjectExist(projectName)) {
-            throw new NotFoundException(String.format("Project with name \"%s\" not found", projectName));
+            throw new NotFoundException(messageSource.getMessage("projectService.notFound",
+                    new String[]{projectName}, LocaleContextHolder.getLocale()));
         }
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
         ProjectEntity tempProjectFromDB = getProjectEntity(projectEntity.getName());
         projectEntity.setId(tempProjectFromDB.getId());
         projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
         projectRepository.save(projectEntity);
-        logger.info(projectName + " has been edited");
+        logger.info(messageSource.getMessage("projectService.editProject.logger", null, Locale.getDefault()),
+                projectName);
         return true;
     }
 
@@ -96,7 +104,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectEntity getProjectEntity(String name) {
         return projectRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
+                () -> new NotFoundException(messageSource.getMessage("projectService.notFound",
+                        new String[]{name}, LocaleContextHolder.getLocale())));
     }
 
     @Transactional

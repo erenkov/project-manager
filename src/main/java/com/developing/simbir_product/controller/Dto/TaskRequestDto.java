@@ -11,69 +11,69 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 
-@Schema(description = "Задача")
+@Schema(description = "{taskDto.schema}")
 @TaskWithDates
 public class TaskRequestDto {
 
-    @Schema(description = "ID задачи")
+    @Schema(description = "{taskDto.id.schema}")
     private String id;
 
-    @Schema(description = "Название задачи")
-    @NotBlank(message = "Name must not be empty")
-    @Size(max = 50, message = "Name must not be greater than 50 characters")
+    @Schema(description = "{taskDto.name.schema}")
+    @NotBlank(message = "{taskDto.name.notBlank}")
+    @Size(max = 50, message = "{taskDto.name.size}")
     private String name;
 
-    @Schema(description = "Статус задачи")
+    @Schema(description = "{taskDto.status.schema}")
     private String status;
 
-    @Schema(description = "Тип задачи")
+    @Schema(description = "{taskDto.type.schema}")
     private String type;
 
-    @Schema(description = "Описание задачи")
+    @Schema(description = "{taskDto.description.schema}")
     private String description;
 
-    @Schema(description = "Дата создания")
+    @Schema(description = "{taskDto.createDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @NotNull(message = "Start date must not be empty")
+    @NotNull(message = "{taskDto.createDate.notNull}")
     private LocalDateTime createDate;
 
-    @Schema(description = "Ориентировочная дата завершения")
+    @Schema(description = "{taskDto.dueDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @NotNull(message = "Estimated end date must not be empty")
+    @NotNull(message = "{taskDto.dueDate.notNull}")
     private LocalDateTime dueDate;
 
-    @Schema(description = "Дата завершения")
+    @Schema(description = "{taskDto.finishDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime finishDate;
 
-    @Schema(description = "Ориентировочные затраты")
+    @Schema(description = "{taskDto.estCosts.schema}")
     @NumberFormat
     private Integer estCosts;
 
-    @Schema(description = "Реальные затраты")
+    @Schema(description = "{taskDto.actualCosts.schema}")
     @NumberFormat
     private Integer actualCosts;
 
-    @Schema(description = "Комментарии")
+    @Schema(description = "{taskDto.comments.schema}")
     private String comments;
 
-    @Schema(description = "Приоритет")
+    @Schema(description = "{taskDto.priority.schema}")
     private Integer priority;
 
-    @Schema(description = "Исполнитель")
-    @Size(max = 150, message = "Assignee name must not be greater than 150 characters")
+    @Schema(description = "{taskDto.assigneeName.schema}")
+    @Size(max = 150, message = "{taskDto.assigneeName.size}")
     private String assigneeName;
 
-    @Schema(description = "Команда")
-    @Size(max = 50, message = "Team name must not be greater than 50 characters")
+    @Schema(description = "{teamDto.name.schema}")
+    @Size(max = 50, message = "{teamDto.name.size}")
     private String team;
 
-    @Schema(description = "Релиз")
-    @Size(max = 50, message = "Release name must not be greater than 50 characters")
+    @Schema(description = "{releaseDto.name.schema}")
+    @Size(max = 50, message = "{releaseDto.name.size}")
     private String release;
 
-    @Schema(description = "Название проекта")
-    @Size(max = 50, message = "Project name must not be greater than 50 characters")
+    @Schema(description = "{projectDto.name.schema}")
+    @Size(max = 50, message = "{projectDto.name.size}")
     private String projectName;
 
 

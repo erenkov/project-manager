@@ -16,13 +16,13 @@ public class BindingUtils {
     @Autowired
     private MessageSource messageSource;
 
-    public void addErrorsToModel(BindingResult bindingResult, ModelAndView modelAndView) {
+    public void addErrorsToModel(BindingResult bindingResult, ModelAndView modelAndView, Locale locale) {
         modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors().stream()
-                .map(error -> messageSource.getMessage(error, Locale.ROOT))
+                .map(error -> messageSource.getMessage(error, locale))
                 .sorted()
                 .collect(Collectors.toList()));
         modelAndView.addObject("GlobalErrors", bindingResult.getGlobalErrors().stream()
-                .map(error -> messageSource.getMessage(error, Locale.ROOT))
+                .map(error -> messageSource.getMessage(error, locale))
                 .sorted()
                 .collect(Collectors.toList()));
     }

@@ -30,10 +30,11 @@ import org.springframework.web.util.UriUtils;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 
-@Tag(name = "Управление релизами")
+@Tag(name = "{releasesController.tag}")
 @RequestMapping(value = "/releases/{projectName}")
 @Controller
 public class ReleasesController {
@@ -47,7 +48,7 @@ public class ReleasesController {
     @Autowired
     private ProjectService projectService;
 
-    @Operation(summary = "Получить страницу c информацией о релизах")
+    @Operation(summary = "{releasesController.getReleasePage.operation}")
     @GetMapping
     public ModelAndView getReleasePage(@PathVariable String projectName,
                                        @RequestParam(value = "errorMessage", required = false) Optional<String> errorMessage) {
@@ -58,7 +59,7 @@ public class ReleasesController {
         return modelAndView;
     }
 
-    @Operation(summary = "Получить страницу создания нового релиза")
+    @Operation(summary = "{releasesController.getNewReleasePage.operation}")
     @GetMapping("/create")
     public ModelAndView getNewReleasePage(@PathVariable String projectName) {
         ModelAndView modelAndView = new ModelAndView("create-release", HttpStatus.OK);
@@ -68,7 +69,7 @@ public class ReleasesController {
         return modelAndView;
     }
 
-    @Operation(summary = "Создать релиз")
+    @Operation(summary = "{releasesController.createRelease.operation}")
     @PostMapping("/create")
     public ModelAndView createRelease(@PathVariable String projectName,
                                       @Valid @ModelAttribute("release") ReleaseRequestDto releaseRequestDto) {
@@ -76,7 +77,7 @@ public class ReleasesController {
         return new ModelAndView("redirect:/releases/" + UriUtils.encode(projectName, StandardCharsets.UTF_8));
     }
 
-    @Operation(summary = "Получить страницу редактирования релиза")
+    @Operation(summary = "{releasesController.getEditReleasePage.operation}")
     @GetMapping("/edit/{releaseId}")
     public ModelAndView getEditReleasePage(@PathVariable String projectName,
                                            @PathVariable("releaseId") String releaseId) {
@@ -85,7 +86,7 @@ public class ReleasesController {
         return modelAndView;
     }
 
-    @Operation(summary = "Редактировать информацию о релизе")
+    @Operation(summary = "{releasesController.editRelease.operation}")
     @PostMapping("/edit/{releaseId}")
     public ModelAndView editRelease(@PathVariable String projectName,
                                     @PathVariable("releaseId") String releaseId,
@@ -126,10 +127,10 @@ public class ReleasesController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(BindingResult bindingResult) {
+    private ModelAndView handleValidationException(BindingResult bindingResult, Locale locale) {
         ModelAndView modelAndView = getCurrentView();
         modelAndView.addObject("release", bindingResult.getModel().get("release"));
-        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView, locale);
         return modelAndView;
     }
 }

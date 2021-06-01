@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
@@ -23,9 +24,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 
-@Tag(name = "Регистрация")
+@Tag(name = "{registrationController.tag}")
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
@@ -41,17 +43,21 @@ public class RegistrationController {
     @Autowired
     private TeamService teamService;
 
-    @Operation(summary = "Получить страницу регистрации")
+    @Autowired
+    private MessageSource messageSource;
+
+    @Operation(summary = "{registrationController.getRegistrationPage.operation}")
     @GetMapping
     public ModelAndView getRegistrationPage() {
         return getRegistrationModel(new UserRequestDto());
     }
 
-    @Operation(summary = "Зарегистрировать пользователя")
+    @Operation(summary = "{registrationController.registerUser.operation}")
     @PostMapping
     public ModelAndView registerUser(@Valid @ModelAttribute("newUser") UserRequestDto newUser) {
         userService.addUser(newUser);
-        logger.debug("Created the user with credentials: {}", newUser);
+        logger.debug(messageSource.getMessage("registrationController.registerUser.logger", null,
+                Locale.getDefault()), newUser);
         return new ModelAndView("redirect:/login");
     }
 
@@ -76,9 +82,9 @@ public class RegistrationController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(BindingResult bindingResult) {
+    private ModelAndView handleValidationException(BindingResult bindingResult, Locale locale) {
         ModelAndView modelAndView = getRegistrationModel((UserRequestDto) bindingResult.getModel().get("newUser"));
-        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView, locale);
         return modelAndView;
     }
 }

@@ -32,10 +32,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 
-@Tag(name = "Управление проектами")
+@Tag(name = "{projectsController.tag}")
 @RequestMapping("/projects")
 @Controller
 public class ProjectsController {
@@ -49,7 +50,7 @@ public class ProjectsController {
     @Autowired
     private TeamService teamService;
 
-    @Operation(summary = "Получить страницу с проектами")
+    @Operation(summary = "{projectsController.getProjectsPage.operation}")
     @GetMapping()
     public String getProjectsPage(Model model, Principal principal, Authentication authentication,
                                   @RequestParam(value = "errorMessage", required = false) Optional<String> errorMessage) {
@@ -67,7 +68,7 @@ public class ProjectsController {
         return "projects";
     }
 
-    @Operation(summary = "Получить страницу создания нового проекта")
+    @Operation(summary = "{projectsController.getNewProjectPage.operation}")
     @GetMapping("/create")
     public ModelAndView getNewProjectPage() {
         ModelAndView modelAndView = getProjectsModel();
@@ -76,14 +77,14 @@ public class ProjectsController {
         return modelAndView;
     }
 
-    @Operation(summary = "Создать новый проект")
+    @Operation(summary = "{projectsController.createProject.operation}")
     @PostMapping("/create")
     public ModelAndView createProject(@Valid @ModelAttribute("newProject") ProjectRequestDto projectRequestDto) {
         projectService.addProject(projectRequestDto);
         return new ModelAndView("redirect:/projects", HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Получить страницу редактирования проекта")
+    @Operation(summary = "{projectsController.getEditProjectPage.operation}")
     @GetMapping("/edit/{prName}")
     public ModelAndView getEditProjectPage(@PathVariable("prName") String prName) {
         ModelAndView modelAndView = getProjectsModel();
@@ -92,7 +93,7 @@ public class ProjectsController {
         return modelAndView;
     }
 
-    @Operation(summary = "Редактировать проект")
+    @Operation(summary = "{projectsController.editProject.operation}")
     @PostMapping("/edit/{prName}")
     public ModelAndView editProject(@PathVariable("prName") String prName,
                                     @Valid @ModelAttribute("project") ProjectRequestDto projectRequestDto) {
@@ -130,7 +131,7 @@ public class ProjectsController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(BindingResult bindingResult) {
+    private ModelAndView handleValidationException(BindingResult bindingResult, Locale locale) {
         ModelAndView modelAndView = getProjectsModel();
         List<String> pathSegments = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPathSegments();
         if ("create".equals(pathSegments.get(1))) {
@@ -140,7 +141,7 @@ public class ProjectsController {
             modelAndView.setViewName("edit-project");
             modelAndView.addObject("project", bindingResult.getModel().get("project"));
         }
-        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView, locale);
         return modelAndView;
     }
 }

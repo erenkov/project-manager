@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Locale;
 
 
-@Tag(name = "Управление профилем")
+@Tag(name = "{userProfileController.tag}")
 @RequestMapping(value = "/profile")
 @Controller
 public class UserProfileController {
@@ -43,16 +45,21 @@ public class UserProfileController {
     @Autowired
     private TeamService teamService;
 
-    @Operation(summary = "Получить страницу c профилем пользователя")
+    @Autowired
+    private MessageSource messageSource;
+
+
+    @Operation(summary = "{userProfileController.getProfile.operation}")
     @GetMapping
     public ModelAndView getProfile(Principal principal) {
         ModelAndView modelAndView = getUserProfileModel();
         modelAndView.addObject("currentUser", userService.findByEmail(principal.getName()));
-        logger.info("{} has accessed the profile page", principal.getName());
+        logger.info(messageSource.getMessage("userProfileController.getProfile.logger", null,
+                Locale.getDefault()), principal.getName());
         return modelAndView;
     }
 
-    @Operation(summary = "Получить страницу c профилем пользователя")
+    @Operation(summary = "{userProfileController.updateProfile.operation}")
     @PostMapping
     public String updateProfile(@Valid @ModelAttribute("currentUser") UserRequestDto currentUser,
                                 Model model, Principal principal) {
@@ -80,10 +87,10 @@ public class UserProfileController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(BindingResult bindingResult) {
+    private ModelAndView handleValidationException(BindingResult bindingResult, Locale locale) {
         ModelAndView modelAndView = getUserProfileModel();
         modelAndView.addObject("currentUser", bindingResult.getModel().get("currentUser"));
-        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView, locale);
         return modelAndView;
     }
 }

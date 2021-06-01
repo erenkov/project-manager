@@ -3,13 +3,13 @@ package com.developing.simbir_product.controller.Dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
-@Schema(description = "Команда")
+@Schema(description = "{teamDto.schema}")
 public class TeamResponseDto {
 
-    @Schema(description = "Название команды")
+    @Schema(description = "{teamDto.name.schema}")
     private String name;
 
-    @Schema(description = "Описание команды")
+    @Schema(description = "{teamDto.description.schema}")
     private String description;
 
     public String getName() {

@@ -6,26 +6,26 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 
-@Schema(description = "Проект")
+@Schema(description = "{projectDto.schema}")
 public class ProjectResponseDto {
 
-    @Schema(description = "Навзвание проекта")
+    @Schema(description = "{projectDto.name.schema}")
     private String name;
 
-    @Schema(description = "Описание проекта")
+    @Schema(description = "{projectDto.description.schema}")
     private String description;
 
-    @Schema(description = "Команда")
+    @Schema(description = "{projectDto.teamName.schema}")
     private String teamName;
 
-    @Schema(description = "Статус")
+    @Schema(description = "{projectDto.status.schema}")
     private String status;
 
-    @Schema(description = "Дата начала проекта")
+    @Schema(description = "{projectDto.startDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startDate;
 
-    @Schema(description = "Ориентировочная дата конца проекта")
+    @Schema(description = "{projectDto.estFinishDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime estFinishDate;
 

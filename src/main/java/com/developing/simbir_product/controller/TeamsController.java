@@ -25,10 +25,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 
-@Tag(name = "Управление командами")
+@Tag(name = "{teamsController.tag}")
 @RequestMapping(value = "/teams")
 @Controller
 public class TeamsController {
@@ -38,7 +39,7 @@ public class TeamsController {
     @Autowired
     private TeamService teamService;
 
-    @Operation(summary = "Получить страницу c информацией о командах")
+    @Operation(summary = "{teamsController.getTeamsPage.operation}")
     @GetMapping
     public ModelAndView getTeamsPage(@RequestParam(value = "errorMessage", required = false) Optional<String> errorMessage) {
         ModelAndView modelAndView = new ModelAndView("teams", HttpStatus.OK);
@@ -47,7 +48,7 @@ public class TeamsController {
         return modelAndView;
     }
 
-    @Operation(summary = "Получить страницу создания новой команды")
+    @Operation(summary = "{teamsController.getNewTeamPage.operation}")
     @GetMapping("/create")
     public ModelAndView getNewTeamPage() {
         ModelAndView modelAndView = new ModelAndView("create-team", HttpStatus.OK);
@@ -55,14 +56,14 @@ public class TeamsController {
         return modelAndView;
     }
 
-    @Operation(summary = "Создать команду")
+    @Operation(summary = "{teamsController.createTeam.operation}")
     @PostMapping("/create")
     public ModelAndView createTeam(@Valid @ModelAttribute("newTeam") TeamRequestDto teamRequestDto) {
         teamService.addTeamDto(teamRequestDto);
         return new ModelAndView("redirect:/teams", HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Получить страницу редактирования команды")
+    @Operation(summary = "{teamsController.getEditTeamPage.operation}")
     @GetMapping("/edit/{teamName}")
     public ModelAndView getEditTeamPage(@PathVariable("teamName") String teamName) {
         ModelAndView modelAndView = new ModelAndView("edit-team", HttpStatus.OK);
@@ -70,7 +71,7 @@ public class TeamsController {
         return modelAndView;
     }
 
-    @Operation(summary = "Редактировать информацию о команде")
+    @Operation(summary = "{teamsController.editTeam.operation}")
     @PostMapping("/edit/{teamName}")
     public ModelAndView editTeam(@PathVariable("teamName") String teamName,
                                  @Valid @ModelAttribute("team") TeamRequestDto teamRequestDto) {
@@ -100,9 +101,9 @@ public class TeamsController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(BindingResult bindingResult) {
+    private ModelAndView handleValidationException(BindingResult bindingResult, Locale locale) {
         ModelAndView modelAndView = new ModelAndView();
-        bindingUtils.addErrorsToModel(bindingResult, modelAndView);
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView, locale);
         List<String> pathSegments = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPathSegments();
         if ("create".equals(pathSegments.get(1))) {
             modelAndView.setViewName("create-team");

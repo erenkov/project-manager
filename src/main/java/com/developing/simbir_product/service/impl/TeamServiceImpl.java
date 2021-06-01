@@ -12,6 +12,8 @@ import com.developing.simbir_product.repository.TeamRepository;
 import com.developing.simbir_product.service.TeamService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,9 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamMapper teamMapper;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Transactional
     @Override
     public TeamEntity addTeam(TeamEntity teamEntity) {
@@ -40,7 +45,8 @@ public class TeamServiceImpl implements TeamService {
     public boolean editTeam(TeamRequestDto teamRequestDto) {
         String teamName = teamRequestDto.getName();
         if (!isTeamExist(teamName)) {
-            throw new NotFoundException(String.format("Team with name \"%s\" not found", teamName));
+            throw new NotFoundException(messageSource.getMessage("teamService.notFound", new String[]{teamName},
+                    LocaleContextHolder.getLocale()));
         }
         TeamEntity teamEntity = teamMapper.teamDtoToEntity(teamRequestDto);
         teamEntity.setId(findByName(teamName).getId());
@@ -58,7 +64,8 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamEntity findByName(String name) {
         return teamRepository.findByName(name).orElseThrow(
-                () -> new NotFoundException(String.format("Team with name \"%s\" not found", name)));
+                () -> new NotFoundException(messageSource.getMessage("teamService.notFound", new String[]{name},
+                        LocaleContextHolder.getLocale())));
     }
 
     @Override
@@ -91,8 +98,7 @@ public class TeamServiceImpl implements TeamService {
     public boolean addTeamDto(TeamRequestDto teamRequestDto) {
         String teamName = teamRequestDto.getName();
         if (isTeamExist(teamName)) {
-            throw new TeamAlreadyExistException(String.format("Team with name \"%s\" already exist", teamName),
-                    teamRequestDto);
+            throw new TeamAlreadyExistException("teamService.alreadyExist.message", teamRequestDto, messageSource);
         }
         teamRepository.save(teamMapper.teamDtoToEntity(teamRequestDto));
         return true;

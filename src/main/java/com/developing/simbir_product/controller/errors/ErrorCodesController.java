@@ -2,19 +2,25 @@ package com.developing.simbir_product.controller.errors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 
 @Controller
 public class ErrorCodesController implements ErrorController {
 
     private final Logger logger = LoggerFactory.getLogger(ErrorCodesController.class);
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     public String getErrorPath() {
@@ -27,7 +33,8 @@ public class ErrorCodesController implements ErrorController {
 
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
-            logger.error("{} has been thrown!", statusCode);
+            logger.error(messageSource.getMessage("errorCodesController.handleError.logger", null,
+                    Locale.getDefault()), statusCode);
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "error-404";
             }

@@ -23,6 +23,8 @@ import com.developing.simbir_product.utils.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -64,12 +67,15 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Transactional
     @Override
     public TaskResponseDto getById(UUID id) {
         TaskEntity taskEntity = taskRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Task with ID '%s' not found", id)));
-
+                () -> new NotFoundException(messageSource.getMessage("taskService.notFound", new UUID[]{id},
+                        LocaleContextHolder.getLocale())));
         return taskMapper.taskEntityToDto(taskEntity);
     }
 
@@ -77,7 +83,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto getByStringId(String id) {
         if (!Converter.isValidUuid(id)) {
-            throw new NotFoundException(String.format("Task with ID '%s' not found", id));
+            throw new NotFoundException(messageSource.getMessage("taskService.notFound", new String[]{id},
+                    LocaleContextHolder.getLocale()));
         }
         return getById(Converter.getUuidFromString(id));
     }
@@ -86,18 +93,21 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskEntity getTaskEntityById(String id) {
         if (!Converter.isValidUuid(id)) {
-            throw new NotFoundException(String.format("Task with ID '%s' not found", id));
+            throw new NotFoundException(messageSource.getMessage("taskService.notFound", new String[]{id},
+                    LocaleContextHolder.getLocale()));
         }
         UUID uuid = Converter.getUuidFromString(id);
         return taskRepository.findById(uuid).orElseThrow(
-                () -> new NotFoundException(String.format("Task with ID '%s' not found", id)));
+                () -> new NotFoundException(messageSource.getMessage("taskService.notFound", new String[]{id},
+                        LocaleContextHolder.getLocale())));
     }
 
     @Transactional
     @Override
     public TaskResponseDto addTask(TaskRequestDto taskRequestDto) {
         if (taskRequestDto == null) {
-            throw new IllegalArgumentException("Can't add empty task");
+            throw new IllegalArgumentException(messageSource.getMessage("taskService.add.illegalArgument",
+                    null, LocaleContextHolder.getLocale()));
         }
         TaskEntity taskEntity = taskRepository.save(taskMapper.taskDtoToEntity(taskRequestDto));
         if (taskRequestDto.getRelease() != null) {
@@ -115,7 +125,8 @@ public class TaskServiceImpl implements TaskService {
             userTaskHistoryEntity.setTaskId(taskEntity);
             userTaskHistoryService.addUserTaskHistory(userTaskHistoryEntity);
         }
-        logger.info("{} task has been created", taskRequestDto.getName());
+        logger.info(messageSource.getMessage("taskService.addTask.logger", new String[]{taskEntity.getName()},
+                Locale.getDefault()));
         return taskMapper.taskEntityToDto(taskEntity);
     }
 
@@ -128,7 +139,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponseDto editTask(TaskRequestDto taskRequestDto) {
         if (taskRequestDto == null) {
-            throw new NotFoundException("Task not found");
+            throw new NotFoundException(messageSource.getMessage("taskService.notFoundEmpty", null,
+                    LocaleContextHolder.getLocale()));
         }
 
         TaskEntity currentTaskState = getTaskEntityById(taskRequestDto.getId());
@@ -166,7 +178,8 @@ public class TaskServiceImpl implements TaskService {
                 taskReleaseHistoryService.addTaskRelease(taskReleaseHistoryEntity);
             }
         }
-        logger.info("{} has been edited", taskRequestDto.getName());
+        logger.info(messageSource.getMessage("taskService.editTask.logger", new String[]{taskEntity.getName()},
+                Locale.getDefault()));
         return taskMapper.taskEntityToDto(taskEntity);
     }
 
@@ -174,13 +187,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteById(UUID id) {
         if (id == null) {
-            throw new IllegalArgumentException("Can't delete empty task");
+            throw new IllegalArgumentException(messageSource.getMessage("taskService.delete.illegalArgument",
+                    null, LocaleContextHolder.getLocale()));
         }
         TaskEntity taskEntity = getTaskEntityById(id.toString());
         taskReleaseHistoryService.deleteAllByTask(taskEntity);
         userTaskHistoryService.deleteAllByTask(taskEntity);
         taskRepository.deleteById(id);
-        logger.info("{} has been deleted", taskEntity.getName());
+        logger.info(messageSource.getMessage("taskService.delete.logger", new String[]{taskEntity.getName()},
+                Locale.getDefault()), taskEntity.getName());
     }
 
     @Override
@@ -223,8 +238,7 @@ public class TaskServiceImpl implements TaskService {
         ReleaseEntity releaseEntity = releaseService.getEntityById(UUID.fromString(taskRequestDto.getRelease()));
         if (taskEntity.getCreateDate().isBefore(releaseEntity.getStartDate()) ||
                 taskEntity.getDueDate().isAfter(releaseEntity.getFinishDate())) {
-            throw new TaskDatesException(String.format("Task \"%s\" dates are outside release dates",
-                    taskRequestDto.getName()), taskRequestDto);
+            throw new TaskDatesException("taskDates.outside.message", taskRequestDto, messageSource);
         }
     }
 }
