@@ -3,7 +3,14 @@ package com.developing.simbir_product.mappers;
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
 import com.developing.simbir_product.entity.*;
-import com.developing.simbir_product.service.*;
+import com.developing.simbir_product.service.ProjectService;
+import com.developing.simbir_product.service.ReleaseService;
+import com.developing.simbir_product.service.TaskReleaseHistoryService;
+import com.developing.simbir_product.service.TaskService;
+import com.developing.simbir_product.service.TeamService;
+import com.developing.simbir_product.service.UserService;
+import com.developing.simbir_product.service.UserTaskHistoryService;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -176,11 +183,19 @@ class TaskMapperTest {
         assertEquals(taskDto.getCreateDate(), testTaskEntity.getCreateDate().toLocalDateTime());
         assertEquals(taskDto.getFinishDate(), testTaskEntity.getFinishDate().toLocalDateTime());
         assertEquals(taskDto.getId(), testTaskEntity.getId().toString());
-        taskDto.setId("");
-        testTaskEntity = taskMapper.taskDtoToEntity(taskDto);
+    }
+
+    @Test
+    void taskDtoToEntityEmptyId() {
+        taskDto.setId(StringUtils.EMPTY);
+        TaskEntity testTaskEntity = taskMapper.taskDtoToEntity(taskDto);
         assertNull(testTaskEntity.getId());
+    }
+
+    @Test
+    void taskDtoToEntityNullId() {
         taskDto.setId(null);
-        testTaskEntity = taskMapper.taskDtoToEntity(taskDto);
+        TaskEntity testTaskEntity = taskMapper.taskDtoToEntity(taskDto);
         assertNull(testTaskEntity.getId());
     }
 }

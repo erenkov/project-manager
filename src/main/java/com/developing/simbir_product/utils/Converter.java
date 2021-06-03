@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Converter {
 
     private final static Logger logger = LoggerFactory.getLogger(Converter.class);
+    public static final int MINIMUM_ASSIGNEE_NAME_PARTS = 3;
 
     public static UUID getUuidFromString(String stringUuid) {
         if (StringUtils.isEmpty(stringUuid) || !isValidUuid(stringUuid)) {
@@ -33,7 +34,7 @@ public class Converter {
             return 0;
         }
         String[] assigneeSplit = assignee.split(" ");
-        if (assigneeSplit.length < 3) {
+        if (assigneeSplit.length < MINIMUM_ASSIGNEE_NAME_PARTS) {
             return 0;
         }
         int userNumber;

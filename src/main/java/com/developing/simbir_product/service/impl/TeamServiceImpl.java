@@ -72,7 +72,7 @@ public class TeamServiceImpl implements TeamService {
     public String getTeamName(TaskEntity taskEntity) {
         ProjectEntity projectEntity = taskEntity.getProjectId();
         if (projectEntity.getTeamId() == null) {
-            return "";
+            return StringUtils.EMPTY;
         }
         return projectEntity.getTeamId().getName();
     }
