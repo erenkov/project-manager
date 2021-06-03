@@ -14,6 +14,7 @@ import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import com.developing.simbir_product.utils.Converter;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +120,7 @@ public class ReleaseServiceImpl implements ReleaseService {
     public String getReleaseString(TaskEntity taskEntity) {
         ReleaseEntity release = taskReleaseHistoryService.getCurrentReleaseByTask(taskEntity);
         if (release == null) {
-            return "";
+            return StringUtils.EMPTY;
         }
         return String.format("%s (%s - %s)",
                 release.getName(),

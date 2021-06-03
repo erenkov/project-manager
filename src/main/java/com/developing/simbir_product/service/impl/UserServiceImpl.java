@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-        if (userRequestDto == null || userRequestDto.getEmail().isBlank()) {
+        if (userRequestDto == null || StringUtils.isBlank(userRequestDto.getEmail())) {
             throw new IllegalArgumentException("Can't create empty user");
         }
         String login = userRequestDto.getEmail();
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = userTaskHistoryService.getCurrentUserByTask(taskEntity);
         if (assignee == null) {
-            return "";
+            return StringUtils.EMPTY;
         }
         return String.format("%s %s %s", assignee.getFirstName(), assignee.getLastName(), assignee.getUserNumber());
     }
