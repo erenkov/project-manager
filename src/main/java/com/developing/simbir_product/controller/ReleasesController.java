@@ -2,8 +2,11 @@ package com.developing.simbir_product.controller;
 
 import com.developing.simbir_product.controller.Dto.ReleaseRequestDto;
 import com.developing.simbir_product.entity.ProjectEntity;
+import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.exception.ReleaseDatesException;
 import com.developing.simbir_product.service.ProjectService;
 import com.developing.simbir_product.service.ReleaseService;
+import com.developing.simbir_product.utils.BindingUtils;
 import com.developing.simbir_product.utils.Converter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,15 +22,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 
-@Tag(name = "Управление релизами")
-@RequestMapping(value = "/releases")
+@Tag(name = "{releasesController.tag}")
+@RequestMapping(value = "/releases/{projectName}")
 @Controller
 public class ReleasesController {
+
+    @Autowired
+    private BindingUtils bindingUtils;
 
     @Autowired
     private ReleaseService releaseService;
@@ -35,72 +48,89 @@ public class ReleasesController {
     @Autowired
     private ProjectService projectService;
 
-    @Operation(summary = "Получить страницу c информацией о релизах")
+    @Operation(summary = "{releasesController.getReleasePage.operation}")
     @GetMapping
-    public ModelAndView getReleasePage(@RequestParam String projectName) {
+    public ModelAndView getReleasePage(@PathVariable String projectName,
+                                       @RequestParam(value = "errorMessage", required = false) Optional<String> errorMessage) {
         ModelAndView modelAndView = new ModelAndView("releases", HttpStatus.OK);
+        errorMessage.ifPresent(modelAndView::addObject);
         ProjectEntity projectEntity = projectService.getProjectEntity(projectName);
         modelAndView.addObject("releases", releaseService.getAllReleasesByProject(projectEntity));
         return modelAndView;
     }
 
-    @Operation(summary = "Получить страницу создания нового релиза")
+    @Operation(summary = "{releasesController.getNewReleasePage.operation}")
     @GetMapping("/create")
-    public ModelAndView getNewReleasePage(@RequestParam String projectName) {
+    public ModelAndView getNewReleasePage(@PathVariable String projectName) {
         ModelAndView modelAndView = new ModelAndView("create-release", HttpStatus.OK);
         ReleaseRequestDto releaseRequestDto = new ReleaseRequestDto();
         releaseRequestDto.setProjectName(projectName);
-        modelAndView.addObject("newRelease", releaseRequestDto);
+        modelAndView.addObject("release", releaseRequestDto);
         return modelAndView;
     }
 
-    @Operation(summary = "Создать релиз")
+    @Operation(summary = "{releasesController.createRelease.operation}")
     @PostMapping("/create")
-    public ModelAndView createRelease(@Valid @ModelAttribute("newRelease") ReleaseRequestDto releaseRequestDto) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("projectName", releaseRequestDto.getProjectName());
-        if (releaseService.addRelease(releaseRequestDto)) {
-            modelAndView.setViewName("redirect:/releases");
-            modelAndView.setStatus(HttpStatus.CREATED);
-        } else {
-            modelAndView.setViewName("redirect:/releases/create");
-            modelAndView.setStatus(HttpStatus.CONFLICT);
-            modelAndView.addObject("newRelease", releaseRequestDto);
-        }
-        return modelAndView;
+    public ModelAndView createRelease(@PathVariable String projectName,
+                                      @Valid @ModelAttribute("release") ReleaseRequestDto releaseRequestDto) {
+        releaseService.addRelease(releaseRequestDto);
+        return new ModelAndView("redirect:/releases/" + UriUtils.encode(projectName, StandardCharsets.UTF_8));
     }
 
-    @Operation(summary = "Получить страницу редактирования релиза")
+    @Operation(summary = "{releasesController.getEditReleasePage.operation}")
     @GetMapping("/edit/{releaseId}")
-    public ModelAndView getEditReleasePage(@PathVariable("releaseId") String releaseId) {
+    public ModelAndView getEditReleasePage(@PathVariable String projectName,
+                                           @PathVariable("releaseId") String releaseId) {
         ModelAndView modelAndView = new ModelAndView("edit-release", HttpStatus.OK);
         modelAndView.addObject("release", releaseService.getById(Converter.getUuidFromString(releaseId)));
         return modelAndView;
     }
 
-    @Operation(summary = "Редактировать информацию о релизе")
+    @Operation(summary = "{releasesController.editRelease.operation}")
     @PostMapping("/edit/{releaseId}")
-    public ModelAndView editRelease(@PathVariable("releaseId") String releaseId,
+    public ModelAndView editRelease(@PathVariable String projectName,
+                                    @PathVariable("releaseId") String releaseId,
                                     @Valid @ModelAttribute("release") ReleaseRequestDto releaseRequestDto) {
         releaseRequestDto.setId(releaseId);
+        releaseService.editRelease(releaseRequestDto);
+        return new ModelAndView("redirect:/releases/" + UriUtils.encode(projectName, StandardCharsets.UTF_8));
+    }
 
+
+    private ModelAndView getCurrentView() {
         ModelAndView modelAndView = new ModelAndView();
-        if (releaseService.editRelease(releaseRequestDto)) {
-            modelAndView.addObject("projectName", releaseRequestDto.getProjectName());
-            modelAndView.setViewName("redirect:/releases");
-            modelAndView.setStatus(HttpStatus.OK);
+        List<String> pathSegments = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPathSegments();
+        if ("create".equals(pathSegments.get(2))) {
+            modelAndView.setViewName("create-release");
         } else {
-            modelAndView.setViewName("redirect:/releases/edit/" + releaseId);
-            modelAndView.setStatus(HttpStatus.CONFLICT);
+            modelAndView.setViewName("edit-release");
         }
         return modelAndView;
     }
 
-    @ExceptionHandler(BindException.class)
-    private ModelAndView handleValidationException(Exception e, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView("create-release", HttpStatus.BAD_REQUEST);
-        modelAndView.addObject("FieldErrors", bindingResult.getFieldErrors());
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+    @ExceptionHandler(NotFoundException.class)
+    private ModelAndView handleEditException(NotFoundException e) {
+        ModelAndView modelAndView = new ModelAndView("redirect:../");
         modelAndView.addObject("errorMessage", e.getLocalizedMessage());
+        return modelAndView;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ReleaseDatesException.class)
+    private ModelAndView handleDatesException(ReleaseDatesException e) {
+        ModelAndView modelAndView = getCurrentView();
+        modelAndView.addObject("release", e.getRelease());
+        modelAndView.addObject("errorMessage", e.getLocalizedMessage());
+        return modelAndView;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    private ModelAndView handleValidationException(BindingResult bindingResult, Locale locale) {
+        ModelAndView modelAndView = getCurrentView();
+        modelAndView.addObject("release", bindingResult.getModel().get("release"));
+        bindingUtils.addErrorsToModel(bindingResult, modelAndView, locale);
         return modelAndView;
     }
 }

@@ -22,7 +22,7 @@
 <th:block th:include="/_header"></th:block>
 <main>
     <div class="container">
-        <div class="row min-vh-100 align-items-center justify-content-center">
+        <div class="row py-5 align-items-center justify-content-center">
             <div class="col-5 py-4">
                 <h1 class="mb-5 text-center">User profile</h1>
                 <div class="shadow-sm border rounded-3">
@@ -31,6 +31,24 @@
                             Edit your profile
                         </h4>
                     </div>
+
+                    <div class="d-block text-center"
+                         style="margin: 5px"
+                         th:if="${errorMessage != null}"
+                         th:text="${errorMessage}"
+                    ></div>
+                    <th:block th:each="error : ${FieldErrors}" th:if="${FieldErrors != null}">
+                        <div class="d-block text-center"
+                             th:text="${error}"
+                        ></div>
+                    </th:block>
+                    <th:block th:each="error : ${GlobalErrors}"
+                              th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
+                        <div class="d-block text-center"
+                             th:text="${error}"
+                        ></div>
+                    </th:block>
+
                     <form action="/profile" method="post" class="p-4" th:object="${currentUser}">
                         <div class="mb-3 row">
                             <label for="inputEmail" class="col-3 col-form-label"
@@ -41,7 +59,8 @@
                                        type="email"
                                        class="form-control"
                                        id="inputEmail"
-                                       disabled
+                                       name="email"
+                                       readonly
                                        required
                                 />
                             </div>
@@ -51,11 +70,12 @@
                             >Password</label
                             >
                             <div class="col-9">
-                                <input value="*****"
+                                <input name="password"
                                        type="password"
                                        class="form-control"
                                        id="inputPassword"
-                                       disabled
+                                       readonly
+                                       value="********"
                                        required
                                 />
                             </div>
@@ -116,9 +136,11 @@
                             <button type="submit" class="btn btn-primary me-3 px-4">
                                 Update
                             </button>
-                            <button type="reset" class="btn btn-secondary px-4">
-                                Cancel
-                            </button>
+                            <a href="/projects">
+                                <button class="btn btn-secondary px-4" type="button">
+                                    Cancel
+                                </button>
+                            </a>
                         </div>
                     </form>
                 </div>

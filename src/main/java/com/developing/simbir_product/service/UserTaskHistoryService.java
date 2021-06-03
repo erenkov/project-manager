@@ -21,4 +21,6 @@ public interface UserTaskHistoryService {
     List<TaskEntity> getTasksByUser(UserEntity userEntity);
 
     UserTaskHistoryEntity findByTemplate(UserTaskHistoryEntity userTaskHistoryEntity);
+
+    void deleteAllByTask(TaskEntity taskEntity);
 }

@@ -14,6 +14,8 @@ public interface TaskService {
 
     TaskResponseDto getById(UUID id);
 
+    TaskResponseDto getByStringId(String id);
+
     TaskEntity getTaskEntityById(String id);
 
     TaskResponseDto addTask(TaskRequestDto taskRequestDto);

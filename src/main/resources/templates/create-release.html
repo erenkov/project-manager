@@ -22,31 +22,49 @@
   <th:block th:include="/_header"></th:block>
     <main>
       <div class="container">
-        <div class="row min-vh-100 align-items-center">
+        <div class="row py-5 align-items-center">
           <div class="col-6 py-4">
             <h1 class="mb-5">New release page</h1>
             <div class="shadow-sm border rounded-3">
               <div class="p-4 border-bottom">
                 <h4 class="mb-0">Create new release</h4>
               </div>
-              <form action="/releases/create" method="post" id="newReleaseForm" class="p-4" th:object="${newRelease}">
+
+              <div class="d-block text-center"
+                   style="margin: 5px"
+                   th:if="${errorMessage != null}"
+                   th:text="${errorMessage}"
+              ></div>
+              <th:block th:each="error : ${FieldErrors}" th:if="${FieldErrors != null}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+              </th:block>
+              <th:block th:each="error : ${GlobalErrors}"
+                        th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+              </th:block>
+
+              <form class="p-4" id="newReleaseForm" method="post" th:action="@{${#request.requestURI}}"
+                    th:object="${release}">
                 <div class="mb-3">
                   <label for="inputName" class="form-label">Name</label>
-                  <input class="form-control" id="inputName" name="name" required type="text"/>
-                </div>
-                <div class="mb-3">
-                  <input class="form-control" th:field="*{projectName}" type="hidden"/>
+                  <input class="form-control" id="inputName" name="name" required th:value="${release.name}"
+                         type="text"/>
                 </div>
                 <div class="row mb-3">
                   <div class="col-6">
                     <label for="inputStartDate" class="form-label"
-                      >Start date</label
+                    >Start date</label
                     >
                     <input
-                      type="datetime-local"
-                      class="form-control"
-                      id="inputStartDate"
-                      name="startDate"
+                            type="datetime-local"
+                            class="form-control"
+                            id="inputStartDate"
+                            name="startDate"
+                            th:value="${release.startDate}"
                     />
                   </div>
                   <div class="col-6">
@@ -54,10 +72,11 @@
                       >Finish date</label
                     >
                     <input
-                      type="datetime-local"
-                      class="form-control"
-                      id="inputFinishDate"
-                      name="finishDate"
+                            type="datetime-local"
+                            class="form-control"
+                            id="inputFinishDate"
+                            name="finishDate"
+                            th:value="${release.finishDate}"
                     />
                   </div>
                 </div>
@@ -65,9 +84,11 @@
                   <button type="submit" class="btn btn-primary me-3 px-4">
                     Create release
                   </button>
-                  <button class="btn btn-secondary px-4" onclick="history.back();" type="button">
-                    Cancel
-                  </button>
+                  <a th:href="@{/releases/{prName}(prName=${projectName})}">
+                    <button class="btn btn-secondary px-4" type="button">
+                      Cancel
+                    </button>
+                  </a>
                 </div>
               </form>
             </div>

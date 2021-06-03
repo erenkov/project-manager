@@ -3,28 +3,28 @@ package com.developing.simbir_product.controller.Dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
-@Schema(description = "Пользователь")
+@Schema(description = "{user.schema}")
 public class UserResponseDto {
 
-    @Schema(description = "E-mail")
+    @Schema(description = "{user.email.schema}")
     private String email;
 
-    @Schema(description = "Пароль")
+    @Schema(description = "{user.password.schema}")
     private String password;
 
-    @Schema(description = "Имя")
+    @Schema(description = "{user.firstName.schema}")
     private String firstName;
 
-    @Schema(description = "Фамилия")
+    @Schema(description = "{user.lastName.schema}")
     private String lastName;
 
-    @Schema(description = "Роль")
+    @Schema(description = "{user.role.schema}")
     private String role;
 
-    @Schema(description = "Команда")
+    @Schema(description = "{teamDto.name.schema}")
     private String team;
 
-    @Schema(description = "Табельный номер")
+    @Schema(description = "{user.userNumber.schema}")
     private Integer userNumber;
 
 

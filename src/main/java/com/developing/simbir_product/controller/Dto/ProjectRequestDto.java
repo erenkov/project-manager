@@ -1,36 +1,40 @@
 package com.developing.simbir_product.controller.Dto;
 
+import com.developing.simbir_product.validators.ProjectWithDates;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 
-@Schema(description = "Проект")
+@Schema(description = "{projectDto.schema}")
+@ProjectWithDates
 public class ProjectRequestDto {
 
-    @Schema(description = "Навзвание проекта")
-    @NotBlank
-    @Size(max = 50)
+    @Schema(description = "{projectDto.name.schema}")
+    @NotBlank(message = "{projectDto.name.notBlank}")
+    @Pattern(regexp = "(?U)[\\w&&[^_]]+[-\\w$.+!*'() ]*", message = "{projectDto.name.pattern}")
+    @Size(max = 50, message = "{projectDto.name.size}")
     private String name;
 
-    @Schema(description = "Описание проекта")
+    @Schema(description = "{projectDto.description.schema}")
     private String description;
 
-    @Schema(description = "Команда")
-    @Size(max = 50)
+    @Schema(description = "{projectDto.teamName.schema}")
+    @Size(max = 50, message = "{projectDto.teamName.size}")
     private String teamName;
 
-    @Schema(description = "Статус")
+    @Schema(description = "{projectDto.status.schema}")
     private String status;
 
-    @Schema(description = "Дата начала проекта")
+    @Schema(description = "{projectDto.startDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startDate;
 
-    @Schema(description = "Ориентировочная дата конца проекта")
+    @Schema(description = "{projectDto.estFinishDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime estFinishDate;
 

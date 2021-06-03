@@ -6,58 +6,58 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 
-@Schema(description = "Задача")
+@Schema(description = "{taskDto.schema}")
 public class TaskResponseDto {
 
-    @Schema(description = "ID задачи")
+    @Schema(description = "{taskDto.id.schema}")
     private String id;
 
-    @Schema(description = "Название задачи")
+    @Schema(description = "{taskDto.name.schema}")
     private String name;
 
-    @Schema(description = "Статус задачи")
+    @Schema(description = "{taskDto.status.schema}")
     private String status;
 
-    @Schema(description = "Тип задачи")
+    @Schema(description = "{taskDto.type.schema}")
     private String type;
 
-    @Schema(description = "Описание задачи")
+    @Schema(description = "{taskDto.description.schema}")
     private String description;
 
-    @Schema(description = "Дата создания")
+    @Schema(description = "{taskDto.createDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createDate;
 
-    @Schema(description = "Ориентировочная дата завершения")
+    @Schema(description = "{taskDto.dueDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dueDate;
 
-    @Schema(description = "Дата завершения")
+    @Schema(description = "{taskDto.finishDate.schema}")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime finishDate;
 
-    @Schema(description = "Ориентировочные затраты")
-    private int estCosts;
+    @Schema(description = "{taskDto.estCosts.schema}")
+    private Integer estCosts;
 
-    @Schema(description = "Реальные затраты")
-    private int actualCosts;
+    @Schema(description = "{taskDto.actualCosts.schema}")
+    private Integer actualCosts;
 
-    @Schema(description = "Комментарии")
+    @Schema(description = "{taskDto.comments.schema}")
     private String comments;
 
-    @Schema(description = "Приоритет")
-    private int priority;
+    @Schema(description = "{taskDto.priority.schema}")
+    private Integer priority;
 
-    @Schema(description = "Исполнитель")
+    @Schema(description = "{taskDto.assigneeName.schema}")
     private String assigneeName;
 
-    @Schema(description = "Команда")
+    @Schema(description = "{teamDto.name.schema}")
     private String team;
 
-    @Schema(description = "Релиз")
+    @Schema(description = "{releaseDto.name.schema}")
     private String release;
 
-    @Schema(description = "Название проекта")
+    @Schema(description = "{projectDto.name.schema}")
     private String projectName;
 
 
@@ -133,19 +133,19 @@ public class TaskResponseDto {
         this.finishDate = finishDate;
     }
 
-    public int getEstCosts() {
+    public Integer getEstCosts() {
         return estCosts;
     }
 
-    public void setEstCosts(int estCosts) {
+    public void setEstCosts(Integer estCosts) {
         this.estCosts = estCosts;
     }
 
-    public int getActualCosts() {
+    public Integer getActualCosts() {
         return actualCosts;
     }
 
-    public void setActualCosts(int actualCosts) {
+    public void setActualCosts(Integer actualCosts) {
         this.actualCosts = actualCosts;
     }
 
@@ -157,11 +157,11 @@ public class TaskResponseDto {
         this.comments = comments;
     }
 
-    public int getPriority() {
+    public Integer getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 

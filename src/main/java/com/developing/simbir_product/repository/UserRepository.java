@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByUserNumber(Integer userNumber);
 
     List<UserEntity> findByTeamId(TeamEntity teamEntity);
+
+    boolean existsByLogin(String login);
 }

@@ -6,14 +6,18 @@ import com.developing.simbir_product.entity.Role;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.exception.NotFoundException;
+import com.developing.simbir_product.exception.UserAlreadyExistException;
 import com.developing.simbir_product.mappers.UserMapper;
 import com.developing.simbir_product.repository.UserRepository;
 import com.developing.simbir_product.service.TeamService;
 import com.developing.simbir_product.service.UserService;
 import com.developing.simbir_product.service.UserTaskHistoryService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.developing.simbir_product.utils.Converter.getUserNumberFromAssignee;
 
 
 @Service
@@ -46,16 +52,21 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Transactional
     @Override
     public boolean addUser(UserRequestDto userRequestDto) {
-        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
-        Optional<UserEntity> userFromDb = userRepository.findByLogin(userEntity.getLogin());
-
-        if (userFromDb.isPresent()) { // Если пользователь уже есть в БД то не выполняем
-            return false;             // добавление пользователя
+        if (userRequestDto == null || StringUtils.isBlank(userRequestDto.getEmail())) {
+            throw new IllegalArgumentException(messageSource.getMessage("userService.IllegalArgument.message",
+                    null, LocaleContextHolder.getLocale()));
         }
-
+        String login = userRequestDto.getEmail();
+        if (userRepository.existsByLogin(login)) {
+            throw new UserAlreadyExistException("userService.alreadyExist.message", userRequestDto, messageSource);
+        }
+        UserEntity userEntity = userMapper.userDtoToEntity(userRequestDto);
         userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(userEntity);
         return true;
@@ -76,7 +87,8 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(tempUserFromDB.getPassword());
         userEntity.setUserNumber(tempUserFromDB.getUserNumber());
         userEntity = userRepository.save(userEntity);
-        logger.info(userEntity.getLogin() + " has been edited");
+        logger.info(messageSource.getMessage("userService.editUser.logger",
+                new String[]{userRequestDto.getEmail()}, Locale.getDefault()));
         return userMapper.userEntityToDto(userEntity);
     }
 
@@ -95,7 +107,8 @@ public class UserServiceImpl implements UserService {
         // Service знает что делать с этим
 
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+                () -> new NotFoundException(messageSource.getMessage("userService.notFoundLogin.message",
+                        new String[]{login}, LocaleContextHolder.getLocale())));
 
         return userMapper.userEntityToDto(userEntity);
     }
@@ -103,16 +116,20 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponseDto findByAssigneeName(String assigneeName) {
-        UserEntity userEntity = userRepository.findByUserNumber(Integer.valueOf(assigneeName.split(" ")[2]))
+        if (StringUtils.isEmpty(assigneeName)) {
+            return null;
+        }
+        UserEntity userEntity = userRepository.findByUserNumber(getUserNumberFromAssignee(assigneeName))
                 .orElse(null);
         return (userEntity == null) ? null : userMapper.userEntityToDto(userEntity);
     }
 
+    @Transactional
     @Override
     public String getUserNameAndNumber(TaskEntity taskEntity) {
         UserEntity assignee = userTaskHistoryService.getCurrentUserByTask(taskEntity);
         if (assignee == null) {
-            return "";
+            return StringUtils.EMPTY;
         }
         return String.format("%s %s %s", assignee.getFirstName(), assignee.getLastName(), assignee.getUserNumber());
     }
@@ -139,8 +156,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findByUserNumber(String userNumber) {
         return userRepository.findByUserNumber(Integer.parseInt(userNumber)).orElseThrow(
-                () -> new NotFoundException(String.format("User with number = '%s' not found", userNumber))
-        );
+                () -> new NotFoundException(messageSource.getMessage("userService.notFoundUserNumber.message",
+                        new String[]{userNumber}, LocaleContextHolder.getLocale())));
     }
 
 
@@ -151,7 +168,8 @@ public class UserServiceImpl implements UserService {
         // Service знает что делать с этим
 
         UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(
-                () -> new NotFoundException(String.format("User with login = '%s' not found", login)));
+                () -> new NotFoundException(messageSource.getMessage("userService.notFoundLogin.message",
+                        new String[]{login}, LocaleContextHolder.getLocale())));
 
         return userEntity;
     }

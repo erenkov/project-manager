@@ -3,6 +3,8 @@ package com.developing.simbir_product.service.impl;
 import com.developing.simbir_product.entity.UserEntity;
 import com.developing.simbir_product.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +21,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserEntity> user = userRepository.findByLogin(username);
@@ -27,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(user.get().getLogin(),
                     user.get().getPassword(), Set.of(user.get().getRole()));
         }
-
-        throw new EntityNotFoundException("Пользователь не был найден");
+        throw new EntityNotFoundException(messageSource.getMessage("userDetails.notFound", null,
+                LocaleContextHolder.getLocale()));
     }
 }

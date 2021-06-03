@@ -22,17 +22,37 @@
   <th:block th:include="/_header"></th:block>
     <main>
       <div class="container">
-        <div class="row min-vh-100 align-items-center">
+        <div class="row py-5 align-items-center">
           <div class="col-6 py-4">
             <h1 class="mb-5">New team page</h1>
             <div class="shadow-sm border rounded-3">
               <div class="p-4 border-bottom">
                 <h4 class="mb-0">Create new team</h4>
               </div>
+
+              <div class="d-block text-center"
+                   style="margin: 5px"
+                   th:if="${errorMessage != null}"
+                   th:text="${errorMessage}"
+              ></div>
+              <th:block th:each="error : ${FieldErrors}" th:if="${FieldErrors != null}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+              </th:block>
+              <th:block th:each="error : ${GlobalErrors}"
+                        th:if="${GlobalErrors != null && FieldErrors.isEmpty()}">
+                <div class="d-block text-center"
+                     th:text="${error}"
+                ></div>
+              </th:block>
+
               <form action="/teams/create" method="post" id="newTeamForm" class="p-4" th:object="${newTeam}">
                 <div class="mb-3">
                   <label for="inputName" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="inputName" name="name" />
+                  <input class="form-control" id="inputName" name="name" required
+                         th:value="${newTeam.name}"
+                         type="text"/>
                 </div>
                 <div class="mb-3">
                   <label for="inputDescription" class="form-label"
@@ -43,15 +63,18 @@
                     class="form-control"
                     id="inputDescription"
                     name="description"
+                    th:value="${newTeam.description}"
                   />
                 </div>
                 <div class="d-block text-center">
                   <button type="submit" class="btn btn-primary me-3 px-4">
                     Create team
                   </button>
-                  <button type="reset" class="btn btn-secondary px-4">
-                    Cancel
-                  </button>
+                  <a href="/teams">
+                    <button class="btn btn-secondary px-4" type="button">
+                      Cancel
+                    </button>
+                  </a>
                 </div>
               </form>
             </div>

@@ -6,6 +6,8 @@ import com.developing.simbir_product.entity.UserTaskHistoryEntity;
 import com.developing.simbir_product.repository.UserTaskHistoryRepository;
 import com.developing.simbir_product.service.UserTaskHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
 
     @Autowired
     private UserTaskHistoryRepository userTaskHistoryRepository;
+    @Autowired
+    private MessageSource messageSource;
 
     @Transactional
     @Override
@@ -60,5 +64,14 @@ public class UserTaskHistoryServiceImpl implements UserTaskHistoryService {
     public UserTaskHistoryEntity findByTemplate(UserTaskHistoryEntity userTaskHistoryEntity) {
         List<UserTaskHistoryEntity> entities = userTaskHistoryRepository.findAll(Example.of(userTaskHistoryEntity));
         return entities.isEmpty() ? null : entities.get(0);
+    }
+
+    @Override
+    public void deleteAllByTask(TaskEntity taskEntity) {
+        if (taskEntity == null) {
+            throw new IllegalArgumentException(messageSource.getMessage("userTask.illegalArgument.message",
+                    null, LocaleContextHolder.getLocale()));
+        }
+        userTaskHistoryRepository.deleteAllByTaskId(taskEntity);
     }
 }

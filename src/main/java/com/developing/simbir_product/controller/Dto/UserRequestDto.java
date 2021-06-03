@@ -3,44 +3,48 @@ package com.developing.simbir_product.controller.Dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 
-@Schema(description = "Пользователь")
+@Schema(description = "{user.schema}")
 public class UserRequestDto {
 
-    @Schema(description = "E-mail")
+    @Schema(description = "{user.email.schema}")
     @Email(regexp = "[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+" +
             "(?:\\.[-a-zA-Z0-9!#$%&'*+/=?^_`{|}~]+)*" +
             "@(?:[a-zA-Z0-9]([-a-zA-Z0-9]{0,61}[a-zA-Z0-9])?\\.)*(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|" +
-            "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])")
-    @NotNull
+            "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])",
+            message = "{user.email.email}")
+    @NotBlank(message = "{user.email.notBlank}")
     @Size(min = 3, max = 320)
     private String email;
 
-    @Schema(description = "Пароль")
-    @NotNull
-    @Size(min = 8, max = 50)
+    @Schema(description = "{user.password.schema}")
+    @NotBlank(message = "{user.password.notBlank}")
+    @Size(min = 8, max = 50, message = "{user.password.size}")
     private String password;
 
-    @Schema(description = "Имя")
-    @Size(max = 50)
+    @Schema(description = "{user.firstName.schema}")
+    @NotBlank(message = "{user.firstName.notBlank}")
+    @Size(max = 50, message = "{user.firstName.size}")
     private String firstName;
 
-    @Schema(description = "Фамилия")
-    @Size(max = 50)
+    @Schema(description = "{user.lastName.schema}")
+    @NotBlank(message = "{user.lastName.notBlank}")
+    @Size(max = 50, message = "{user.lastName.size}")
     private String lastName;
 
-    @Schema(description = "Роль")
-    @Size(max = 50)
+    @Schema(description = "{user.role.schema}")
+    @NotBlank(message = "{user.role.notBlank}")
+    @Size(max = 50, message = "{user.role.size}")
     private String role;
 
-    @Schema(description = "Команда")
-    @Size(max = 50)
+    @Schema(description = "{teamDto.name.schema}")
+    @Size(max = 50, message = "{teamDto.name.size}")
     private String team;
 
-    @Schema(description = "Табельный номер")
+    @Schema(description = "{user.userNumber.schema}")
     private Integer userNumber;
 
 

@@ -23,8 +23,6 @@ public interface TeamService {
 
     String getTeamName(TaskEntity taskEntity);
 
-    List<String> findAllTeamNames();
-
     List<String> getListOfAllTeamNames();
 
     TeamEntity mapTeamByName(String teamName);

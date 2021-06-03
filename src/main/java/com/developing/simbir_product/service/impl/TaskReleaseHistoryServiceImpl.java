@@ -9,6 +9,8 @@ import com.developing.simbir_product.mappers.ReleaseMapper;
 import com.developing.simbir_product.repository.TaskReleaseHistoryRepository;
 import com.developing.simbir_product.service.TaskReleaseHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,9 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     private TaskReleaseHistoryRepository taskReleaseHistoryRepository;
     @Autowired
     private ReleaseMapper releaseMapper;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Transactional
     @Override
@@ -41,7 +46,8 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     @Override
     public ReleaseEntity getCurrentReleaseByTask(TaskEntity taskEntity) {
         if (taskEntity.getDueDate() == null) {
-            throw new NotFoundException(String.format("Task %s has no due date.", taskEntity.getName()));
+            throw new NotFoundException(messageSource.getMessage("taskRelease.notFound",
+                    new String[]{taskEntity.getName()}, LocaleContextHolder.getLocale()));
         }
         return taskReleaseHistoryRepository.findByTaskId(taskEntity).stream()
                 .map(TaskReleaseHistoryEntity::getReleaseId)
@@ -63,5 +69,14 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     public TaskReleaseHistoryEntity findByTemplate(TaskReleaseHistoryEntity taskReleaseHistoryEntity) {
         List<TaskReleaseHistoryEntity> entities = taskReleaseHistoryRepository.findAll(Example.of(taskReleaseHistoryEntity));
         return entities.isEmpty() ? null : entities.get(0);
+    }
+
+    @Override
+    public void deleteAllByTask(TaskEntity taskEntity) {
+        if (taskEntity == null) {
+            throw new IllegalArgumentException(messageSource.getMessage("taskRelease.illegalArgument", null,
+                    LocaleContextHolder.getLocale()));
+        }
+        taskReleaseHistoryRepository.deleteAllByTaskId(taskEntity);
     }
 }

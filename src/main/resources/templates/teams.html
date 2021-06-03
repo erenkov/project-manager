@@ -28,17 +28,19 @@
     <div class="container">
         <div class="row py-5">
             <div class="col-7 py-4">
+                <div class="col py-4" th:if="${#httpServletRequest.getParameter('errorMessage') != null}"
+                     th:text="${#httpServletRequest.getParameter('errorMessage')}"></div>
                 <h2 class="mb-4">List of Teams:</h2>
                 <ul class="border rounded-3 list-group p-4 bg-light text-dark mb-3">
                     <th:block th:each="teamNameItem : ${teamNames}">
                         <li class="border list-group-item d-flex justify-content-between align-items-center p-2 bg-white mb-2">
-                            <a
-                                    href="#"
-                                    class="text-primary h4 mb-0"
+                            <div
+                                    class="h4 mb-0"
                                     style="text-decoration: none"
                                     th:text="${teamNameItem}"
-                            ></a>
-                            <a class="btn btn-success btn-sm px-3" th:href="@{/teams/edit/{teamName}(teamName=${teamNameItem})}">
+                            ></div>
+                            <a class="btn btn-success btn-sm px-3"
+                               th:href="@{/teams/edit/{teamName}(teamName=${teamNameItem})}">
                                 Edit
                             </a>
                         </li>
