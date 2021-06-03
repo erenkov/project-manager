@@ -1,4 +1,4 @@
-package com.developing.simbir_product.feign;
+package com.developing.test_feign.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
         name = "youtube-service",
-        url = "https://www.googleapis.com/youtube/v3"
+        url = "${api.url}"
 )
 public interface YouTubeClient {
 
