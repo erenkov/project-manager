@@ -59,8 +59,8 @@ public class ProjectServiceImpl implements ProjectService {
         projectRequestDto.setStatus(ProjectStatus.BACKLOG.name());
         ProjectEntity projectEntity = projectMapper.projectDtoToEntity(projectRequestDto);
         projectRepository.save(projectEntity);
-        logger.info(messageSource.getMessage("projectService.addProject.logger", null, Locale.getDefault()),
-                projectName);
+        logger.info(messageSource.getMessage("projectService.addProject.logger", new String[]{projectName},
+                Locale.getDefault()));
         return true;
     }
 
@@ -83,8 +83,8 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setId(tempProjectFromDB.getId());
         projectEntity.setFinishDate(tempProjectFromDB.getEstFinishDate());
         projectRepository.save(projectEntity);
-        logger.info(messageSource.getMessage("projectService.editProject.logger", null, Locale.getDefault()),
-                projectName);
+        logger.info(messageSource.getMessage("projectService.editProject.logger", new String[]{projectName},
+                Locale.getDefault()));
         return true;
     }
 

@@ -54,8 +54,8 @@ public class UserProfileController {
     public ModelAndView getProfile(Principal principal) {
         ModelAndView modelAndView = getUserProfileModel();
         modelAndView.addObject("currentUser", userService.findByEmail(principal.getName()));
-        logger.info(messageSource.getMessage("userProfileController.getProfile.logger", null,
-                Locale.getDefault()), principal.getName());
+        logger.info(messageSource.getMessage("userProfileController.getProfile.logger",
+                new String[]{principal.getName()}, Locale.getDefault()));
         return modelAndView;
     }
 

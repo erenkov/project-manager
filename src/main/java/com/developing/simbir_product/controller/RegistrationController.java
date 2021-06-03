@@ -56,8 +56,8 @@ public class RegistrationController {
     @PostMapping
     public ModelAndView registerUser(@Valid @ModelAttribute("newUser") UserRequestDto newUser) {
         userService.addUser(newUser);
-        logger.debug(messageSource.getMessage("registrationController.registerUser.logger", null,
-                Locale.getDefault()), newUser);
+        logger.debug(messageSource.getMessage("registrationController.registerUser.logger",
+                new String[]{newUser.getEmail()}, Locale.getDefault()));
         return new ModelAndView("redirect:/login");
     }
 

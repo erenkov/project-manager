@@ -33,8 +33,8 @@ public class ErrorCodesController implements ErrorController {
 
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
-            logger.error(messageSource.getMessage("errorCodesController.handleError.logger", null,
-                    Locale.getDefault()), statusCode);
+            logger.error(messageSource.getMessage("errorCodesController.handleError.logger",
+                    new Integer[]{statusCode}, Locale.getDefault()));
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "error-404";
             }
