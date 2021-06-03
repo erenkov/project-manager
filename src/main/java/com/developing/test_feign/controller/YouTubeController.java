@@ -12,17 +12,14 @@ public class YouTubeController {
     @Autowired
     private YouTubeClient youTubeClient;
 
-    private String id = "7lCDEYXw3mM";
-
     @Value("${api.key}")
     private String key;
 
-    private String part = "snippet,statistics";
-
-    private String fields = "items(snippet,statistics)";
-
     @GetMapping("/youtube")
     public String getVideo() {
+        String id = "7lCDEYXw3mM";
+        String part = "snippet,statistics";
+        String fields = "items(snippet,statistics)";
         return youTubeClient.getVideo(id, key, part, fields);
     }
 }
