@@ -121,4 +121,29 @@ public class TaskBoardController {
         taskService.deleteById(UUID.fromString(id));
         return ResponseEntity.ok("redirect:/board/{projectName}");
     }
+
+    @GetMapping("/filter")
+    public String filter(@PathVariable("projectName") String projectName, Model model, Principal principal){
+        model.addAttribute("currentProject", projectService.findByName(projectName));
+        model.addAttribute("newTask", new TaskRequestDto());
+        model.addAttribute("taskStatus", taskService.getListOfTaskStatus());
+        model.addAttribute("taskType", taskService.getListOfTaskTypes());
+        model.addAttribute("listUsers", userService.getListOfUsersByTeamName(projectService.findByName(projectName).getTeamName()));
+        model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
+        model.addAttribute("releaseList", releaseService.getAllReleasesByProject(projectService.getProjectEntity(projectName)));
+        model.addAttribute("currentUser", userService.findByEmail(principal.getName()));
+        model.addAttribute("projectName", projectName);
+
+        return "task-filters";
+    }
+
+    @PostMapping("/filter")
+    public String applyFilter(@ModelAttribute("task") TaskRequestDto taskRequestDto,
+            @PathVariable("projectName") String projectName, Model model){
+        model.addAttribute("listAllTasks", taskService.getAllFilteredProjectTasks(taskRequestDto, projectName));
+        model.addAttribute("currentRelease", releaseService.getCurrentRelease(projectName));
+        model.addAttribute("teamName", projectService.findByName(projectName).getTeamName());
+        model.addAttribute("currentProject", projectService.findByName(projectName));
+        return "task-board";
+    }
 }

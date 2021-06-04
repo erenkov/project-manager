@@ -2,22 +2,11 @@ package com.developing.simbir_product.service.impl;
 
 import com.developing.simbir_product.controller.Dto.TaskRequestDto;
 import com.developing.simbir_product.controller.Dto.TaskResponseDto;
-import com.developing.simbir_product.entity.ReleaseEntity;
-import com.developing.simbir_product.entity.TaskEntity;
-import com.developing.simbir_product.entity.TaskReleaseHistoryEntity;
-import com.developing.simbir_product.entity.TaskStatus;
-import com.developing.simbir_product.entity.TaskType;
-import com.developing.simbir_product.entity.UserEntity;
-import com.developing.simbir_product.entity.UserTaskHistoryEntity;
+import com.developing.simbir_product.entity.*;
 import com.developing.simbir_product.exception.NotFoundException;
 import com.developing.simbir_product.mappers.TaskMapper;
 import com.developing.simbir_product.repository.TaskRepository;
-import com.developing.simbir_product.service.ProjectService;
-import com.developing.simbir_product.service.ReleaseService;
-import com.developing.simbir_product.service.TaskReleaseHistoryService;
-import com.developing.simbir_product.service.TaskService;
-import com.developing.simbir_product.service.UserService;
-import com.developing.simbir_product.service.UserTaskHistoryService;
+import com.developing.simbir_product.service.*;
 import com.developing.simbir_product.utils.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
@@ -155,6 +145,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TaskEntity> getFilteredTasks(TaskRequestDto taskRequestDto, String projectName){
+        ProjectEntity projectEntity = projectService.getProjectEntity(projectName);
+
+        return taskRepository.findByNameAndEstCostsAndActualCostsAndProjectIdAndPriorityAndDescriptionAndComments(
+                taskRequestDto.getName(), taskRequestDto.getEstCosts(), taskRequestDto.getActualCosts(), projectEntity,
+                taskRequestDto.getPriority(), taskRequestDto.getDescription(), taskRequestDto.getComments());
+    }
+
+    @Override
+    public List<TaskResponseDto> getAllFilteredProjectTasks(TaskRequestDto taskRequestDto, String projectName) {
+        return getFilteredTasks(taskRequestDto, projectName).stream()
+                .map(taskMapper::taskEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<TaskResponseDto> getAllProjectTasks(String projectName) {
         return getTasksByProjectsName(projectName).stream()
                 .map(taskMapper::taskEntityToDto)
@@ -181,6 +187,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     @Override
     public List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal principal) {
+
+
+
         return null;
     }
 }

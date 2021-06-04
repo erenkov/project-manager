@@ -1,13 +1,6 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 
@@ -19,9 +12,11 @@ public class TaskReleaseHistoryEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+
     @ManyToOne
     @JoinColumn(name = "task_id", updatable = false, nullable = false)
     private TaskEntity taskId;
+
 
     @ManyToOne
     @JoinColumn(name = "release_id", updatable = false, nullable = false)

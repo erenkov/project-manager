@@ -13,8 +13,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -63,5 +65,18 @@ public class TaskReleaseHistoryServiceImpl implements TaskReleaseHistoryService 
     public TaskReleaseHistoryEntity findByTemplate(TaskReleaseHistoryEntity taskReleaseHistoryEntity) {
         List<TaskReleaseHistoryEntity> entities = taskReleaseHistoryRepository.findAll(Example.of(taskReleaseHistoryEntity));
         return entities.isEmpty() ? null : entities.get(0);
+    }
+
+    @Transactional
+    @Override
+    public List<TaskEntity> findUnfinishedTasksByReleaseId(ReleaseEntity releaseEntity) {
+        List<TaskReleaseHistoryEntity> list = taskReleaseHistoryRepository.findByReleaseId(releaseEntity);
+        List<TaskReleaseHistoryEntity> correctList = list.stream().filter(taskReleaseHistoryEntity -> !taskReleaseHistoryEntity.isCompleted()).collect(Collectors.toList());
+        List<TaskEntity> taskEntities = new ArrayList<>();
+        for (int i = 0; i < correctList.size(); i++){
+            taskEntities.add(correctList.get(i).getTaskId());
+        }
+
+        return taskEntities;
     }
 }

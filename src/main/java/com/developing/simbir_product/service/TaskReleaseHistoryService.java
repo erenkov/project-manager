@@ -6,6 +6,7 @@ import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TaskReleaseHistoryEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -20,4 +21,6 @@ public interface TaskReleaseHistoryService {
     ReleaseResponseDto getCurrentReleaseDtoByTask(TaskEntity taskEntity);
 
     TaskReleaseHistoryEntity findByTemplate(TaskReleaseHistoryEntity taskReleaseHistoryEntity);
+
+    List<TaskEntity> findUnfinishedTasksByReleaseId(ReleaseEntity releaseEntity);
 }

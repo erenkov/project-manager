@@ -1,14 +1,8 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +23,7 @@ public class ProjectEntity {
     @Column(name = "description")
     private String description;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "team_id")
     private TeamEntity teamId;

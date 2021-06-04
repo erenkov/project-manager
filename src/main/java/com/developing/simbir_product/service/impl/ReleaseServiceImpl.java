@@ -147,4 +147,10 @@ public class ReleaseServiceImpl implements ReleaseService {
         return releaseRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("Release with ID = '%s' not found", id)));
     }
+
+    @Override
+    public ReleaseEntity getByName(String name) {
+         return releaseRepository.findByName(name).orElseThrow(
+                () -> new NotFoundException(String.format("Project with name = '%s' not found", name)));
+    }
 }
