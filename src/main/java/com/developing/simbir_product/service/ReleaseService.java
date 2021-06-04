@@ -29,4 +29,6 @@ public interface ReleaseService {
     List<ReleaseResponseDto> getAllReleasesByProject(ProjectEntity projectEntity);
 
     ReleaseEntity getEntityById(UUID id);
+
+    ReleaseEntity getByName(String name);
 }

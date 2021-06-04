@@ -35,4 +35,8 @@ public interface TaskService {
     List<String> getListOfTaskTypes();
 
     List<TaskResponseDto> getTasksByFilter(TaskRequestDto taskRequestDto, Principal http);
+
+    List<TaskEntity> getFilteredTasks(TaskRequestDto taskRequestDto, String projectName);
+
+    List<TaskResponseDto> getAllFilteredProjectTasks(TaskRequestDto taskRequestDto, String projectName);
 }

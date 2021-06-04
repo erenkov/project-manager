@@ -75,9 +75,9 @@
                     <a class="btn btn-primary btn-sm ms-4" th:href="@{/board/{prName}/create/(prName=${currentProject.name})}">
                         <i class="bi bi-plus"></i> Add card
                     </a>
-                    <a href="/board/filters" class="btn btn-primary btn-sm px-3 ms-4"
-                    ><i class="bi bi-filter"></i>Filters</a
-                    >
+                    <a class="btn btn-primary btn-sm px-3 ms-4" th:href="@{/board/{prName}/filter/(prName=${currentProject.name})}">
+                    <i class="bi bi-filter"></i>Filters
+                    </a>
                     <a class="btn btn-primary btn-sm px-3 ms-4"
                        th:href="@{/releases(projectName=${currentProject.name})}"
                     >Releases</a

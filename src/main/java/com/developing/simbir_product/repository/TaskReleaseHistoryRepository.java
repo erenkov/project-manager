@@ -1,5 +1,6 @@
 package com.developing.simbir_product.repository;
 
+import com.developing.simbir_product.entity.ReleaseEntity;
 import com.developing.simbir_product.entity.TaskEntity;
 import com.developing.simbir_product.entity.TaskReleaseHistoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,7 @@ import java.util.UUID;
 public interface TaskReleaseHistoryRepository extends JpaRepository<TaskReleaseHistoryEntity, UUID> {
 
     List<TaskReleaseHistoryEntity> findByTaskId(TaskEntity taskEntity);
+
+    List<TaskReleaseHistoryEntity> findByReleaseId(ReleaseEntity releaseEntity);
+
 }

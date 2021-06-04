@@ -1,13 +1,8 @@
 package com.developing.simbir_product.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -29,6 +24,7 @@ public class TaskEntity {
     @Column(name = "task_type", nullable = false)
     private TaskType taskType;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "project_id")
     private ProjectEntity projectId;
